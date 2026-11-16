@@ -31,7 +31,7 @@ const SearchPage = async ({ searchParams }: Props) => {
   }
 
   return (
-    <div className="bg-slate-50 min-h-[70vh] pb-16">
+    <div className="bg-canvas min-h-[70vh] pb-16">
       <SectionTitle
         title={query ? `Results for "${sanitize(query)}"` : "Search Catalog"}
         path="Home | Search"
@@ -39,9 +39,9 @@ const SearchPage = async ({ searchParams }: Props) => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         <div className="flex items-center justify-between mb-6">
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-stone-600">
             Found{" "}
-            <strong className="text-slate-900 font-bold">
+            <strong className="text-stone-900 font-bold">
               {products.length}
             </strong>{" "}
             {products.length === 1 ? "product" : "products"}
@@ -49,7 +49,7 @@ const SearchPage = async ({ searchParams }: Props) => {
           </p>
           <Link
             href="/shop"
-            className="text-sm font-semibold text-blue-600 hover:text-blue-700"
+            className="text-sm font-semibold text-teal-700 hover:text-teal-800"
           >
             Browse with filters →
           </Link>
@@ -62,12 +62,12 @@ const SearchPage = async ({ searchParams }: Props) => {
             ))}
           </div>
         ) : (
-          <div className="bg-white rounded-2xl border border-slate-200/80 p-12 text-center space-y-5">
+          <div className="bg-white rounded-2xl border border-stone-200/80 p-12 text-center space-y-5">
             <div className="space-y-1.5">
-              <h2 className="text-xl font-bold text-slate-900">
+              <h2 className="text-xl font-bold text-stone-900">
                 No products matched your search
               </h2>
-              <p className="text-sm text-slate-500 max-w-md mx-auto">
+              <p className="text-sm text-stone-500 max-w-md mx-auto">
                 Check your spelling, try a broader keyword, or jump directly to
                 one of our popular departments below.
               </p>
@@ -77,7 +77,7 @@ const SearchPage = async ({ searchParams }: Props) => {
                 <Link
                   key={c.id}
                   href={c.href}
-                  className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-blue-600 hover:text-white text-xs font-semibold text-slate-700 transition-colors"
+                  className="px-4 py-2 rounded-xl bg-stone-100 hover:bg-teal-700 hover:text-white text-xs font-semibold text-stone-700 transition-colors"
                 >
                   {c.title}
                 </Link>

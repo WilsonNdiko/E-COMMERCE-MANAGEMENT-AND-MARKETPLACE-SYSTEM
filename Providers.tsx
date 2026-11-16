@@ -12,21 +12,22 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
           style: {
             fontSize: "14px",
             fontWeight: 500,
-            borderRadius: "12px",
+            borderRadius: "14px",
             padding: "12px 16px",
-            background: "#0f172a",
-            color: "#f8fafc",
-            boxShadow: "0 10px 25px -5px rgba(15, 23, 42, 0.25)",
+            background: "#292524",
+            color: "#fafaf9",
+            border: "1px solid #44403c",
+            boxShadow: "0 10px 25px -5px rgba(28, 25, 23, 0.2)",
           },
           success: {
             iconTheme: {
-              primary: "#10b981",
+              primary: "#14b8a6",
               secondary: "#ffffff",
             },
           },
           error: {
             iconTheme: {
-              primary: "#f43f5e",
+              primary: "#fb7185",
               secondary: "#ffffff",
             },
           },

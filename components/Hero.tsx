@@ -11,83 +11,71 @@ import {
 
 const Hero = () => {
   return (
-    <section className="relative overflow-hidden bg-slate-950 text-white bg-hero-grid">
-      {/* Subtle layered ambient glow */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-32 right-1/4 h-[500px] w-[500px] rounded-full bg-blue-600/25 blur-3xl"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -bottom-32 left-10 h-[380px] w-[380px] rounded-full bg-cyan-500/15 blur-3xl"
-      />
-
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24">
-        <div className="grid grid-cols-1 lg:grid-cols-12 items-center gap-12">
+    <section className="bg-sage border-b border-stone-200/80">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20 lg:py-22">
+        <div className="grid grid-cols-1 lg:grid-cols-12 items-center gap-10 lg:gap-12">
           {/* Left Copy */}
           <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-            <div className="inline-flex items-center gap-2 rounded-full bg-blue-500/15 border border-blue-400/30 px-3.5 py-1 text-xs font-semibold text-blue-300">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span>Interactive 3D Showroom · Save 10% with SAVE10</span>
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/90 border border-teal-800/15 px-4 py-1.5 text-xs font-semibold text-teal-800 shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-amber-500" />
+              <span>Welcome Offer · Enjoy 10% Off with Code SAVE10</span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.08] text-white">
-              Next-Gen Tech,{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-300 to-cyan-300">
-                Engineered for Everyday Life
-              </span>
+            <h1 className="text-4xl sm:text-5xl lg:text-[3.4rem] font-extrabold tracking-tight leading-[1.1] text-stone-900">
+              Quality Essentials for{" "}
+              <span className="text-teal-800">Home, Work &amp; Everyday Life</span>
             </h1>
 
-            <p className="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-              Explore precision wearables, pro laptops, mirrorless cameras, and
-              studio-grade audio — inspect every device in interactive 360° 3D,
-              backed by a 2-year official warranty.
+            <p className="text-base sm:text-lg text-stone-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+              Shop thoughtfully selected home appliances, phones, laptops,
+              cameras, and everyday gadgets — easy to browse, preview in 360° 3D,
+              and delivered right to your door with a 2-year warranty.
             </p>
 
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3.5 pt-2">
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3.5 pt-1">
               <Link
                 href="/shop"
-                className="inline-flex items-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold px-7 py-3.5 text-sm sm:text-base shadow-lg shadow-blue-600/30 hover:-translate-y-0.5 transition-all"
+                className="inline-flex items-center gap-2 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-semibold px-7 py-3.5 text-sm sm:text-base shadow-sm hover:-transtone-y-0.5 transition-all"
               >
-                <span>Shop All Products</span>
+                <span>Start Shopping</span>
                 <FaArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 href="/product/smart-watch-demo?view=3d"
-                className="inline-flex items-center gap-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-white font-semibold px-6 py-3.5 text-sm sm:text-base backdrop-blur-sm hover:-translate-y-0.5 transition-all"
+                className="inline-flex items-center gap-2 rounded-xl bg-white hover:bg-ivory border border-stone-300/90 text-stone-800 font-semibold px-6 py-3.5 text-sm sm:text-base shadow-sm hover:-transtone-y-0.5 transition-all"
               >
-                <FaCube className="w-4 h-4 text-cyan-300" />
-                <span>Inspect Watch in 3D</span>
+                <FaCube className="w-4 h-4 text-teal-700" />
+                <span>Try 3D Product View</span>
               </Link>
             </div>
 
-            {/* Trust pills */}
-            <div className="pt-6 border-t border-slate-800/80 flex flex-wrap items-center justify-center lg:justify-start gap-x-8 gap-y-3 text-xs sm:text-sm text-slate-300">
+            {/* Friendly Buyer Trust Strip */}
+            <div className="pt-6 border-t border-teal-900/10 flex flex-wrap items-center justify-center lg:justify-start gap-x-8 gap-y-3 text-xs sm:text-sm font-medium text-stone-700">
               <div className="flex items-center gap-2">
-                <FaTruckFast className="text-blue-400 w-4 h-4" />
-                <span>Free Shipping $150+</span>
+                <FaTruckFast className="text-teal-700 w-4 h-4" />
+                <span>Free Delivery Over $150</span>
               </div>
               <div className="flex items-center gap-2">
-                <FaShieldHalved className="text-blue-400 w-4 h-4" />
-                <span>2-Year Official Warranty</span>
+                <FaShieldHalved className="text-teal-700 w-4 h-4" />
+                <span>2-Year Easy Warranty</span>
               </div>
               <div className="flex items-center gap-2">
-                <FaStar className="text-amber-400 w-4 h-4" />
-                <span>4.9/5 Verified Reviews</span>
+                <FaStar className="text-amber-500 w-4 h-4" />
+                <span>4.9/5 Happy Shoppers</span>
               </div>
             </div>
           </div>
 
-          {/* Right Product Showcase */}
+          {/* Right Clean Warm Showcase Card */}
           <div className="lg:col-span-5 flex justify-center">
-            <div className="group relative w-full max-w-md rounded-3xl bg-gradient-to-b from-slate-800/80 to-slate-900/95 border border-slate-700/70 p-8 flex flex-col items-center shadow-2xl hover:border-blue-500/60 transition-all backdrop-blur-sm">
-              <div className="w-full flex items-center justify-between mb-4">
-                <span className="inline-flex items-center rounded-full bg-emerald-500/15 border border-emerald-400/30 px-3 py-0.5 text-xs font-semibold text-emerald-300">
-                  Featured Release
+            <div className="group w-full max-w-md rounded-3xl bg-white border border-stone-200/90 p-7 sm:p-8 flex flex-col items-center shadow-lg shadow-stone-900/5 hover:border-teal-600/40 transition-all">
+              <div className="w-full flex items-center justify-between mb-3">
+                <span className="inline-flex items-center rounded-full bg-amber-50 border border-amber-200 px-3 py-0.5 text-xs font-semibold text-amber-800">
+                  Bestseller Pick
                 </span>
                 <Link
                   href="/product/smart-watch-demo?view=3d"
-                  className="inline-flex items-center gap-1.5 rounded-full bg-blue-500/20 hover:bg-blue-500/35 border border-blue-400/30 px-3 py-0.5 text-xs font-semibold text-blue-200 transition-colors"
+                  className="inline-flex items-center gap-1.5 rounded-full bg-teal-50 hover:bg-teal-700 border border-teal-200 hover:border-teal-700 px-3 py-0.5 text-xs font-semibold text-teal-800 hover:text-white transition-colors"
                 >
                   <FaCube className="w-3 h-3" />
                   <span>360° 3D</span>
@@ -96,31 +84,31 @@ const Hero = () => {
 
               <Link
                 href="/product/smart-watch-demo"
-                className="py-2 flex items-center justify-center"
+                className="w-full rounded-2xl bg-canvas py-6 px-4 flex items-center justify-center"
               >
                 <Image
                   src="/watch for banner.png"
-                  width={320}
-                  height={320}
+                  width={300}
+                  height={300}
                   priority
                   alt="Galaxy Watch Ultra Titanium"
-                  className="w-60 sm:w-72 h-auto object-contain drop-shadow-[0_24px_36px_rgba(37,99,235,0.28)] animate-hero-float group-hover:scale-105 transition-transform duration-300"
+                  className="w-56 sm:w-64 h-auto object-contain animate-hero-float group-hover:scale-105 transition-transform duration-300"
                 />
               </Link>
 
-              <div className="w-full mt-5 pt-4 border-t border-slate-700/60 flex items-center justify-between gap-3">
+              <div className="w-full mt-5 pt-4 border-t border-stone-100 flex items-center justify-between gap-3">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
-                    Samsung · Wearables
+                  <p className="text-xs font-medium text-stone-500">
+                    Everyday Smart Wearable
                   </p>
                   <Link
                     href="/product/smart-watch-demo"
-                    className="text-base font-bold text-white hover:text-blue-300 transition-colors"
+                    className="text-base font-bold text-stone-900 hover:text-teal-700 transition-colors"
                   >
                     Galaxy Watch Ultra Titanium
                   </Link>
                 </div>
-                <span className="text-2xl font-extrabold text-blue-400">
+                <span className="text-2xl font-extrabold text-teal-800">
                   $399
                 </span>
               </div>

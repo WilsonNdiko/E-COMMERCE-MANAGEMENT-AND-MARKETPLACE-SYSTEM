@@ -23,7 +23,7 @@ const ShopPage = async ({
       : "All Electronics";
 
   return (
-    <div className="bg-slate-50 min-h-[75vh] pb-16">
+    <div className="bg-canvas min-h-[75vh] pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Breadcrumb />
 
@@ -31,8 +31,8 @@ const ShopPage = async ({
           <Filters />
 
           <div>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 mb-5 border-b border-slate-200/80">
-              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 capitalize">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 mb-5 border-b border-stone-200/80">
+              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-stone-900 capitalize">
                 {heading}
               </h1>
               <SortBy />

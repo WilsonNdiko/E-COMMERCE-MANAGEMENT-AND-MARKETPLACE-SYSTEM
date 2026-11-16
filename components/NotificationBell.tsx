@@ -96,7 +96,7 @@ const NotificationBell: React.FC<NotificationBellProps> = ({
       <button
         type="button"
         onClick={handleToggle}
-        className="relative inline-flex items-center justify-center w-10 h-10 text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors"
+        className="relative inline-flex items-center justify-center w-10 h-10 text-stone-700 hover:text-teal-700 hover:bg-teal-50 rounded-xl transition-colors"
         aria-label={`Notifications ${
           unreadCount > 0 ? `(${unreadCount} unread)` : ""
         }`}
@@ -104,21 +104,21 @@ const NotificationBell: React.FC<NotificationBellProps> = ({
       >
         <FaRegBell className="w-5 h-5" />
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 flex items-center justify-center min-w-[20px] h-5 px-1 text-[11px] font-bold text-white bg-blue-600 rounded-full shadow-sm">
+          <span className="absolute -top-1 -right-1 flex items-center justify-center min-w-[20px] h-5 px-1 text-[11px] font-bold text-white bg-teal-700 rounded-full shadow-sm">
             {unreadCount > 99 ? "99+" : unreadCount}
           </span>
         )}
       </button>
 
       {isDropdownOpen && (
-        <div className="absolute right-0 top-full mt-2 w-80 sm:w-96 bg-white border border-slate-200 rounded-2xl shadow-xl z-50 overflow-hidden">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
-            <h3 className="text-sm font-bold text-slate-900">Notifications</h3>
+        <div className="absolute right-0 top-full mt-2 w-80 sm:w-96 bg-white border border-stone-200 rounded-2xl shadow-xl z-50 overflow-hidden">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-stone-100">
+            <h3 className="text-sm font-bold text-stone-900">Notifications</h3>
             {unreadCount > 0 && (
               <button
                 type="button"
                 onClick={handleMarkAllRead}
-                className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700"
+                className="inline-flex items-center gap-1 text-xs font-semibold text-teal-700 hover:text-teal-800"
               >
                 <FaCheckDouble className="w-3 h-3" />
                 <span>Mark read</span>
@@ -126,18 +126,18 @@ const NotificationBell: React.FC<NotificationBellProps> = ({
             )}
           </div>
 
-          <div className="max-h-72 overflow-y-auto divide-y divide-slate-100">
+          <div className="max-h-72 overflow-y-auto divide-y divide-stone-100">
             {loading ? (
-              <div className="p-6 text-center text-xs text-slate-500">
+              <div className="p-6 text-center text-xs text-stone-500">
                 Loading notifications...
               </div>
             ) : recent.length === 0 ? (
               <div className="p-8 text-center">
-                <FaRegBell className="w-8 h-8 mx-auto text-slate-300 mb-2" />
-                <p className="text-slate-600 text-sm font-medium">
+                <FaRegBell className="w-8 h-8 mx-auto text-stone-300 mb-2" />
+                <p className="text-stone-600 text-sm font-medium">
                   All caught up
                 </p>
-                <p className="text-slate-400 text-xs mt-0.5">
+                <p className="text-stone-400 text-xs mt-0.5">
                   Order updates and alerts will appear here.
                 </p>
               </div>
@@ -146,18 +146,18 @@ const NotificationBell: React.FC<NotificationBellProps> = ({
                 <div
                   key={item.id}
                   className={`px-4 py-3 text-left ${
-                    !item.isRead ? "bg-blue-50/50" : "bg-white"
+                    !item.isRead ? "bg-teal-50/50" : "bg-white"
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <p className="text-xs font-semibold text-slate-900">
+                    <p className="text-xs font-semibold text-stone-900">
                       {item.title}
                     </p>
                     {!item.isRead && (
-                      <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0 mt-1" />
+                      <span className="w-2 h-2 rounded-full bg-teal-700 shrink-0 mt-1" />
                     )}
                   </div>
-                  <p className="text-xs text-slate-600 mt-0.5 line-clamp-2">
+                  <p className="text-xs text-stone-600 mt-0.5 line-clamp-2">
                     {item.message}
                   </p>
                 </div>
@@ -165,11 +165,11 @@ const NotificationBell: React.FC<NotificationBellProps> = ({
             )}
           </div>
 
-          <div className="p-2.5 bg-slate-50 border-t border-slate-100">
+          <div className="p-2.5 bg-canvas border-t border-stone-100">
             <Link
               href="/notifications"
               onClick={() => setIsDropdownOpen(false)}
-              className="block w-full text-center text-xs font-semibold text-blue-600 hover:text-blue-700 py-1"
+              className="block w-full text-center text-xs font-semibold text-teal-700 hover:text-teal-800 py-1"
             >
               Open Notification Center →
             </Link>

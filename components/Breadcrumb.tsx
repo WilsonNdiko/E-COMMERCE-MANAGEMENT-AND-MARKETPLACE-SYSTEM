@@ -12,31 +12,31 @@ const Breadcrumb = () => {
   return (
     <nav
       aria-label="Breadcrumb"
-      className="flex items-center gap-2 text-xs font-medium text-slate-500 py-5"
+      className="flex items-center gap-2 text-xs font-medium text-stone-500 py-5"
     >
       <Link
         href="/"
-        className="inline-flex items-center gap-1.5 hover:text-blue-600 transition-colors"
+        className="inline-flex items-center gap-1.5 hover:text-teal-700 transition-colors"
       >
         <FaHouse className="w-3.5 h-3.5" />
         <span>Home</span>
       </Link>
-      <FaChevronRight className="w-2.5 h-2.5 text-slate-300" />
+      <FaChevronRight className="w-2.5 h-2.5 text-stone-300" />
       {categorySlug ? (
         <>
           <Link
             href="/shop"
-            className="hover:text-blue-600 transition-colors"
+            className="hover:text-teal-700 transition-colors"
           >
             Shop
           </Link>
-          <FaChevronRight className="w-2.5 h-2.5 text-slate-300" />
-          <span className="text-slate-900 font-semibold capitalize">
+          <FaChevronRight className="w-2.5 h-2.5 text-stone-300" />
+          <span className="text-stone-900 font-semibold capitalize">
             {decodeURIComponent(categorySlug).replace(/-/g, " ")}
           </span>
         </>
       ) : (
-        <span className="text-slate-900 font-semibold">All Products</span>
+        <span className="text-stone-900 font-semibold">All Products</span>
       )}
     </nav>
   );

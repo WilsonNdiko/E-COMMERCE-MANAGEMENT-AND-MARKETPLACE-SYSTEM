@@ -5,7 +5,7 @@ import { Suspense } from "react";
 
 const CartPage = () => {
   return (
-    <div className="bg-slate-50 min-h-[75vh] pb-16">
+    <div className="bg-canvas min-h-[75vh] pb-16">
       <SectionTitle title="Shopping Cart" path="Home | Cart" />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-8">
         <Suspense fallback={<Loader />}>

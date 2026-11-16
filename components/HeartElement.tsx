@@ -11,7 +11,7 @@ const HeartElement = ({ wishQuantity }: { wishQuantity: number }) => {
   return (
     <Link
       href="/wishlist"
-      className="relative inline-flex items-center justify-center w-10 h-10 rounded-xl text-slate-700 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+      className="relative inline-flex items-center justify-center w-10 h-10 rounded-xl text-stone-700 hover:text-rose-600 hover:bg-rose-50 transition-colors"
       aria-label={`Wishlist (${count} items)`}
       title="Wishlist"
     >

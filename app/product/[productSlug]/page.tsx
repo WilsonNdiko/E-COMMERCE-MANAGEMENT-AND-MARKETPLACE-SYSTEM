@@ -86,33 +86,33 @@ const SingleProductPage = async ({ params }: SingleProductPageProps) => {
   const sku = `SNG-${String(product.id).slice(0, 6).toUpperCase()}`;
 
   return (
-    <div className="bg-slate-50 pb-20">
+    <div className="bg-canvas pb-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
         <nav
           aria-label="Breadcrumb"
-          className="flex flex-wrap items-center gap-2 text-xs font-medium text-slate-500 py-5"
+          className="flex flex-wrap items-center gap-2 text-xs font-medium text-stone-500 py-5"
         >
-          <Link href="/" className="hover:text-blue-600 transition-colors">
+          <Link href="/" className="hover:text-teal-700 transition-colors">
             Home
           </Link>
-          <FaChevronRight className="w-2.5 h-2.5 text-slate-300" />
-          <Link href="/shop" className="hover:text-blue-600 transition-colors">
+          <FaChevronRight className="w-2.5 h-2.5 text-stone-300" />
+          <Link href="/shop" className="hover:text-teal-700 transition-colors">
             Shop
           </Link>
           {product.category?.name && (
             <>
-              <FaChevronRight className="w-2.5 h-2.5 text-slate-300" />
+              <FaChevronRight className="w-2.5 h-2.5 text-stone-300" />
               <Link
                 href={`/shop/${product.category.name}`}
-                className="hover:text-blue-600 capitalize transition-colors"
+                className="hover:text-teal-700 capitalize transition-colors"
               >
                 {product.category.name.replace(/-/g, " ")}
               </Link>
             </>
           )}
-          <FaChevronRight className="w-2.5 h-2.5 text-slate-300" />
-          <span className="text-slate-900 font-semibold truncate max-w-[240px]">
+          <FaChevronRight className="w-2.5 h-2.5 text-stone-300" />
+          <span className="text-stone-900 font-semibold truncate max-w-[240px]">
             {sanitize(product.title)}
           </span>
         </nav>
@@ -123,7 +123,7 @@ const SingleProductPage = async ({ params }: SingleProductPageProps) => {
           <div className="lg:col-span-6">
             <Suspense
               fallback={
-                <div className="aspect-square rounded-3xl bg-white border border-slate-200/80 shadow-sm" />
+                <div className="aspect-square rounded-3xl bg-white border border-stone-200/80 shadow-sm" />
               }
             >
               <ProductGallery
@@ -137,17 +137,17 @@ const SingleProductPage = async ({ params }: SingleProductPageProps) => {
           </div>
 
           {/* Right: Product Info & Actions */}
-          <div className="lg:col-span-6 bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-8 shadow-sm space-y-6">
+          <div className="lg:col-span-6 bg-white rounded-3xl border border-stone-200/80 p-6 sm:p-8 shadow-sm space-y-6">
             <div className="space-y-2.5">
               <div className="flex flex-wrap items-center gap-2 text-xs">
-                <span className="font-bold uppercase tracking-wider text-blue-600">
+                <span className="font-bold uppercase tracking-wider text-teal-700">
                   {sanitize(product.manufacturer)}
                 </span>
-                <span className="text-slate-300">·</span>
-                <span className="text-slate-500 font-mono">SKU: {sku}</span>
+                <span className="text-stone-300">·</span>
+                <span className="text-stone-500 font-mono">SKU: {sku}</span>
               </div>
 
-              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 leading-tight">
+              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-stone-900 leading-tight">
                 {sanitize(product.title)}
               </h1>
 
@@ -158,11 +158,11 @@ const SingleProductPage = async ({ params }: SingleProductPageProps) => {
                     <FaStar
                       key={i}
                       className={`w-4 h-4 ${
-                        i < rating ? "text-amber-400" : "text-slate-200"
+                        i < rating ? "text-amber-400" : "text-stone-200"
                       }`}
                     />
                   ))}
-                  <span className="text-xs font-semibold text-slate-600 ml-1">
+                  <span className="text-xs font-semibold text-stone-600 ml-1">
                     {rating}.0
                     {product._count?.reviews
                       ? ` (${product._count.reviews} ${
@@ -195,11 +195,11 @@ const SingleProductPage = async ({ params }: SingleProductPageProps) => {
             </div>
 
             {/* Price */}
-            <div className="flex items-baseline gap-3 py-4 border-y border-slate-100">
-              <span className="text-3xl sm:text-4xl font-extrabold text-slate-900">
+            <div className="flex items-baseline gap-3 py-4 border-y border-stone-100">
+              <span className="text-3xl sm:text-4xl font-extrabold text-stone-900">
                 ${Number(product.price).toLocaleString()}
               </span>
-              <span className="text-xs text-slate-500">
+              <span className="text-xs text-stone-500">
                 {product.price >= 150
                   ? "Qualifies for FREE Express Shipping"
                   : "+ $10 flat-rate shipping (free over $150)"}
@@ -207,7 +207,7 @@ const SingleProductPage = async ({ params }: SingleProductPageProps) => {
             </div>
 
             {/* Short Description */}
-            <p className="text-sm text-slate-600 leading-relaxed">
+            <p className="text-sm text-stone-600 leading-relaxed">
               {sanitize(product.description)}
             </p>
 
@@ -215,17 +215,17 @@ const SingleProductPage = async ({ params }: SingleProductPageProps) => {
             <SingleProductDynamicFields product={product} />
 
             {/* Trust Assurances */}
-            <div className="pt-4 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-600">
+            <div className="pt-4 border-t border-stone-100 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-stone-600">
               <div className="flex items-center gap-2">
-                <FaTruckFast className="w-4 h-4 text-blue-600 shrink-0" />
+                <FaTruckFast className="w-4 h-4 text-teal-700 shrink-0" />
                 <span>Fast Tracked Delivery</span>
               </div>
               <div className="flex items-center gap-2">
-                <FaShieldHalved className="w-4 h-4 text-blue-600 shrink-0" />
+                <FaShieldHalved className="w-4 h-4 text-teal-700 shrink-0" />
                 <span>2-Year Warranty</span>
               </div>
               <div className="flex items-center gap-2">
-                <FaRotateLeft className="w-4 h-4 text-blue-600 shrink-0" />
+                <FaRotateLeft className="w-4 h-4 text-teal-700 shrink-0" />
                 <span>30-Day Free Returns</span>
               </div>
             </div>
@@ -241,12 +241,12 @@ const SingleProductPage = async ({ params }: SingleProductPageProps) => {
         {relatedProducts.length > 0 && (
           <section className="mt-14">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900">
+              <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-stone-900">
                 You May Also Like
               </h2>
               <Link
                 href="/shop"
-                className="text-sm font-semibold text-blue-600 hover:text-blue-700"
+                className="text-sm font-semibold text-teal-700 hover:text-teal-800"
               >
                 View all →
               </Link>

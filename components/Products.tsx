@@ -53,10 +53,10 @@ const Products = async ({
 
   return (
     <div>
-      <p className="text-xs font-medium text-slate-500 mb-4">
+      <p className="text-xs font-medium text-stone-500 mb-4">
         Showing{" "}
-        <span className="font-semibold text-slate-800">{products.length}</span>{" "}
-        of <span className="font-semibold text-slate-800">{totalCount}</span>{" "}
+        <span className="font-semibold text-stone-800">{products.length}</span>{" "}
+        of <span className="font-semibold text-stone-800">{totalCount}</span>{" "}
         {totalCount === 1 ? "product" : "products"}
       </p>
 
@@ -70,18 +70,18 @@ const Products = async ({
           <Pagination currentPage={page} totalPages={totalPages} />
         </>
       ) : (
-        <div className="bg-white rounded-2xl border border-slate-200/80 p-12 text-center space-y-3">
-          <p className="text-lg font-bold text-slate-900">
+        <div className="bg-white rounded-2xl border border-stone-200/80 p-12 text-center space-y-3">
+          <p className="text-lg font-bold text-stone-900">
             No matching products found
           </p>
-          <p className="text-sm text-slate-500 max-w-md mx-auto">
+          <p className="text-sm text-stone-500 max-w-md mx-auto">
             Try widening your price range, lowering the minimum rating, or
             browsing all categories.
           </p>
           <div className="pt-2">
             <Link
               href="/shop"
-              className="inline-flex items-center rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-5 py-2.5 transition-colors"
+              className="inline-flex items-center rounded-xl bg-teal-700 hover:bg-teal-800 text-white text-sm font-semibold px-5 py-2.5 transition-colors"
             >
               Clear All Filters
             </Link>

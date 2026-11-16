@@ -22,7 +22,7 @@ const SortBy = () => {
     <div className="flex items-center gap-2.5">
       <label
         htmlFor="shop-sort"
-        className="text-xs font-semibold text-slate-500 whitespace-nowrap"
+        className="text-xs font-semibold text-stone-500 whitespace-nowrap"
       >
         Sort by
       </label>
@@ -30,7 +30,7 @@ const SortBy = () => {
         id="shop-sort"
         value={currentSort}
         onChange={(e) => handleSort(e.target.value)}
-        className="rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-sm font-medium text-slate-800 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10"
+        className="rounded-xl border border-stone-200 bg-white px-3.5 py-2 text-sm font-medium text-stone-800 shadow-sm focus:border-teal-600 focus:outline-none focus:ring-4 focus:ring-teal-600/10"
         name="sort"
       >
         <option value="defaultSort">Featured</option>

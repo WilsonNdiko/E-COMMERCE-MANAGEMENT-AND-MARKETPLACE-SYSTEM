@@ -141,9 +141,9 @@ const BulkUploadHistory = () => {
       case "PARTIAL":
         return <FaExclamationTriangle className="text-yellow-500 text-xl" />;
       case "PENDING":
-        return <FaClock className="text-blue-500 text-xl" />;
+        return <FaClock className="text-teal-600 text-xl" />;
       default:
-        return <FaFileAlt className="text-gray-500 text-xl" />;
+        return <FaFileAlt className="text-stone-500 text-xl" />;
     }
   };
 
@@ -161,7 +161,7 @@ const BulkUploadHistory = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center py-12">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600"></div>
       </div>
     );
   }
@@ -176,8 +176,8 @@ const BulkUploadHistory = () => {
 
   if (batches.length === 0) {
     return (
-      <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center text-gray-500">
-        <FaFileAlt className="text-4xl mx-auto mb-2 text-gray-400" />
+      <div className="bg-canvas border border-stone-200 rounded-lg p-8 text-center text-stone-500">
+        <FaFileAlt className="text-4xl mx-auto mb-2 text-stone-400" />
         <p>No upload history yet</p>
       </div>
     );
@@ -196,7 +196,7 @@ const BulkUploadHistory = () => {
               <h3 className="text-xl font-bold">Delete Batch Upload</h3>
             </div>
 
-            <p className="text-gray-700 mb-4">
+            <p className="text-stone-700 mb-4">
               Are you sure you want to delete{" "}
               <strong>{batchToDelete.fileName}</strong>?
             </p>
@@ -225,7 +225,7 @@ const BulkUploadHistory = () => {
             <div className="flex gap-3">
               <button
                 onClick={handleDeleteCancel}
-                className="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors"
+                className="flex-1 px-4 py-2 bg-stone-200 text-stone-700 rounded hover:bg-stone-300 transition-colors"
               >
                 Cancel
               </button>
@@ -245,14 +245,14 @@ const BulkUploadHistory = () => {
       {batches.map((batch) => (
         <div
           key={batch.id}
-          className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow"
+          className="bg-white border border-stone-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow"
         >
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
               {getStatusIcon(batch.status)}
               <div>
                 <h3 className="font-semibold text-lg">{batch.fileName}</h3>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-stone-500">
                   Uploaded by {batch.uploadedBy} •{" "}
                   {formatDate(batch.uploadedAt)}
                 </p>
@@ -267,7 +267,7 @@ const BulkUploadHistory = () => {
                     ? "bg-red-100 text-red-700"
                     : batch.status === "PARTIAL"
                     ? "bg-yellow-100 text-yellow-700"
-                    : "bg-gray-100 text-gray-700"
+                    : "bg-stone-100 text-stone-700"
                 }`}
               >
                 {batch.status}
@@ -288,26 +288,26 @@ const BulkUploadHistory = () => {
           </div>
 
           <div className="grid grid-cols-4 gap-4 mb-4">
-            <div className="bg-gray-50 rounded p-3 text-center">
-              <p className="text-2xl font-bold text-gray-700">
+            <div className="bg-canvas rounded p-3 text-center">
+              <p className="text-2xl font-bold text-stone-700">
                 {batch.totalRecords}
               </p>
-              <p className="text-xs text-gray-500">Total</p>
+              <p className="text-xs text-stone-500">Total</p>
             </div>
             <div className="bg-green-50 rounded p-3 text-center">
               <p className="text-2xl font-bold text-green-600">
                 {batch.successfulRecords}
               </p>
-              <p className="text-xs text-gray-500">Success</p>
+              <p className="text-xs text-stone-500">Success</p>
             </div>
             <div className="bg-red-50 rounded p-3 text-center">
               <p className="text-2xl font-bold text-red-600">
                 {batch.failedRecords}
               </p>
-              <p className="text-xs text-gray-500">Failed</p>
+              <p className="text-xs text-stone-500">Failed</p>
             </div>
-            <div className="bg-blue-50 rounded p-3 text-center">
-              <p className="text-2xl font-bold text-blue-600">
+            <div className="bg-teal-50 rounded p-3 text-center">
+              <p className="text-2xl font-bold text-teal-700">
                 {batch.totalRecords > 0
                   ? Math.round(
                       (batch.successfulRecords / batch.totalRecords) * 100
@@ -315,7 +315,7 @@ const BulkUploadHistory = () => {
                   : 0}
                 %
               </p>
-              <p className="text-xs text-gray-500">Success Rate</p>
+              <p className="text-xs text-stone-500">Success Rate</p>
             </div>
           </div>
 

@@ -96,10 +96,10 @@ const DashboardProductDetails = () => {
   };
 
   const inputCls =
-    "w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10";
+    "w-full rounded-xl border border-stone-200 px-3.5 py-2.5 text-sm text-stone-900 focus:border-teal-600 focus:outline-none focus:ring-4 focus:ring-teal-600/10";
 
   return (
-    <div className="bg-slate-50 min-h-[80vh] py-8">
+    <div className="bg-canvas min-h-[80vh] py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col xl:flex-row gap-6">
         <DashboardSidebar />
 
@@ -108,12 +108,12 @@ const DashboardProductDetails = () => {
             <div>
               <Link
                 href="/admin/products"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 hover:underline mb-1"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-teal-700 hover:underline mb-1"
               >
                 <FaArrowLeft className="w-3 h-3" />
                 <span>Back to Products</span>
               </Link>
-              <h1 className="text-2xl font-extrabold text-slate-900">
+              <h1 className="text-2xl font-extrabold text-stone-900">
                 Edit Product
               </h1>
             </div>
@@ -130,17 +130,17 @@ const DashboardProductDetails = () => {
           </div>
 
           {!product ? (
-            <div className="bg-white rounded-2xl border border-slate-200 p-10 text-center text-sm text-slate-500">
+            <div className="bg-white rounded-2xl border border-stone-200 p-10 text-center text-sm text-stone-500">
               Loading product...
             </div>
           ) : (
             <form
               onSubmit={handleUpdate}
-              className="bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-8 shadow-sm space-y-5"
+              className="bg-white rounded-2xl border border-stone-200/80 p-6 sm:p-8 shadow-sm space-y-5"
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="sm:col-span-2">
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label className="block text-xs font-semibold text-stone-700 mb-1">
                     Title
                   </label>
                   <input
@@ -155,7 +155,7 @@ const DashboardProductDetails = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label className="block text-xs font-semibold text-stone-700 mb-1">
                     Slug
                   </label>
                   <input
@@ -170,7 +170,7 @@ const DashboardProductDetails = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label className="block text-xs font-semibold text-stone-700 mb-1">
                     Manufacturer
                   </label>
                   <input
@@ -185,7 +185,7 @@ const DashboardProductDetails = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label className="block text-xs font-semibold text-stone-700 mb-1">
                     Price (USD)
                   </label>
                   <input
@@ -201,7 +201,7 @@ const DashboardProductDetails = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label className="block text-xs font-semibold text-stone-700 mb-1">
                     Stock Quantity (0 = Out of Stock)
                   </label>
                   <input
@@ -220,7 +220,7 @@ const DashboardProductDetails = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label className="block text-xs font-semibold text-stone-700 mb-1">
                     Category
                   </label>
                   <select
@@ -239,7 +239,7 @@ const DashboardProductDetails = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label className="block text-xs font-semibold text-stone-700 mb-1">
                     Merchant
                   </label>
                   <select
@@ -258,7 +258,7 @@ const DashboardProductDetails = () => {
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                  <label className="block text-xs font-semibold text-stone-700 mb-1.5">
                     Main Image
                   </label>
                   <div className="flex items-center gap-4">
@@ -271,7 +271,7 @@ const DashboardProductDetails = () => {
                       alt={product.title}
                       width={72}
                       height={72}
-                      className="w-18 h-18 rounded-xl border border-slate-200 bg-slate-50 object-contain p-1.5"
+                      className="w-18 h-18 rounded-xl border border-stone-200 bg-canvas object-contain p-1.5"
                     />
                     <input
                       type="file"
@@ -286,7 +286,7 @@ const DashboardProductDetails = () => {
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label className="block text-xs font-semibold text-stone-700 mb-1">
                     Description
                   </label>
                   <textarea
@@ -304,13 +304,13 @@ const DashboardProductDetails = () => {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-bold px-6 py-2.5 text-sm"
+                  className="rounded-xl bg-teal-700 hover:bg-teal-800 disabled:opacity-60 text-white font-bold px-6 py-2.5 text-sm"
                 >
                   {saving ? "Saving..." : "Save Changes"}
                 </button>
                 <Link
                   href={`/product/${product.slug}`}
-                  className="rounded-xl border border-slate-200 px-5 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-50"
+                  className="rounded-xl border border-stone-200 px-5 py-2.5 text-sm font-semibold text-stone-600 hover:bg-canvas"
                 >
                   View in Store →
                 </Link>

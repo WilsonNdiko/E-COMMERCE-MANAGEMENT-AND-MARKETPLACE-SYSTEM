@@ -65,16 +65,16 @@ const Filters = () => {
     Boolean(activeCategorySlug);
 
   return (
-    <aside className="bg-white rounded-2xl border border-slate-200/80 p-5 space-y-6 h-fit">
+    <aside className="bg-white rounded-2xl border border-stone-200/80 p-5 space-y-6 h-fit">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-bold uppercase tracking-wider text-slate-900">
+        <h3 className="text-sm font-bold uppercase tracking-wider text-stone-900">
           Filters
         </h3>
         {hasActiveFilters && (
           <button
             type="button"
             onClick={resetAll}
-            className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700"
+            className="inline-flex items-center gap-1 text-xs font-semibold text-teal-700 hover:text-teal-800"
           >
             <FaRotateLeft className="w-3 h-3" />
             <span>Reset</span>
@@ -83,11 +83,11 @@ const Filters = () => {
       </div>
 
       {/* Availability */}
-      <div className="pt-4 border-t border-slate-100 space-y-2.5">
-        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+      <div className="pt-4 border-t border-stone-100 space-y-2.5">
+        <h4 className="text-xs font-bold uppercase tracking-wider text-stone-500">
           Availability
         </h4>
-        <label className="flex items-center gap-2.5 cursor-pointer text-sm text-slate-700 hover:text-slate-900">
+        <label className="flex items-center gap-2.5 cursor-pointer text-sm text-stone-700 hover:text-stone-900">
           <input
             type="checkbox"
             checked={inStock}
@@ -98,7 +98,7 @@ const Filters = () => {
           />
           <span>In Stock</span>
         </label>
-        <label className="flex items-center gap-2.5 cursor-pointer text-sm text-slate-700 hover:text-slate-900">
+        <label className="flex items-center gap-2.5 cursor-pointer text-sm text-stone-700 hover:text-stone-900">
           <input
             type="checkbox"
             checked={outOfStock}
@@ -112,12 +112,12 @@ const Filters = () => {
       </div>
 
       {/* Price Range */}
-      <div className="pt-4 border-t border-slate-100 space-y-3">
+      <div className="pt-4 border-t border-stone-100 space-y-3">
         <div className="flex items-center justify-between">
-          <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+          <h4 className="text-xs font-bold uppercase tracking-wider text-stone-500">
             Max Price
           </h4>
-          <span className="text-sm font-bold text-blue-600">
+          <span className="text-sm font-bold text-teal-700">
             ${priceDraft.toLocaleString()}
           </span>
         </div>
@@ -154,8 +154,8 @@ const Filters = () => {
               }}
               className={`px-2.5 py-1 rounded-lg text-xs font-medium border transition-colors ${
                 urlPrice === preset
-                  ? "bg-blue-600 text-white border-blue-600"
-                  : "bg-slate-50 text-slate-600 border-slate-200 hover:border-blue-300"
+                  ? "bg-teal-700 text-white border-teal-700"
+                  : "bg-canvas text-stone-600 border-stone-200 hover:border-teal-300"
               }`}
             >
               {preset === MAX_PRICE ? "Any" : `≤ $${preset}`}
@@ -165,8 +165,8 @@ const Filters = () => {
       </div>
 
       {/* Minimum Rating */}
-      <div className="pt-4 border-t border-slate-100 space-y-2">
-        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+      <div className="pt-4 border-t border-stone-100 space-y-2">
+        <h4 className="text-xs font-bold uppercase tracking-wider text-stone-500">
           Customer Rating
         </h4>
         <div className="space-y-1">
@@ -183,8 +183,8 @@ const Filters = () => {
                 }
                 className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                   active
-                    ? "bg-blue-50 text-blue-700 font-semibold"
-                    : "text-slate-600 hover:bg-slate-50"
+                    ? "bg-teal-50 text-teal-800 font-semibold"
+                    : "text-stone-600 hover:bg-canvas"
                 }`}
               >
                 {stars === 0 ? (
@@ -195,7 +195,7 @@ const Filters = () => {
                       <FaStar
                         key={i}
                         className={`w-3 h-3 ${
-                          i < stars ? "text-amber-400" : "text-slate-200"
+                          i < stars ? "text-amber-400" : "text-stone-200"
                         }`}
                       />
                     ))}
@@ -210,8 +210,8 @@ const Filters = () => {
 
       {/* Categories */}
       {categories.length > 0 && (
-        <div className="pt-4 border-t border-slate-100 space-y-2">
-          <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+        <div className="pt-4 border-t border-stone-100 space-y-2">
+          <h4 className="text-xs font-bold uppercase tracking-wider text-stone-500">
             Categories
           </h4>
           <ul className="space-y-0.5 max-h-64 overflow-y-auto pr-1">
@@ -220,8 +220,8 @@ const Filters = () => {
                 href="/shop"
                 className={`flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-colors ${
                   !activeCategorySlug
-                    ? "bg-blue-50 text-blue-700 font-semibold"
-                    : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                    ? "bg-teal-50 text-teal-800 font-semibold"
+                    : "text-stone-600 hover:bg-canvas hover:text-stone-900"
                 }`}
               >
                 <span>All Categories</span>
@@ -235,13 +235,13 @@ const Filters = () => {
                     href={`/shop/${cat.name}`}
                     className={`flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs capitalize transition-colors ${
                       isSelected
-                        ? "bg-blue-50 text-blue-700 font-semibold"
-                        : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                        ? "bg-teal-50 text-teal-800 font-semibold"
+                        : "text-stone-600 hover:bg-canvas hover:text-stone-900"
                     }`}
                   >
                     <span>{cat.name.replace(/-/g, " ")}</span>
                     {cat._count?.products !== undefined && (
-                      <span className="text-[11px] text-slate-400">
+                      <span className="text-[11px] text-stone-400">
                         {cat._count.products}
                       </span>
                     )}

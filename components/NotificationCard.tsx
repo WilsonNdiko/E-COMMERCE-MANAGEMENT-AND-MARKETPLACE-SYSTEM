@@ -33,7 +33,7 @@ interface NotificationCardProps {
 const getTypeIcon = (type: NotificationType) => {
   switch (type) {
     case NotificationType.ORDER_UPDATE:
-      return <FaShoppingCart className="text-blue-500" />;
+      return <FaShoppingCart className="text-teal-600" />;
     case NotificationType.PAYMENT_STATUS:
       return <FaCreditCard className="text-green-500" />;
     case NotificationType.PROMOTION:
@@ -41,14 +41,14 @@ const getTypeIcon = (type: NotificationType) => {
     case NotificationType.SYSTEM_ALERT:
       return <FaExclamationTriangle className="text-red-500" />;
     default:
-      return <FaCircle className="text-gray-500" />;
+      return <FaCircle className="text-stone-500" />;
   }
 };
 
 const getTypeColor = (type: NotificationType) => {
   switch (type) {
     case NotificationType.ORDER_UPDATE:
-      return 'bg-blue-100 text-blue-800';
+      return 'bg-teal-100 text-teal-900';
     case NotificationType.PAYMENT_STATUS:
       return 'bg-green-100 text-green-800';
     case NotificationType.PROMOTION:
@@ -56,14 +56,14 @@ const getTypeColor = (type: NotificationType) => {
     case NotificationType.SYSTEM_ALERT:
       return 'bg-red-100 text-red-800';
     default:
-      return 'bg-gray-100 text-gray-800';
+      return 'bg-stone-100 text-stone-800';
   }
 };
 
 const getPriorityBadge = (priority: NotificationPriority) => {
   const priorityStyles = {
-    [NotificationPriority.LOW]: 'bg-gray-100 text-gray-600 border-gray-300',
-    [NotificationPriority.NORMAL]: 'bg-blue-100 text-blue-600 border-blue-300',
+    [NotificationPriority.LOW]: 'bg-stone-100 text-stone-600 border-stone-300',
+    [NotificationPriority.NORMAL]: 'bg-teal-100 text-teal-700 border-teal-300',
     [NotificationPriority.HIGH]: 'bg-orange-100 text-orange-600 border-orange-300',
     [NotificationPriority.URGENT]: 'bg-red-100 text-red-600 border-red-300'
   };
@@ -94,8 +94,8 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
   return (
     <div className={`
       border rounded-lg p-4 transition-all duration-200 hover:shadow-md
-      ${notification.isRead ? 'bg-white border-gray-200' : 'bg-blue-50 border-blue-200 shadow-sm'}
-      ${isSelected ? 'ring-2 ring-blue-500 border-blue-500' : ''}
+      ${notification.isRead ? 'bg-white border-stone-200' : 'bg-teal-50 border-teal-200 shadow-sm'}
+      ${isSelected ? 'ring-2 ring-teal-600 border-teal-600' : ''}
     `}>
       <div className="flex items-start space-x-3">
         {/* Selection Checkbox */}
@@ -104,7 +104,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
             type="checkbox"
             checked={isSelected}
             onChange={() => onToggleSelect(notification.id)}
-            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+            className="w-4 h-4 text-teal-700 bg-stone-100 border-stone-300 rounded focus:ring-teal-600 focus:ring-2"
             aria-label={`Select notification: ${notification.title}`}
           />
         </div>
@@ -118,12 +118,12 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
                 {getTypeIcon(notification.type)}
               </div>
               <h3 className={`text-sm font-medium truncate ${
-                notification.isRead ? 'text-gray-900' : 'text-gray-900 font-semibold'
+                notification.isRead ? 'text-stone-900' : 'text-stone-900 font-semibold'
               }`}>
                 {notification.title}
               </h3>
               {!notification.isRead && (
-                <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0" aria-label="Unread notification" />
+                <div className="w-2 h-2 bg-teal-600 rounded-full flex-shrink-0" aria-label="Unread notification" />
               )}
             </div>
 
@@ -134,7 +134,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
           </div>
 
           {/* Message */}
-          <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+          <p className="text-sm text-stone-600 mb-3 line-clamp-2">
             {notification.message}
           </p>
 
@@ -147,7 +147,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
               </span>
               
               {/* Timestamp */}
-              <span className="text-xs text-gray-500" title={new Date(notification.createdAt).toLocaleString()}>
+              <span className="text-xs text-stone-500" title={new Date(notification.createdAt).toLocaleString()}>
                 {timeAgo}
               </span>
             </div>
@@ -157,7 +157,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
               {!notification.isRead && (
                 <button
                   onClick={() => onMarkAsRead(notification.id)}
-                  className="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-600 bg-blue-100 rounded hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition-colors"
+                  className="inline-flex items-center px-2 py-1 text-xs font-medium text-teal-700 bg-teal-100 rounded hover:bg-teal-200 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:ring-offset-1 transition-colors"
                   aria-label="Mark as read"
                 >
                   <FaCheck className="w-3 h-3 mr-1" />

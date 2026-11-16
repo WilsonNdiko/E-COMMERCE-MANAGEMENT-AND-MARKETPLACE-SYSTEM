@@ -8,11 +8,11 @@ const SectionTitle = ({ title, path }: { title: string; path: string }) => {
     .filter(Boolean);
 
   return (
-    <div className="bg-white border-b border-slate-200/80">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+    <div className="bg-sage border-b border-stone-200/80">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-7 sm:py-9">
         <nav
           aria-label="Breadcrumb"
-          className="flex items-center gap-2 text-xs font-medium text-slate-500 mb-2"
+          className="flex items-center gap-2 text-xs font-medium text-stone-600 mb-1.5"
         >
           {segments.map((seg, idx) => {
             const isLast = idx === segments.length - 1;
@@ -24,16 +24,16 @@ const SectionTitle = ({ title, path }: { title: string; path: string }) => {
                 : null;
             return (
               <React.Fragment key={`${seg}-${idx}`}>
-                {idx > 0 && <span className="text-slate-300">/</span>}
+                {idx > 0 && <span className="text-stone-400">/</span>}
                 {!isLast && href ? (
                   <Link
                     href={href}
-                    className="hover:text-blue-600 transition-colors"
+                    className="hover:text-teal-800 transition-colors"
                   >
                     {seg}
                   </Link>
                 ) : (
-                  <span className={isLast ? "text-slate-800 font-semibold" : ""}>
+                  <span className={isLast ? "text-teal-900 font-semibold" : ""}>
                     {seg}
                   </span>
                 )}
@@ -41,7 +41,7 @@ const SectionTitle = ({ title, path }: { title: string; path: string }) => {
             );
           })}
         </nav>
-        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
+        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-stone-900">
           {title}
         </h1>
       </div>

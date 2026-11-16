@@ -15,13 +15,13 @@ const CartElement = () => {
   return (
     <Link
       href="/cart"
-      className="inline-flex items-center gap-2.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-blue-600 text-white transition-colors shadow-sm"
+      className="inline-flex items-center gap-2.5 px-3 py-2 rounded-xl bg-teal-900 hover:bg-teal-700 text-white transition-colors shadow-sm"
       aria-label={`Shopping cart (${qty} items)`}
     >
       <div className="relative">
         <FaBagShopping className="w-4 h-4" />
         {qty > 0 && (
-          <span className="absolute -top-2 -right-2.5 min-w-[18px] h-[18px] px-1 text-[10px] font-bold bg-blue-500 text-white rounded-full flex items-center justify-center ring-2 ring-slate-900">
+          <span className="absolute -top-2 -right-2.5 min-w-[18px] h-[18px] px-1 text-[10px] font-bold bg-teal-600 text-white rounded-full flex items-center justify-center ring-2 ring-stone-900">
             {qty > 99 ? "99+" : qty}
           </span>
         )}

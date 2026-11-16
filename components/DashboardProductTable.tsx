@@ -82,10 +82,10 @@ const DashboardProductTable = () => {
     <div className="flex-1 min-w-0 space-y-5">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-extrabold tracking-tight text-slate-900">
+          <h1 className="text-2xl font-extrabold tracking-tight text-stone-900">
             Products
           </h1>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <p className="text-xs text-stone-500 mt-0.5">
             Manage catalog listings, pricing, images, and inventory counts.
           </p>
         </div>
@@ -103,7 +103,7 @@ const DashboardProductTable = () => {
           )}
           <Link
             href="/admin/products/new"
-            className="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 text-xs font-bold shadow-sm transition-colors"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-teal-700 hover:bg-teal-800 text-white px-4 py-2.5 text-xs font-bold shadow-sm transition-colors"
           >
             <FaPlus className="w-3 h-3" />
             <span>Add Product</span>
@@ -127,8 +127,8 @@ const DashboardProductTable = () => {
               onClick={() => setStockFilter(val)}
               className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors ${
                 stockFilter === val
-                  ? "bg-blue-600 text-white"
-                  : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50"
+                  ? "bg-teal-700 text-white"
+                  : "bg-white border border-stone-200 text-stone-600 hover:bg-canvas"
               }`}
             >
               {label}
@@ -137,22 +137,22 @@ const DashboardProductTable = () => {
         </div>
 
         <div className="relative w-full sm:w-64">
-          <FaMagnifyingGlass className="w-3.5 h-3.5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <FaMagnifyingGlass className="w-3.5 h-3.5 text-stone-400 absolute left-3.5 top-1/2 -transtone-y-1/2" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search products or brands..."
-            className="w-full rounded-xl border border-slate-200 bg-white pl-9 pr-3 py-2 text-xs text-slate-900 focus:border-blue-500 focus:outline-none"
+            className="w-full rounded-xl border border-stone-200 bg-white pl-9 pr-3 py-2 text-xs text-stone-900 focus:border-teal-600 focus:outline-none"
           />
         </div>
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-2xl border border-stone-200/80 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 text-slate-500 uppercase tracking-wider font-semibold border-b border-slate-100">
+            <thead className="bg-canvas text-stone-500 uppercase tracking-wider font-semibold border-b border-stone-100">
               <tr>
                 <th className="px-4 py-3.5 w-10">
                   <input
@@ -172,22 +172,22 @@ const DashboardProductTable = () => {
                 <th className="px-4 py-3.5 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-stone-100">
               {loading ? (
                 <tr>
-                  <td colSpan={6} className="py-10 text-center text-slate-500">
+                  <td colSpan={6} className="py-10 text-center text-stone-500">
                     Loading catalog...
                   </td>
                 </tr>
               ) : filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="py-10 text-center text-slate-500">
+                  <td colSpan={6} className="py-10 text-center text-stone-500">
                     No products match your search.
                   </td>
                 </tr>
               ) : (
                 filtered.map((product) => (
-                  <tr key={product.id} className="hover:bg-slate-50/70">
+                  <tr key={product.id} className="hover:bg-canvas/70">
                     <td className="px-4 py-3">
                       <input
                         type="checkbox"
@@ -198,7 +198,7 @@ const DashboardProductTable = () => {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-11 h-11 rounded-xl bg-slate-50 border border-slate-100 p-1 flex items-center justify-center shrink-0">
+                        <div className="w-11 h-11 rounded-xl bg-canvas border border-stone-100 p-1 flex items-center justify-center shrink-0">
                           <Image
                             width={40}
                             height={40}
@@ -212,16 +212,16 @@ const DashboardProductTable = () => {
                           />
                         </div>
                         <div>
-                          <p className="font-bold text-slate-900">
+                          <p className="font-bold text-stone-900">
                             {sanitize(product.title)}
                           </p>
-                          <p className="text-slate-400">
+                          <p className="text-stone-400">
                             {sanitize(product.manufacturer)}
                           </p>
                         </div>
                       </div>
                     </td>
-                    <td className="px-4 py-3 capitalize text-slate-600">
+                    <td className="px-4 py-3 capitalize text-stone-600">
                       {product.category?.name?.replace(/-/g, " ") || "—"}
                     </td>
                     <td className="px-4 py-3">
@@ -235,20 +235,20 @@ const DashboardProductTable = () => {
                         </span>
                       )}
                     </td>
-                    <td className="px-4 py-3 font-extrabold text-slate-900">
+                    <td className="px-4 py-3 font-extrabold text-stone-900">
                       ${Number(product.price).toLocaleString()}
                     </td>
                     <td className="px-4 py-3 text-right">
                       <div className="inline-flex items-center gap-2">
                         <Link
                           href={`/product/${product.slug}`}
-                          className="text-slate-400 hover:text-blue-600 font-semibold"
+                          className="text-stone-400 hover:text-teal-700 font-semibold"
                         >
                           View
                         </Link>
                         <Link
                           href={`/admin/products/${product.id}`}
-                          className="rounded-lg border border-slate-200 hover:bg-slate-100 px-3 py-1.5 font-semibold text-slate-700 transition-colors"
+                          className="rounded-lg border border-stone-200 hover:bg-stone-100 px-3 py-1.5 font-semibold text-stone-700 transition-colors"
                         >
                           Edit
                         </Link>

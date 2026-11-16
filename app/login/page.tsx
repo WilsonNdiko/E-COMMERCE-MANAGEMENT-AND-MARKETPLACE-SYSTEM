@@ -73,12 +73,12 @@ function LoginForm() {
 
   return (
     <div className="max-w-md mx-auto px-4 pt-10 pb-20 space-y-5">
-      <div className="bg-white rounded-3xl border border-slate-200/80 p-7 sm:p-9 shadow-sm space-y-6">
+      <div className="bg-white rounded-3xl border border-stone-200/80 p-7 sm:p-9 shadow-sm space-y-6">
         <div className="text-center space-y-1">
-          <h2 className="text-xl font-extrabold text-slate-900">
+          <h2 className="text-xl font-extrabold text-stone-900">
             Welcome back
           </h2>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-stone-500">
             Sign in to manage orders, wishlist, or the admin dashboard.
           </p>
         </div>
@@ -93,7 +93,7 @@ function LoginForm() {
           <div>
             <label
               htmlFor="email"
-              className="block text-xs font-semibold text-slate-700 mb-1.5"
+              className="block text-xs font-semibold text-stone-700 mb-1.5"
             >
               Email Address
             </label>
@@ -106,7 +106,7 @@ function LoginForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
-              className="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10"
+              className="w-full rounded-xl border border-stone-200 px-3.5 py-2.5 text-sm text-stone-900 placeholder:text-stone-400 focus:border-teal-600 focus:outline-none focus:ring-4 focus:ring-teal-600/10"
             />
           </div>
 
@@ -114,14 +114,14 @@ function LoginForm() {
             <div className="flex items-center justify-between mb-1.5">
               <label
                 htmlFor="password"
-                className="block text-xs font-semibold text-slate-700"
+                className="block text-xs font-semibold text-stone-700"
               >
                 Password
               </label>
               <button
                 type="button"
                 onClick={() => setShowResetHelp((v) => !v)}
-                className="text-xs font-semibold text-blue-600 hover:text-blue-700"
+                className="text-xs font-semibold text-teal-700 hover:text-teal-800"
               >
                 Forgot password?
               </button>
@@ -136,12 +136,12 @@ function LoginForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full rounded-xl border border-slate-200 pl-3.5 pr-10 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10"
+                className="w-full rounded-xl border border-stone-200 pl-3.5 pr-10 py-2.5 text-sm text-stone-900 placeholder:text-stone-400 focus:border-teal-600 focus:outline-none focus:ring-4 focus:ring-teal-600/10"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword((v) => !v)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                className="absolute right-3 top-1/2 -transtone-y-1/2 text-stone-400 hover:text-stone-600"
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? (
@@ -154,11 +154,11 @@ function LoginForm() {
           </div>
 
           {showResetHelp && (
-            <div className="rounded-xl bg-slate-50 border border-slate-200 p-3 text-xs text-slate-600">
+            <div className="rounded-xl bg-canvas border border-stone-200 p-3 text-xs text-stone-600">
               Need a password reset? Reach out via our{" "}
               <Link
                 href="/contact"
-                className="font-semibold text-blue-600 underline"
+                className="font-semibold text-teal-700 underline"
               >
                 Support form
               </Link>{" "}
@@ -169,29 +169,29 @@ function LoginForm() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-bold py-3 text-sm shadow-sm transition-colors"
+            className="w-full rounded-xl bg-teal-700 hover:bg-teal-800 disabled:opacity-60 text-white font-bold py-3 text-sm shadow-sm transition-colors"
           >
             {submitting ? "Signing in..." : "Sign In"}
           </button>
         </form>
 
         {/* Demo Admin Helper */}
-        <div className="pt-4 border-t border-slate-100">
+        <div className="pt-4 border-t border-stone-100">
           <button
             type="button"
             onClick={fillDemoAdmin}
-            className="w-full flex items-center justify-center gap-2 rounded-xl border border-blue-200 bg-blue-50/70 hover:bg-blue-100/70 px-4 py-2.5 text-xs font-semibold text-blue-700 transition-colors"
+            className="w-full flex items-center justify-center gap-2 rounded-xl border border-teal-200 bg-teal-50/70 hover:bg-teal-100/70 px-4 py-2.5 text-xs font-semibold text-teal-800 transition-colors"
           >
             <FaKey className="w-3.5 h-3.5" />
             <span>Fill Demo Admin Login (admin@singitronic.com)</span>
           </button>
         </div>
 
-        <p className="text-center text-xs text-slate-500">
+        <p className="text-center text-xs text-stone-500">
           Don&apos;t have an account?{" "}
           <Link
             href="/register"
-            className="font-bold text-blue-600 hover:text-blue-700"
+            className="font-bold text-teal-700 hover:text-teal-800"
           >
             Create one free
           </Link>
@@ -203,11 +203,11 @@ function LoginForm() {
 
 const LoginPage = () => {
   return (
-    <div className="bg-slate-50 min-h-[75vh]">
+    <div className="bg-canvas min-h-[75vh]">
       <SectionTitle title="Sign In" path="Home | Sign In" />
       <Suspense
         fallback={
-          <div className="py-12 text-center text-sm text-slate-500">
+          <div className="py-12 text-center text-sm text-stone-500">
             Loading...
           </div>
         }

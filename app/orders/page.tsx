@@ -189,30 +189,30 @@ function OrdersContent() {
       )}
 
       {/* Order Lookup Bar */}
-      <div className="no-print bg-white rounded-3xl border border-slate-200/80 p-6 shadow-sm">
-        <h2 className="text-base font-bold text-slate-900 mb-1">
+      <div className="no-print bg-white rounded-3xl border border-stone-200/80 p-6 shadow-sm">
+        <h2 className="text-base font-bold text-stone-900 mb-1">
           Track an Order
         </h2>
-        <p className="text-xs text-slate-500 mb-4">
+        <p className="text-xs text-stone-500 mb-4">
           Enter your Order ID (e.g.{" "}
           <code className="font-mono">ord-demo-1001</code>) or the email address
           used at checkout.
         </p>
         <form onSubmit={handleLookup} className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
-            <FaMagnifyingGlass className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <FaMagnifyingGlass className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -transtone-y-1/2" />
             <input
               type="text"
               value={lookupInput}
               onChange={(e) => setLookupInput(e.target.value)}
               placeholder="Order ID or email address..."
-              className="w-full rounded-xl border border-slate-200 pl-10 pr-4 py-2.5 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10"
+              className="w-full rounded-xl border border-stone-200 pl-10 pr-4 py-2.5 text-sm text-stone-900 focus:border-teal-600 focus:outline-none focus:ring-4 focus:ring-teal-600/10"
             />
           </div>
           <button
             type="submit"
             disabled={loading}
-            className="rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-6 py-2.5 transition-colors"
+            className="rounded-xl bg-teal-700 hover:bg-teal-800 text-white text-sm font-semibold px-6 py-2.5 transition-colors"
           >
             {loading ? "Searching..." : "Track Order"}
           </button>
@@ -221,7 +221,7 @@ function OrdersContent() {
 
       {/* Orders List */}
       {loading ? (
-        <div className="text-center py-12 text-sm text-slate-500">
+        <div className="text-center py-12 text-sm text-stone-500">
           Loading orders...
         </div>
       ) : orders.length > 0 ? (
@@ -234,19 +234,19 @@ function OrdersContent() {
             return (
               <div
                 key={order.id}
-                className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden"
+                className="bg-white rounded-3xl border border-stone-200/80 shadow-sm overflow-hidden"
               >
-                <div className="bg-slate-50/70 px-6 py-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-4">
+                <div className="bg-canvas/70 px-6 py-4 border-b border-stone-100 flex flex-wrap items-center justify-between gap-4">
                   <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs">
                     <div>
-                      <p className="text-slate-400 font-medium">Order ID</p>
-                      <p className="font-mono font-bold text-slate-900 mt-0.5">
+                      <p className="text-stone-400 font-medium">Order ID</p>
+                      <p className="font-mono font-bold text-stone-900 mt-0.5">
                         #{order.id.slice(0, 14)}
                       </p>
                     </div>
                     <div>
-                      <p className="text-slate-400 font-medium">Date Placed</p>
-                      <p className="font-semibold text-slate-800 mt-0.5">
+                      <p className="text-stone-400 font-medium">Date Placed</p>
+                      <p className="font-semibold text-stone-800 mt-0.5">
                         {order.dateTime
                           ? new Date(order.dateTime).toLocaleDateString(
                               undefined,
@@ -260,15 +260,15 @@ function OrdersContent() {
                       </p>
                     </div>
                     <div>
-                      <p className="text-slate-400 font-medium">Ship To</p>
-                      <p className="font-semibold text-slate-800 mt-0.5">
+                      <p className="text-stone-400 font-medium">Ship To</p>
+                      <p className="font-semibold text-stone-800 mt-0.5">
                         {order.name} {order.lastname} · {order.city},{" "}
                         {order.country}
                       </p>
                     </div>
                     <div>
-                      <p className="text-slate-400 font-medium">Total</p>
-                      <p className="font-extrabold text-slate-900 mt-0.5">
+                      <p className="text-stone-400 font-medium">Total</p>
+                      <p className="font-extrabold text-stone-900 mt-0.5">
                         ${Number(order.total).toLocaleString()}
                       </p>
                     </div>
@@ -293,12 +293,12 @@ function OrdersContent() {
                             <div key={label} className="space-y-1.5">
                               <div
                                 className={`h-1.5 rounded-full transition-colors ${
-                                  reached ? "bg-blue-600" : "bg-slate-100"
+                                  reached ? "bg-teal-700" : "bg-stone-100"
                                 }`}
                               />
                               <p
                                 className={`text-[11px] font-semibold ${
-                                  reached ? "text-blue-700" : "text-slate-400"
+                                  reached ? "text-teal-800" : "text-stone-400"
                                 }`}
                               >
                                 {label}
@@ -312,14 +312,14 @@ function OrdersContent() {
                 )}
 
                 {order.products && order.products.length > 0 && (
-                  <ul className="divide-y divide-slate-100 px-6 py-2">
+                  <ul className="divide-y divide-stone-100 px-6 py-2">
                     {order.products.map((line) => (
                       <li
                         key={line.id}
                         className="py-3.5 flex items-center justify-between gap-4"
                       >
                         <div className="flex items-center gap-3.5 min-w-0">
-                          <div className="w-14 h-14 rounded-xl bg-slate-50 border border-slate-100 p-1.5 flex items-center justify-center shrink-0">
+                          <div className="w-14 h-14 rounded-xl bg-canvas border border-stone-100 p-1.5 flex items-center justify-center shrink-0">
                             <Image
                               src={
                                 line.product?.mainImage
@@ -339,11 +339,11 @@ function OrdersContent() {
                                   ? `/product/${line.product.slug}`
                                   : "/shop"
                               }
-                              className="text-sm font-bold text-slate-900 hover:text-blue-600 truncate block"
+                              className="text-sm font-bold text-stone-900 hover:text-teal-700 truncate block"
                             >
                               {line.product?.title || "Product"}
                             </Link>
-                            <p className="text-xs text-slate-500">
+                            <p className="text-xs text-stone-500">
                               Qty: {line.quantity}
                               {line.product?.price
                                 ? ` · $${line.product.price.toLocaleString()} each`
@@ -352,7 +352,7 @@ function OrdersContent() {
                           </div>
                         </div>
                         {line.product?.price && (
-                          <span className="text-sm font-bold text-slate-900 shrink-0">
+                          <span className="text-sm font-bold text-stone-900 shrink-0">
                             $
                             {(
                               line.product.price * line.quantity
@@ -365,8 +365,8 @@ function OrdersContent() {
                 )}
 
                 {/* Order Footer Actions: Address + Print Receipt + Cancel */}
-                <div className="px-6 py-3.5 bg-slate-50/50 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
-                  <span className="text-slate-500">
+                <div className="px-6 py-3.5 bg-canvas/50 border-t border-stone-100 flex flex-wrap items-center justify-between gap-3 text-xs">
+                  <span className="text-stone-500">
                     Delivery address: {order.adress}
                     {order.apartment ? `, ${order.apartment}` : ""},{" "}
                     {order.city} {order.postalCode}, {order.country}
@@ -376,9 +376,9 @@ function OrdersContent() {
                     <button
                       type="button"
                       onClick={() => window.print()}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 px-3 py-1.5 font-semibold text-slate-700 transition-colors"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-stone-200 bg-white hover:bg-stone-100 px-3 py-1.5 font-semibold text-stone-700 transition-colors"
                     >
-                      <FaPrint className="w-3 h-3 text-slate-500" />
+                      <FaPrint className="w-3 h-3 text-stone-500" />
                       <span>Print Receipt</span>
                     </button>
 
@@ -404,20 +404,20 @@ function OrdersContent() {
           })}
         </div>
       ) : searchedOnce ? (
-        <div className="bg-white rounded-3xl border border-slate-200/80 p-12 text-center space-y-3 shadow-sm">
-          <div className="w-14 h-14 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto">
+        <div className="bg-white rounded-3xl border border-stone-200/80 p-12 text-center space-y-3 shadow-sm">
+          <div className="w-14 h-14 rounded-2xl bg-stone-100 text-stone-400 flex items-center justify-center mx-auto">
             <FaBoxOpen className="w-6 h-6" />
           </div>
-          <h3 className="text-lg font-extrabold text-slate-900">
+          <h3 className="text-lg font-extrabold text-stone-900">
             No matching orders found
           </h3>
-          <p className="text-xs text-slate-500 max-w-sm mx-auto">
+          <p className="text-xs text-stone-500 max-w-sm mx-auto">
             Double-check your Order ID or email address, or start shopping to
             place your first order.
           </p>
           <Link
             href="/shop"
-            className="inline-block mt-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-5 py-2.5 transition-colors"
+            className="inline-block mt-2 rounded-xl bg-teal-700 hover:bg-teal-800 text-white text-xs font-bold px-5 py-2.5 transition-colors"
           >
             Browse Catalog
           </Link>
@@ -429,13 +429,13 @@ function OrdersContent() {
 
 export default function OrdersPage() {
   return (
-    <div className="bg-slate-50 min-h-[75vh] pb-20">
+    <div className="bg-canvas min-h-[75vh] pb-20">
       <div className="no-print">
         <SectionTitle title="Orders & Tracking" path="Home | Orders" />
       </div>
       <Suspense
         fallback={
-          <div className="py-12 text-center text-sm text-slate-500">
+          <div className="py-12 text-center text-sm text-stone-500">
             Loading orders...
           </div>
         }

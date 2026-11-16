@@ -42,12 +42,12 @@ export default function RecentlyViewed({
   if (items.length === 0) return null;
 
   return (
-    <section className="mt-14 pt-10 border-t border-slate-200/70">
+    <section className="mt-14 pt-10 border-t border-stone-200/70">
       <div className="flex items-center justify-between mb-5">
-        <h2 className="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900">
+        <h2 className="text-lg sm:text-xl font-extrabold tracking-tight text-stone-900">
           Recently Viewed
         </h2>
-        <span className="text-xs text-slate-400">Your browsing history</span>
+        <span className="text-xs text-stone-400">Your browsing history</span>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -55,9 +55,9 @@ export default function RecentlyViewed({
           <Link
             key={p.id}
             href={`/product/${p.slug}`}
-            className="group bg-white rounded-2xl border border-slate-200/80 hover:border-blue-300 hover:shadow-md p-4 flex items-center gap-3.5 transition-all"
+            className="group bg-white rounded-2xl border border-stone-200/80 hover:border-teal-300 hover:shadow-md p-4 flex items-center gap-3.5 transition-all"
           >
-            <div className="w-16 h-16 rounded-xl bg-slate-50 p-2 flex items-center justify-center shrink-0">
+            <div className="w-16 h-16 rounded-xl bg-canvas p-2 flex items-center justify-center shrink-0">
               <Image
                 src={p.mainImage ? `/${p.mainImage}` : "/product_placeholder.jpg"}
                 alt={p.title}
@@ -67,24 +67,24 @@ export default function RecentlyViewed({
               />
             </div>
             <div className="min-w-0 flex-1 space-y-1">
-              <p className="text-[11px] text-slate-400 truncate">
+              <p className="text-[11px] text-stone-400 truncate">
                 {p.manufacturer}
               </p>
-              <p className="text-xs font-bold text-slate-900 group-hover:text-blue-600 line-clamp-1 transition-colors">
+              <p className="text-xs font-bold text-stone-900 group-hover:text-teal-700 line-clamp-1 transition-colors">
                 {p.title}
               </p>
               <div className="flex items-center justify-between gap-2">
-                <span className="text-sm font-extrabold text-slate-900">
+                <span className="text-sm font-extrabold text-stone-900">
                   ${Number(p.price).toLocaleString()}
                 </span>
-                <span className="inline-flex items-center gap-0.5 text-[11px] font-semibold text-slate-500">
+                <span className="inline-flex items-center gap-0.5 text-[11px] font-semibold text-stone-500">
                   {p.rating > 0 ? (
                     <>
                       <FaStar className="w-2.5 h-2.5 text-amber-400" />
                       {p.rating}.0
                     </>
                   ) : (
-                    <FaCube className="w-2.5 h-2.5 text-blue-500" />
+                    <FaCube className="w-2.5 h-2.5 text-teal-600" />
                   )}
                 </span>
               </div>

@@ -25,7 +25,7 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions);
   return (
     <html lang="en" data-theme="light">
-      <body className="min-h-screen flex flex-col bg-slate-50 text-slate-900 antialiased">
+      <body className="min-h-screen flex flex-col bg-canvas text-stone-900 antialiased">
         <SessionProvider session={session}>
           <Header />
           <Providers>

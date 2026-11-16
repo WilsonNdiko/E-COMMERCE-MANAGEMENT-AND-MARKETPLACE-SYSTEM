@@ -42,18 +42,18 @@ export default function FaqPage() {
   );
 
   return (
-    <div className="bg-slate-50 pb-20">
+    <div className="bg-canvas pb-20">
       <SectionTitle title="Frequently Asked Questions" path="Home | FAQ" />
 
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 space-y-6">
         <div className="relative">
-          <FaMagnifyingGlass className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
+          <FaMagnifyingGlass className="w-4 h-4 text-stone-400 absolute left-4 top-1/2 -transtone-y-1/2" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search questions (shipping, returns, promo codes)..."
-            className="w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-4 py-3.5 text-sm text-slate-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10"
+            className="w-full rounded-2xl border border-stone-200 bg-white pl-11 pr-4 py-3.5 text-sm text-stone-900 shadow-sm focus:border-teal-600 focus:outline-none focus:ring-4 focus:ring-teal-600/10"
           />
         </div>
 
@@ -63,24 +63,24 @@ export default function FaqPage() {
             return (
               <div
                 key={item.q}
-                className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden"
+                className="bg-white rounded-2xl border border-stone-200/80 shadow-sm overflow-hidden"
               >
                 <button
                   type="button"
                   onClick={() => setOpenIndex(open ? null : idx)}
                   className="w-full px-6 py-4 flex items-center justify-between gap-4 text-left"
                 >
-                  <span className="text-sm sm:text-base font-bold text-slate-900">
+                  <span className="text-sm sm:text-base font-bold text-stone-900">
                     {item.q}
                   </span>
                   <FaChevronDown
-                    className={`w-3.5 h-3.5 text-slate-400 shrink-0 transition-transform ${
-                      open ? "rotate-180 text-blue-600" : ""
+                    className={`w-3.5 h-3.5 text-stone-400 shrink-0 transition-transform ${
+                      open ? "rotate-180 text-teal-700" : ""
                     }`}
                   />
                 </button>
                 {open && (
-                  <div className="px-6 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+                  <div className="px-6 pb-5 text-sm text-stone-600 leading-relaxed border-t border-stone-100 pt-3">
                     {item.a}
                   </div>
                 )}
@@ -89,16 +89,16 @@ export default function FaqPage() {
           })}
         </div>
 
-        <div className="bg-white rounded-2xl border border-slate-200/80 p-6 text-center space-y-2">
-          <p className="text-sm font-bold text-slate-900">
+        <div className="bg-white rounded-2xl border border-stone-200/80 p-6 text-center space-y-2">
+          <p className="text-sm font-bold text-stone-900">
             Still have a question?
           </p>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-stone-500">
             Our specialists are ready to help around the clock.
           </p>
           <Link
             href="/contact"
-            className="inline-block mt-1 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-5 py-2.5 transition-colors"
+            className="inline-block mt-1 rounded-xl bg-teal-700 hover:bg-teal-800 text-white text-xs font-bold px-5 py-2.5 transition-colors"
           >
             Contact Support
           </Link>

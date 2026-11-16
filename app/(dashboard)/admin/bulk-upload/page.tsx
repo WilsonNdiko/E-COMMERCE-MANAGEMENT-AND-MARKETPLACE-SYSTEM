@@ -88,26 +88,26 @@ UltraSlim Mechanical Keyboard,129,Logitech,15,product7.webp,Low-profile tactile 
   };
 
   return (
-    <div className="bg-slate-50 min-h-[80vh] py-8">
+    <div className="bg-canvas min-h-[80vh] py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col xl:flex-row gap-6">
         <DashboardSidebar />
 
         <div className="flex-1 min-w-0 space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h1 className="text-2xl font-extrabold text-slate-900">
+              <h1 className="text-2xl font-extrabold text-stone-900">
                 CSV Bulk Upload
               </h1>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-stone-500 mt-0.5">
                 Import dozens of products in seconds using a standardized CSV template.
               </p>
             </div>
             <button
               type="button"
               onClick={downloadTemplate}
-              className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 px-4 py-2.5 text-xs font-bold text-slate-700 shadow-sm"
+              className="inline-flex items-center gap-2 rounded-xl border border-stone-200 bg-white hover:bg-canvas px-4 py-2.5 text-xs font-bold text-stone-700 shadow-sm"
             >
-              <FaDownload className="text-blue-600" />
+              <FaDownload className="text-teal-700" />
               <span>Download CSV Template</span>
             </button>
           </div>
@@ -126,17 +126,17 @@ UltraSlim Mechanical Keyboard,129,Logitech,15,product7.webp,Low-profile tactile 
             }}
             className={`bg-white rounded-2xl border-2 border-dashed p-10 text-center transition-colors ${
               dragActive
-                ? "border-blue-500 bg-blue-50/50"
-                : "border-slate-200 hover:border-blue-300"
+                ? "border-teal-600 bg-teal-50/50"
+                : "border-stone-200 hover:border-teal-300"
             }`}
           >
-            <FaFileUpload className="text-4xl text-slate-300 mx-auto mb-3" />
-            <p className="text-sm font-bold text-slate-800 mb-1">
+            <FaFileUpload className="text-4xl text-stone-300 mx-auto mb-3" />
+            <p className="text-sm font-bold text-stone-800 mb-1">
               {file
                 ? `${file.name} (${(file.size / 1024).toFixed(1)} KB)`
                 : "Drop your CSV file here, or browse"}
             </p>
-            <p className="text-xs text-slate-500 mb-5">
+            <p className="text-xs text-stone-500 mb-5">
               Columns: title, price, manufacturer, inStock, mainImage, description, slug, categoryId
             </p>
             <input
@@ -152,7 +152,7 @@ UltraSlim Mechanical Keyboard,129,Logitech,15,product7.webp,Low-profile tactile 
             <div className="flex items-center justify-center gap-3">
               <label
                 htmlFor="csv-upload"
-                className="cursor-pointer rounded-xl border border-slate-200 bg-white hover:bg-slate-50 px-5 py-2.5 text-xs font-bold text-slate-700"
+                className="cursor-pointer rounded-xl border border-stone-200 bg-white hover:bg-canvas px-5 py-2.5 text-xs font-bold text-stone-700"
               >
                 Select CSV File
               </label>
@@ -161,7 +161,7 @@ UltraSlim Mechanical Keyboard,129,Logitech,15,product7.webp,Low-profile tactile 
                   type="button"
                   onClick={handleUpload}
                   disabled={uploading}
-                  className="rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white px-6 py-2.5 text-xs font-bold"
+                  className="rounded-xl bg-teal-700 hover:bg-teal-800 disabled:opacity-60 text-white px-6 py-2.5 text-xs font-bold"
                 >
                   {uploading ? "Importing..." : "Import Products Now"}
                 </button>
@@ -170,8 +170,8 @@ UltraSlim Mechanical Keyboard,129,Logitech,15,product7.webp,Low-profile tactile 
           </div>
 
           {uploadResult && (
-            <div className="bg-white rounded-2xl border border-slate-200 p-5 flex items-center justify-between text-xs">
-              <div className="flex items-center gap-2 font-bold text-slate-900">
+            <div className="bg-white rounded-2xl border border-stone-200 p-5 flex items-center justify-between text-xs">
+              <div className="flex items-center gap-2 font-bold text-stone-900">
                 {uploadResult.summary.failed === 0 ? (
                   <FaCheckCircle className="text-emerald-600 text-base" />
                 ) : (
@@ -191,8 +191,8 @@ UltraSlim Mechanical Keyboard,129,Logitech,15,product7.webp,Low-profile tactile 
             </div>
           )}
 
-          <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm">
-            <h2 className="text-sm font-bold text-slate-900 mb-4">
+          <div className="bg-white rounded-2xl border border-stone-200/80 p-6 shadow-sm">
+            <h2 className="text-sm font-bold text-stone-900 mb-4">
               Import History
             </h2>
             <BulkUploadHistory key={historyKey} />

@@ -39,10 +39,10 @@ const QuantityInputCart = ({ product } : { product: ProductInCart }) => {
         Quantity{" "}
       </label>
 
-      <div className="flex items-center justify-center rounded border border-gray-200 w-32">
+      <div className="flex items-center justify-center rounded border border-stone-200 w-32">
         <button
           type="button"
-          className="size-10 leading-10 text-gray-600 transition hover:opacity-75 flex items-center justify-center"
+          className="size-10 leading-10 text-stone-600 transition hover:opacity-75 flex items-center justify-center"
           onClick={() => handleQuantityChange("minus")}
         >
           <FaMinus />
@@ -58,7 +58,7 @@ const QuantityInputCart = ({ product } : { product: ProductInCart }) => {
 
         <button
           type="button"
-          className="size-10 leading-10 text-gray-600 transition hover:opacity-75 flex items-center justify-center"
+          className="size-10 leading-10 text-stone-600 transition hover:opacity-75 flex items-center justify-center"
           onClick={() => handleQuantityChange("plus")}
         >
           <FaPlus />

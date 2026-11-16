@@ -226,20 +226,20 @@ const CheckoutPage = () => {
 
   if (mounted && items.length === 0) {
     return (
-      <div className="bg-slate-50 min-h-[70vh] pb-16">
+      <div className="bg-canvas min-h-[70vh] pb-16">
         <SectionTitle title="Checkout" path="Home | Cart | Checkout" />
         <div className="max-w-xl mx-auto px-4 pt-12">
-          <div className="bg-white rounded-3xl border border-slate-200/80 p-12 text-center space-y-4">
-            <h2 className="text-xl font-bold text-slate-900">
+          <div className="bg-white rounded-3xl border border-stone-200/80 p-12 text-center space-y-4">
+            <h2 className="text-xl font-bold text-stone-900">
               No items to check out
             </h2>
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-stone-500">
               Add products to your cart first, then return here to complete your
               order.
             </p>
             <Link
               href="/shop"
-              className="inline-flex items-center rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 text-sm"
+              className="inline-flex items-center rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-semibold px-6 py-3 text-sm"
             >
               Browse Shop
             </Link>
@@ -250,10 +250,10 @@ const CheckoutPage = () => {
   }
 
   const inputCls =
-    "w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10";
+    "w-full rounded-xl border border-stone-200 bg-white px-3.5 py-2.5 text-sm text-stone-900 placeholder:text-stone-400 focus:border-teal-600 focus:outline-none focus:ring-4 focus:ring-teal-600/10";
 
   return (
-    <div className="bg-slate-50 min-h-screen pb-20">
+    <div className="bg-canvas min-h-screen pb-20">
       <SectionTitle title="Secure Checkout" path="Home | Cart | Checkout" />
 
       <form
@@ -263,14 +263,14 @@ const CheckoutPage = () => {
         {/* Left: Shipping + Payment */}
         <div className="lg:col-span-7 space-y-6">
           {/* Contact & Recipient */}
-          <div className="bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-8 shadow-sm space-y-5">
+          <div className="bg-white rounded-3xl border border-stone-200/80 p-6 sm:p-8 shadow-sm space-y-5">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-extrabold text-slate-900">
+              <h2 className="text-lg font-extrabold text-stone-900">
                 1. Contact Information
               </h2>
               <Link
                 href="/cart"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 hover:text-blue-700"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-teal-700 hover:text-teal-800"
               >
                 <FaArrowLeft className="w-3 h-3" />
                 <span>Edit cart</span>
@@ -279,7 +279,7 @@ const CheckoutPage = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1.5">
+                <label className="block text-xs font-semibold text-stone-600 mb-1.5">
                   First Name *
                 </label>
                 <input
@@ -294,7 +294,7 @@ const CheckoutPage = () => {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1.5">
+                <label className="block text-xs font-semibold text-stone-600 mb-1.5">
                   Last Name *
                 </label>
                 <input
@@ -312,7 +312,7 @@ const CheckoutPage = () => {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1.5">
+                <label className="block text-xs font-semibold text-stone-600 mb-1.5">
                   Email Address *
                 </label>
                 <input
@@ -327,7 +327,7 @@ const CheckoutPage = () => {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1.5">
+                <label className="block text-xs font-semibold text-stone-600 mb-1.5">
                   Phone Number *
                 </label>
                 <input
@@ -345,14 +345,14 @@ const CheckoutPage = () => {
           </div>
 
           {/* Shipping Address */}
-          <div className="bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-8 shadow-sm space-y-5">
-            <h2 className="text-lg font-extrabold text-slate-900">
+          <div className="bg-white rounded-3xl border border-stone-200/80 p-6 sm:p-8 shadow-sm space-y-5">
+            <h2 className="text-lg font-extrabold text-stone-900">
               2. Shipping Address
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="sm:col-span-2">
-                <label className="block text-xs font-semibold text-slate-600 mb-1.5">
+                <label className="block text-xs font-semibold text-stone-600 mb-1.5">
                   Street Address *
                 </label>
                 <input
@@ -368,7 +368,7 @@ const CheckoutPage = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1.5">
+                <label className="block text-xs font-semibold text-stone-600 mb-1.5">
                   Apartment / Suite (optional)
                 </label>
                 <input
@@ -386,7 +386,7 @@ const CheckoutPage = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1.5">
+                <label className="block text-xs font-semibold text-stone-600 mb-1.5">
                   Company (optional)
                 </label>
                 <input
@@ -404,7 +404,7 @@ const CheckoutPage = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1.5">
+                <label className="block text-xs font-semibold text-stone-600 mb-1.5">
                   City *
                 </label>
                 <input
@@ -420,7 +420,7 @@ const CheckoutPage = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1.5">
+                <label className="block text-xs font-semibold text-stone-600 mb-1.5">
                   Postal / ZIP Code *
                 </label>
                 <input
@@ -439,7 +439,7 @@ const CheckoutPage = () => {
               </div>
 
               <div className="sm:col-span-2">
-                <label className="block text-xs font-semibold text-slate-600 mb-1.5">
+                <label className="block text-xs font-semibold text-stone-600 mb-1.5">
                   Country *
                 </label>
                 <input
@@ -458,7 +458,7 @@ const CheckoutPage = () => {
               </div>
 
               <div className="sm:col-span-2">
-                <label className="block text-xs font-semibold text-slate-600 mb-1.5">
+                <label className="block text-xs font-semibold text-stone-600 mb-1.5">
                   Delivery Instructions (optional)
                 </label>
                 <textarea
@@ -478,8 +478,8 @@ const CheckoutPage = () => {
           </div>
 
           {/* Payment Method */}
-          <div className="bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-8 shadow-sm space-y-5">
-            <h2 className="text-lg font-extrabold text-slate-900">
+          <div className="bg-white rounded-3xl border border-stone-200/80 p-6 sm:p-8 shadow-sm space-y-5">
+            <h2 className="text-lg font-extrabold text-stone-900">
               3. Payment Method
             </h2>
 
@@ -489,16 +489,16 @@ const CheckoutPage = () => {
                 onClick={() => setPaymentMethod("cod")}
                 className={`flex items-center gap-3 p-4 rounded-2xl border-2 text-left transition-all ${
                   paymentMethod === "cod"
-                    ? "border-blue-600 bg-blue-50/50"
-                    : "border-slate-200 hover:border-slate-300"
+                    ? "border-teal-700 bg-teal-50/50"
+                    : "border-stone-200 hover:border-stone-300"
                 }`}
               >
-                <FaMoneyBillWave className="w-5 h-5 text-blue-600 shrink-0" />
+                <FaMoneyBillWave className="w-5 h-5 text-teal-700 shrink-0" />
                 <div>
-                  <p className="text-sm font-bold text-slate-900">
+                  <p className="text-sm font-bold text-stone-900">
                     Pay on Delivery
                   </p>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-stone-500">
                     Cash or card upon courier arrival
                   </p>
                 </div>
@@ -509,16 +509,16 @@ const CheckoutPage = () => {
                 onClick={() => setPaymentMethod("card")}
                 className={`flex items-center gap-3 p-4 rounded-2xl border-2 text-left transition-all ${
                   paymentMethod === "card"
-                    ? "border-blue-600 bg-blue-50/50"
-                    : "border-slate-200 hover:border-slate-300"
+                    ? "border-teal-700 bg-teal-50/50"
+                    : "border-stone-200 hover:border-stone-300"
                 }`}
               >
-                <FaCreditCard className="w-5 h-5 text-blue-600 shrink-0" />
+                <FaCreditCard className="w-5 h-5 text-teal-700 shrink-0" />
                 <div>
-                  <p className="text-sm font-bold text-slate-900">
+                  <p className="text-sm font-bold text-stone-900">
                     Credit / Debit Card
                   </p>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-stone-500">
                     Visa, Mastercard, Amex
                   </p>
                 </div>
@@ -528,7 +528,7 @@ const CheckoutPage = () => {
             {paymentMethod === "card" && (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                 <div className="sm:col-span-2">
-                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">
+                  <label className="block text-xs font-semibold text-stone-600 mb-1.5">
                     Name on Card *
                   </label>
                   <input
@@ -542,7 +542,7 @@ const CheckoutPage = () => {
                   />
                 </div>
                 <div className="sm:col-span-2">
-                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">
+                  <label className="block text-xs font-semibold text-stone-600 mb-1.5">
                     Card Number *
                   </label>
                   <input
@@ -558,7 +558,7 @@ const CheckoutPage = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">
+                  <label className="block text-xs font-semibold text-stone-600 mb-1.5">
                     Expiry (MM/YY) *
                   </label>
                   <input
@@ -575,7 +575,7 @@ const CheckoutPage = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">
+                  <label className="block text-xs font-semibold text-stone-600 mb-1.5">
                     CVC *
                   </label>
                   <input
@@ -597,15 +597,15 @@ const CheckoutPage = () => {
         </div>
 
         {/* Right: Order Summary */}
-        <aside className="lg:col-span-5 bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-8 shadow-sm space-y-6 sticky top-32">
-          <h2 className="text-lg font-extrabold text-slate-900">
+        <aside className="lg:col-span-5 bg-white rounded-3xl border border-stone-200/80 p-6 sm:p-8 shadow-sm space-y-6 sticky top-32">
+          <h2 className="text-lg font-extrabold text-stone-900">
             Order Review
           </h2>
 
-          <ul className="divide-y divide-slate-100 max-h-72 overflow-y-auto pr-1">
+          <ul className="divide-y divide-stone-100 max-h-72 overflow-y-auto pr-1">
             {items.map((item) => (
               <li key={item.id} className="py-3 flex items-center gap-3.5">
-                <div className="w-14 h-14 rounded-xl bg-slate-50 border border-slate-100 p-1.5 flex items-center justify-center shrink-0">
+                <div className="w-14 h-14 rounded-xl bg-canvas border border-stone-100 p-1.5 flex items-center justify-center shrink-0">
                   <Image
                     src={
                       item.image
@@ -619,14 +619,14 @@ const CheckoutPage = () => {
                   />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-slate-900 truncate">
+                  <p className="text-sm font-semibold text-stone-900 truncate">
                     {item.title}
                   </p>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-stone-500">
                     Qty {item.amount} × ${item.price.toLocaleString()}
                   </p>
                 </div>
-                <span className="text-sm font-bold text-slate-900 shrink-0">
+                <span className="text-sm font-bold text-stone-900 shrink-0">
                   ${(item.price * item.amount).toLocaleString()}
                 </span>
               </li>
@@ -641,7 +641,7 @@ const CheckoutPage = () => {
                 value={promoInput}
                 onChange={(e) => setPromoInput(e.target.value)}
                 placeholder="Promo code (SAVE10)"
-                className="flex-1 rounded-xl border border-slate-200 px-3 py-2 text-xs text-slate-900 focus:border-blue-500 focus:outline-none"
+                className="flex-1 rounded-xl border border-stone-200 px-3 py-2 text-xs text-stone-900 focus:border-teal-600 focus:outline-none"
               />
               <button
                 type="button"
@@ -652,7 +652,7 @@ const CheckoutPage = () => {
                     setPromoInput("");
                   } else toast.error(res.message);
                 }}
-                className="rounded-xl bg-slate-100 hover:bg-slate-200 px-3.5 py-2 text-xs font-bold text-slate-700"
+                className="rounded-xl bg-stone-100 hover:bg-stone-200 px-3.5 py-2 text-xs font-bold text-stone-700"
               >
                 Apply
               </button>
@@ -664,10 +664,10 @@ const CheckoutPage = () => {
             </div>
           )}
 
-          <dl className="space-y-2.5 text-sm border-t border-slate-100 pt-4">
-            <div className="flex justify-between text-slate-600">
+          <dl className="space-y-2.5 text-sm border-t border-stone-100 pt-4">
+            <div className="flex justify-between text-stone-600">
               <dt>Subtotal</dt>
-              <dd className="font-semibold text-slate-900">
+              <dd className="font-semibold text-stone-900">
                 ${subtotal.toLocaleString()}
               </dd>
             </div>
@@ -679,9 +679,9 @@ const CheckoutPage = () => {
                 </dd>
               </div>
             )}
-            <div className="flex justify-between text-slate-600">
+            <div className="flex justify-between text-stone-600">
               <dt>Shipping</dt>
-              <dd className="font-semibold text-slate-900">
+              <dd className="font-semibold text-stone-900">
                 {shipping === 0 ? (
                   <span className="text-emerald-600 font-bold">FREE</span>
                 ) : (
@@ -689,15 +689,15 @@ const CheckoutPage = () => {
                 )}
               </dd>
             </div>
-            <div className="flex justify-between text-slate-600">
+            <div className="flex justify-between text-stone-600">
               <dt>Estimated Tax (8%)</dt>
-              <dd className="font-semibold text-slate-900">
+              <dd className="font-semibold text-stone-900">
                 ${tax.toLocaleString()}
               </dd>
             </div>
-            <div className="flex justify-between border-t border-slate-200 pt-3 text-base">
-              <dt className="font-extrabold text-slate-900">Total</dt>
-              <dd className="text-xl font-extrabold text-blue-600">
+            <div className="flex justify-between border-t border-stone-200 pt-3 text-base">
+              <dt className="font-extrabold text-stone-900">Total</dt>
+              <dd className="text-xl font-extrabold text-teal-700">
                 ${grandTotal.toLocaleString()}
               </dd>
             </div>
@@ -706,7 +706,7 @@ const CheckoutPage = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-bold px-6 py-4 text-sm shadow-lg shadow-blue-600/20 transition-all"
+            className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-teal-700 hover:bg-teal-800 disabled:opacity-60 text-white font-bold px-6 py-4 text-sm shadow-lg shadow-teal-700/20 transition-all"
           >
             <FaLock className="w-3.5 h-3.5" />
             <span>
@@ -716,7 +716,7 @@ const CheckoutPage = () => {
             </span>
           </button>
 
-          <p className="flex items-center justify-center gap-1.5 text-xs text-slate-500">
+          <p className="flex items-center justify-center gap-1.5 text-xs text-stone-500">
             <FaShieldHalved className="text-emerald-600" />
             <span>256-bit SSL encrypted · 30-day money-back guarantee</span>
           </p>

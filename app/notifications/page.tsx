@@ -54,27 +54,27 @@ const NotificationsPage = () => {
 
   if (status === "loading") {
     return (
-      <div className="py-20 text-center text-sm text-slate-500">
+      <div className="py-20 text-center text-sm text-stone-500">
         Loading notifications...
       </div>
     );
   }
 
   return (
-    <div className="bg-slate-50 min-h-[75vh] pb-20">
+    <div className="bg-canvas min-h-[75vh] pb-20">
       <SectionTitle title="Notifications" path="Home | Notifications" />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-5">
         {/* Toolbar */}
-        <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+        <div className="bg-white rounded-2xl border border-stone-200/80 p-4 shadow-sm flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
           <div className="relative flex-1">
-            <FaMagnifyingGlass className="w-3.5 h-3.5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <FaMagnifyingGlass className="w-3.5 h-3.5 text-stone-400 absolute left-3.5 top-1/2 -transtone-y-1/2" />
             <input
               type="text"
               value={filters.search || ""}
               onChange={(e) => setFilters({ search: e.target.value, page: 1 })}
               placeholder="Search notifications..."
-              className="w-full rounded-xl border border-slate-200 pl-9 pr-3 py-2 text-xs text-slate-900 focus:border-blue-500 focus:outline-none"
+              className="w-full rounded-xl border border-stone-200 pl-9 pr-3 py-2 text-xs text-stone-900 focus:border-teal-600 focus:outline-none"
             />
           </div>
 
@@ -94,7 +94,7 @@ const NotificationsPage = () => {
                   page: 1,
                 });
               }}
-              className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700"
+              className="rounded-xl border border-stone-200 bg-white px-3 py-2 text-xs font-semibold text-stone-700"
             >
               <option value="all">All ({total})</option>
               <option value="unread">Unread ({unreadCount})</option>
@@ -109,7 +109,7 @@ const NotificationsPage = () => {
                     ? clearSelection()
                     : selectAll()
                 }
-                className="rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                className="rounded-xl border border-stone-200 px-3 py-2 text-xs font-semibold text-stone-700 hover:bg-canvas"
               >
                 {selectedIds.length === notifications.length
                   ? "Deselect All"
@@ -122,7 +122,7 @@ const NotificationsPage = () => {
                 <button
                   type="button"
                   onClick={markSelectedAsRead}
-                  className="inline-flex items-center gap-1 rounded-xl bg-blue-600 text-white px-3 py-2 text-xs font-bold"
+                  className="inline-flex items-center gap-1 rounded-xl bg-teal-700 text-white px-3 py-2 text-xs font-bold"
                 >
                   <FaCheck className="w-3 h-3" />
                   <span>Mark Read ({selectedIds.length})</span>
@@ -142,18 +142,18 @@ const NotificationsPage = () => {
 
         {/* List */}
         {loading ? (
-          <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center text-sm text-slate-500">
+          <div className="bg-white rounded-2xl border border-stone-200 p-12 text-center text-sm text-stone-500">
             Loading notifications...
           </div>
         ) : notifications.length === 0 ? (
-          <div className="bg-white rounded-3xl border border-slate-200/80 p-14 text-center space-y-3 shadow-sm">
-            <div className="w-14 h-14 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto">
+          <div className="bg-white rounded-3xl border border-stone-200/80 p-14 text-center space-y-3 shadow-sm">
+            <div className="w-14 h-14 rounded-2xl bg-stone-100 text-stone-400 flex items-center justify-center mx-auto">
               <FaBell className="w-6 h-6" />
             </div>
-            <h2 className="text-lg font-extrabold text-slate-900">
+            <h2 className="text-lg font-extrabold text-stone-900">
               You&apos;re all caught up
             </h2>
-            <p className="text-xs text-slate-500 max-w-sm mx-auto">
+            <p className="text-xs text-stone-500 max-w-sm mx-auto">
               When you place an order or a shipment status changes, instant
               updates will show up right here.
             </p>
@@ -179,11 +179,11 @@ const NotificationsPage = () => {
               type="button"
               disabled={page === 1}
               onClick={() => setFilters({ page: Math.max(1, page - 1) })}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-semibold disabled:opacity-40"
+              className="rounded-xl border border-stone-200 bg-white px-4 py-2 text-xs font-semibold disabled:opacity-40"
             >
               Previous
             </button>
-            <span className="text-xs font-semibold text-slate-600">
+            <span className="text-xs font-semibold text-stone-600">
               Page {page} of {totalPages}
             </span>
             <button
@@ -192,7 +192,7 @@ const NotificationsPage = () => {
               onClick={() =>
                 setFilters({ page: Math.min(totalPages, page + 1) })
               }
-              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-semibold disabled:opacity-40"
+              className="rounded-xl border border-stone-200 bg-white px-4 py-2 text-xs font-semibold disabled:opacity-40"
             >
               Next
             </button>

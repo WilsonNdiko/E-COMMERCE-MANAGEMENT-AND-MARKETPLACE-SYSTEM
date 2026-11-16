@@ -79,7 +79,7 @@ export function WishlistToggleButton({
         className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold border transition-all ${
           isSaved
             ? "bg-rose-50 border-rose-200 text-rose-600 hover:bg-rose-100"
-            : "bg-white border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50"
+            : "bg-white border-stone-200 text-stone-700 hover:border-stone-300 hover:bg-canvas"
         }`}
         aria-label={isSaved ? "Remove from wishlist" : "Add to wishlist"}
       >
@@ -102,7 +102,7 @@ export function WishlistToggleButton({
       className={`w-9 h-9 rounded-full flex items-center justify-center shadow-sm border transition-all ${
         isSaved
           ? "bg-rose-50 border-rose-200 text-rose-500 hover:bg-rose-100"
-          : "bg-white/95 border-slate-200/80 text-slate-500 hover:text-rose-500 hover:border-rose-200"
+          : "bg-white/95 border-stone-200/80 text-stone-500 hover:text-rose-500 hover:border-rose-200"
       }`}
     >
       {isSaved ? (
@@ -139,7 +139,7 @@ export function QuickAddToCartButton({ product }: { product: Product }) {
 
   if (isOutOfStock) {
     return (
-      <span className="inline-flex items-center justify-center rounded-xl bg-slate-100 text-slate-400 px-3.5 py-2 text-xs font-semibold cursor-not-allowed">
+      <span className="inline-flex items-center justify-center rounded-xl bg-stone-100 text-stone-400 px-3.5 py-2 text-xs font-semibold cursor-not-allowed">
         Sold Out
       </span>
     );
@@ -152,7 +152,7 @@ export function QuickAddToCartButton({ product }: { product: Product }) {
       className={`inline-flex items-center justify-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-semibold transition-all shadow-sm ${
         justAdded
           ? "bg-emerald-600 text-white"
-          : "bg-blue-600 hover:bg-blue-700 text-white"
+          : "bg-teal-700 hover:bg-teal-800 text-white"
       }`}
     >
       {justAdded ? (

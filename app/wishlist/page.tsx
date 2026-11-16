@@ -102,26 +102,26 @@ export default function WishlistPage() {
   const items = mounted ? wishlist : [];
 
   return (
-    <div className="bg-slate-50 min-h-[75vh] pb-16">
+    <div className="bg-canvas min-h-[75vh] pb-16">
       <SectionTitle title="Saved Wishlist" path="Home | Wishlist" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         {items.length === 0 ? (
-          <div className="bg-white rounded-3xl border border-slate-200/80 p-12 sm:p-16 text-center max-w-xl mx-auto space-y-4 shadow-sm">
+          <div className="bg-white rounded-3xl border border-stone-200/80 p-12 sm:p-16 text-center max-w-xl mx-auto space-y-4 shadow-sm">
             <div className="w-16 h-16 rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center mx-auto">
               <FaRegHeart className="w-7 h-7" />
             </div>
-            <h2 className="text-xl font-bold text-slate-900">
+            <h2 className="text-xl font-bold text-stone-900">
               Your wishlist is empty
             </h2>
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-stone-500">
               Tap the heart icon on any product to save favorites for later or
               compare items side by side.
             </p>
             <div className="pt-2">
               <Link
                 href="/shop"
-                className="inline-flex items-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 text-sm transition-colors"
+                className="inline-flex items-center gap-2 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-semibold px-6 py-3 text-sm transition-colors"
               >
                 <span>Explore Electronics</span>
                 <FaArrowRight className="w-3.5 h-3.5" />
@@ -131,8 +131,8 @@ export default function WishlistPage() {
         ) : (
           <>
             <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-              <p className="text-sm text-slate-600">
-                <strong className="font-bold text-slate-900">
+              <p className="text-sm text-stone-600">
+                <strong className="font-bold text-stone-900">
                   {items.length}
                 </strong>{" "}
                 saved {items.length === 1 ? "item" : "items"}
@@ -141,7 +141,7 @@ export default function WishlistPage() {
                 <button
                   type="button"
                   onClick={handleAddAllToCart}
-                  className="inline-flex items-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2.5 transition-colors"
+                  className="inline-flex items-center gap-2 rounded-xl bg-teal-700 hover:bg-teal-800 text-white text-xs font-semibold px-4 py-2.5 transition-colors"
                 >
                   <FaBagShopping className="w-3.5 h-3.5" />
                   <span>Add All to Cart</span>
@@ -149,7 +149,7 @@ export default function WishlistPage() {
                 <button
                   type="button"
                   onClick={handleClearAll}
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 text-slate-600 text-xs font-semibold px-4 py-2.5 transition-colors"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-stone-200 bg-white hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 text-stone-600 text-xs font-semibold px-4 py-2.5 transition-colors"
                 >
                   <FaTrashCan className="w-3.5 h-3.5" />
                   <span>Clear</span>
@@ -163,17 +163,17 @@ export default function WishlistPage() {
                 return (
                   <div
                     key={item.id}
-                    className="bg-white rounded-2xl border border-slate-200/80 overflow-hidden flex flex-col shadow-sm hover:shadow-md transition-shadow"
+                    className="bg-white rounded-2xl border border-stone-200/80 overflow-hidden flex flex-col shadow-sm hover:shadow-md transition-shadow"
                   >
                     <Link
                       href={`/product/${item.slug}`}
-                      className="aspect-square bg-slate-50 p-6 flex items-center justify-center relative"
+                      className="aspect-square bg-canvas p-6 flex items-center justify-center relative"
                     >
                       <span
                         className={`absolute top-3 left-3 rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${
                           inStock
                             ? "bg-emerald-50 text-emerald-700"
-                            : "bg-slate-200 text-slate-600"
+                            : "bg-stone-200 text-stone-600"
                         }`}
                       >
                         {inStock ? "In Stock" : "Out of Stock"}
@@ -195,21 +195,21 @@ export default function WishlistPage() {
                       <div>
                         <Link
                           href={`/product/${item.slug}`}
-                          className="text-sm font-bold text-slate-900 hover:text-blue-600 line-clamp-2"
+                          className="text-sm font-bold text-stone-900 hover:text-teal-700 line-clamp-2"
                         >
                           {sanitize(item.title)}
                         </Link>
-                        <p className="text-lg font-extrabold text-slate-900 mt-1.5">
+                        <p className="text-lg font-extrabold text-stone-900 mt-1.5">
                           ${Number(item.price).toLocaleString()}
                         </p>
                       </div>
 
-                      <div className="flex items-center gap-2 pt-2 border-t border-slate-100">
+                      <div className="flex items-center gap-2 pt-2 border-t border-stone-100">
                         <button
                           type="button"
                           disabled={!inStock}
                           onClick={() => handleMoveToCart(item)}
-                          className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:bg-slate-200 disabled:text-slate-400 text-white text-xs font-semibold py-2.5 px-3 transition-colors"
+                          className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-teal-700 hover:bg-teal-800 disabled:bg-stone-200 disabled:text-stone-400 text-white text-xs font-semibold py-2.5 px-3 transition-colors"
                         >
                           <FaBagShopping className="w-3.5 h-3.5" />
                           <span>{inStock ? "Move to Cart" : "Sold Out"}</span>
@@ -217,7 +217,7 @@ export default function WishlistPage() {
                         <button
                           type="button"
                           onClick={() => handleRemove(item.id)}
-                          className="w-9 h-9 rounded-xl border border-slate-200 hover:border-rose-200 hover:bg-rose-50 text-slate-500 hover:text-rose-600 flex items-center justify-center transition-colors"
+                          className="w-9 h-9 rounded-xl border border-stone-200 hover:border-rose-200 hover:bg-rose-50 text-stone-500 hover:text-rose-600 flex items-center justify-center transition-colors"
                           aria-label="Remove item"
                           title="Remove from wishlist"
                         >

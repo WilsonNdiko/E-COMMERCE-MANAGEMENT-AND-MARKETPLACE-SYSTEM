@@ -33,35 +33,35 @@ type FinishOption = {
 const FINISHES: FinishOption[] = [
   {
     id: "titanium",
-    name: "Titanium",
-    hex: 0x475569,
-    swatch: "#475569",
-    metalness: 0.82,
-    roughness: 0.26,
+    name: "Warm Gray",
+    hex: 0x57534e,
+    swatch: "#57534e",
+    metalness: 0.78,
+    roughness: 0.28,
   },
   {
     id: "silver",
-    name: "Silver",
-    hex: 0xcbd5e1,
-    swatch: "#cbd5e1",
-    metalness: 0.88,
-    roughness: 0.2,
+    name: "Pearl Silver",
+    hex: 0xd6d3d1,
+    swatch: "#d6d3d1",
+    metalness: 0.85,
+    roughness: 0.22,
   },
   {
-    id: "obsidian",
-    name: "Obsidian",
-    hex: 0x1e293b,
-    swatch: "#1e293b",
-    metalness: 0.75,
-    roughness: 0.3,
+    id: "champagne",
+    name: "Champagne",
+    hex: 0xd6bfa2,
+    swatch: "#d6bfa2",
+    metalness: 0.8,
+    roughness: 0.26,
   },
   {
-    id: "cobalt",
-    name: "Cobalt",
-    hex: 0x1d4ed8,
-    swatch: "#2563eb",
-    metalness: 0.78,
-    roughness: 0.25,
+    id: "teal",
+    name: "Botanical Teal",
+    hex: 0x0f766e,
+    swatch: "#0f766e",
+    metalness: 0.72,
+    roughness: 0.28,
   },
 ];
 
@@ -847,15 +847,15 @@ export default function Product3DViewer({
     }
   }, [finishId]);
 
-  // Apply live studio backdrop updates
+  // Apply live studio backdrop updates (solid soft warm linen vs cozy charcoal)
   useEffect(() => {
     if (sceneRef.current) {
       sceneRef.current.background = new THREE.Color(
-        darkStage ? 0x0f172a : 0xf8fafc
+        darkStage ? 0x1c1917 : 0xf5f1ea
       );
     }
     if (shadowMatRef.current) {
-      shadowMatRef.current.opacity = darkStage ? 0.42 : 0.16;
+      shadowMatRef.current.opacity = darkStage ? 0.42 : 0.14;
     }
   }, [darkStage]);
 
@@ -895,27 +895,27 @@ export default function Product3DViewer({
     el.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(darkStage ? 0x0f172a : 0xf8fafc);
+    scene.background = new THREE.Color(darkStage ? 0x1c1917 : 0xf5f1ea);
     sceneRef.current = scene;
 
     const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 100);
 
-    // Studio 3-point lighting + subtle blue rim light
-    const ambient = new THREE.AmbientLight(0xffffff, 0.85);
+    // Warm soft 3-point studio lighting
+    const ambient = new THREE.AmbientLight(0xfffdf9, 0.9);
     scene.add(ambient);
 
-    const hemi = new THREE.HemisphereLight(0xe0f2fe, 0x334155, 0.9);
+    const hemi = new THREE.HemisphereLight(0xfcfbf8, 0x57534e, 0.85);
     scene.add(hemi);
 
-    const keyLight = new THREE.DirectionalLight(0xffffff, 1.9);
+    const keyLight = new THREE.DirectionalLight(0xfffaf0, 1.85);
     keyLight.position.set(4.5, 6, 5.5);
     scene.add(keyLight);
 
-    const fillLight = new THREE.DirectionalLight(0xbfdbfe, 0.95);
+    const fillLight = new THREE.DirectionalLight(0xe7f0ec, 0.95);
     fillLight.position.set(-5, 2.5, 3);
     scene.add(fillLight);
 
-    const rimLight = new THREE.DirectionalLight(0x60a5fa, 1.1);
+    const rimLight = new THREE.DirectionalLight(0x99f6e4, 0.95);
     rimLight.position.set(0, 4, -6);
     scene.add(rimLight);
 
@@ -941,9 +941,9 @@ export default function Product3DViewer({
     });
 
     const accentMat = new THREE.MeshStandardMaterial({
-      color: 0x2563eb,
-      emissive: 0x1d4ed8,
-      emissiveIntensity: 0.35,
+      color: 0x0f766e,
+      emissive: 0x115e59,
+      emissiveIntensity: 0.3,
       metalness: 0.5,
       roughness: 0.25,
     });
@@ -983,7 +983,7 @@ export default function Product3DViewer({
           if (ctx) {
             const grad = ctx.createRadialGradient(256, 230, 40, 256, 256, 320);
             grad.addColorStop(0, "#ffffff");
-            grad.addColorStop(1, "#eef2ff");
+            grad.addColorStop(1, "#f5f1ea");
             ctx.fillStyle = grad;
             ctx.fillRect(0, 0, 512, 512);
             const pad = 52;
@@ -1210,8 +1210,8 @@ export default function Product3DViewer({
           : "aspect-square rounded-3xl shadow-sm"
       } ${
         darkStage
-          ? "bg-slate-900 border-slate-700 text-white"
-          : "bg-slate-50 border-slate-200/80 text-slate-900"
+          ? "bg-stone-900 border-stone-700 text-white"
+          : "bg-canvas border-stone-200/90 text-stone-900"
       }`}
     >
       {/* Top Overlay Bar */}
@@ -1219,8 +1219,8 @@ export default function Product3DViewer({
         <div
           className={`pointer-events-auto inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-bold backdrop-blur-md border ${
             darkStage
-              ? "bg-slate-800/80 border-slate-700 text-blue-300"
-              : "bg-white/90 border-slate-200 text-blue-700 shadow-sm"
+              ? "bg-stone-800/80 border-stone-700 text-teal-300"
+              : "bg-white/90 border-stone-200 text-teal-800 shadow-sm"
           }`}
         >
           <FaCube className="w-3 h-3" />
@@ -1235,8 +1235,8 @@ export default function Product3DViewer({
             aria-label={autoSpin ? "Pause 3D rotation" : "Auto-rotate 3D model"}
             className={`w-8 h-8 rounded-full flex items-center justify-center border backdrop-blur-md transition-colors ${
               darkStage
-                ? "bg-slate-800/80 border-slate-700 hover:bg-slate-700 text-slate-200"
-                : "bg-white/90 border-slate-200 hover:bg-slate-100 text-slate-700 shadow-sm"
+                ? "bg-stone-800/80 border-stone-700 hover:bg-stone-700 text-stone-200"
+                : "bg-white/90 border-stone-200 hover:bg-stone-100 text-stone-700 shadow-sm"
             }`}
           >
             {autoSpin ? (
@@ -1253,8 +1253,8 @@ export default function Product3DViewer({
             aria-label="Toggle studio lighting"
             className={`w-8 h-8 rounded-full flex items-center justify-center border backdrop-blur-md transition-colors ${
               darkStage
-                ? "bg-slate-800/80 border-slate-700 hover:bg-slate-700 text-amber-300"
-                : "bg-white/90 border-slate-200 hover:bg-slate-100 text-slate-700 shadow-sm"
+                ? "bg-stone-800/80 border-stone-700 hover:bg-stone-700 text-amber-300"
+                : "bg-white/90 border-stone-200 hover:bg-stone-100 text-stone-700 shadow-sm"
             }`}
           >
             {darkStage ? (
@@ -1271,8 +1271,8 @@ export default function Product3DViewer({
             aria-label={fullscreen ? "Exit fullscreen" : "Expand 3D studio"}
             className={`w-8 h-8 rounded-full flex items-center justify-center border backdrop-blur-md transition-colors ${
               darkStage
-                ? "bg-slate-800/80 border-slate-700 hover:bg-slate-700 text-slate-200"
-                : "bg-white/90 border-slate-200 hover:bg-slate-100 text-slate-700 shadow-sm"
+                ? "bg-stone-800/80 border-stone-700 hover:bg-stone-700 text-stone-200"
+                : "bg-white/90 border-stone-200 hover:bg-stone-100 text-stone-700 shadow-sm"
             }`}
           >
             {fullscreen ? (
@@ -1306,7 +1306,7 @@ export default function Product3DViewer({
           }}
         >
           <div
-            className="w-64 h-64 rounded-3xl bg-white p-6 shadow-2xl border border-slate-200 flex items-center justify-center transition-transform duration-150"
+            className="w-64 h-64 rounded-3xl bg-white p-6 shadow-2xl border border-stone-200 flex items-center justify-center transition-transform duration-150"
             style={{
               transform: `scale(${fallbackAngle.scale}) rotateX(${fallbackAngle.rx}deg) rotateY(${fallbackAngle.ry}deg)`,
               transformStyle: "preserve-3d",
@@ -1324,17 +1324,17 @@ export default function Product3DViewer({
 
       {/* Right Zoom & Reset Floating Pill */}
       <div
-        className={`absolute right-3.5 top-1/2 -translate-y-1/2 z-10 flex flex-col rounded-full border backdrop-blur-md overflow-hidden ${
+        className={`absolute right-3.5 top-1/2 -transtone-y-1/2 z-10 flex flex-col rounded-full border backdrop-blur-md overflow-hidden ${
           darkStage
-            ? "bg-slate-800/80 border-slate-700 text-slate-200"
-            : "bg-white/90 border-slate-200 text-slate-700 shadow-sm"
+            ? "bg-stone-800/80 border-stone-700 text-stone-200"
+            : "bg-white/90 border-stone-200 text-stone-700 shadow-sm"
         }`}
       >
         <button
           type="button"
           onClick={() => handleZoom(-0.55)}
           aria-label="Zoom in"
-          className="p-2 hover:bg-blue-600 hover:text-white transition-colors"
+          className="p-2 hover:bg-teal-700 hover:text-white transition-colors"
         >
           <FaPlus className="w-3 h-3" />
         </button>
@@ -1342,7 +1342,7 @@ export default function Product3DViewer({
           type="button"
           onClick={() => handleZoom(0.55)}
           aria-label="Zoom out"
-          className="p-2 border-y border-slate-200/40 hover:bg-blue-600 hover:text-white transition-colors"
+          className="p-2 border-y border-stone-200/40 hover:bg-teal-700 hover:text-white transition-colors"
         >
           <FaMinus className="w-3 h-3" />
         </button>
@@ -1351,7 +1351,7 @@ export default function Product3DViewer({
           onClick={handleReset}
           aria-label="Reset 3D view"
           title="Reset angle"
-          className="p-2 hover:bg-blue-600 hover:text-white transition-colors"
+          className="p-2 hover:bg-teal-700 hover:text-white transition-colors"
         >
           <FaArrowsRotate className="w-3 h-3" />
         </button>
@@ -1363,13 +1363,13 @@ export default function Product3DViewer({
         <div
           className={`pointer-events-auto inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 border backdrop-blur-md ${
             darkStage
-              ? "bg-slate-800/85 border-slate-700"
-              : "bg-white/90 border-slate-200 shadow-sm"
+              ? "bg-stone-800/85 border-stone-700"
+              : "bg-white/90 border-stone-200 shadow-sm"
           }`}
         >
           <span
             className={`text-[10px] font-bold uppercase tracking-wider px-1 hidden sm:inline ${
-              darkStage ? "text-slate-400" : "text-slate-500"
+              darkStage ? "text-stone-400" : "text-stone-500"
             }`}
           >
             Finish
@@ -1383,7 +1383,7 @@ export default function Product3DViewer({
               aria-label={`${f.name} finish`}
               className={`w-5 h-5 rounded-full border-2 transition-transform ${
                 finishId === f.id
-                  ? "scale-110 border-blue-500 ring-2 ring-blue-500/30"
+                  ? "scale-110 border-teal-600 ring-2 ring-teal-600/30"
                   : "border-white/70 opacity-80 hover:opacity-100"
               }`}
               style={{ backgroundColor: f.swatch }}
@@ -1395,8 +1395,8 @@ export default function Product3DViewer({
         <div
           className={`pointer-events-auto inline-flex items-center gap-1 rounded-full p-1 border backdrop-blur-md ${
             darkStage
-              ? "bg-slate-800/85 border-slate-700"
-              : "bg-white/90 border-slate-200 shadow-sm"
+              ? "bg-stone-800/85 border-stone-700"
+              : "bg-white/90 border-stone-200 shadow-sm"
           }`}
         >
           {CAMERA_PRESETS.map((p) => (
@@ -1406,10 +1406,10 @@ export default function Product3DViewer({
               onClick={() => applyPreset(p.id)}
               className={`px-2.5 py-1 rounded-full text-[11px] font-semibold transition-colors ${
                 activePreset === p.id
-                  ? "bg-blue-600 text-white"
+                  ? "bg-teal-700 text-white"
                   : darkStage
-                  ? "text-slate-300 hover:text-white"
-                  : "text-slate-600 hover:text-slate-900"
+                  ? "text-stone-300 hover:text-white"
+                  : "text-stone-600 hover:text-stone-900"
               }`}
             >
               {p.label}
@@ -1424,7 +1424,7 @@ export default function Product3DViewer({
     return (
       <>
         <div
-          className="fixed inset-0 z-40 bg-slate-950/70 backdrop-blur-sm"
+          className="fixed inset-0 z-40 bg-stone-950/70 backdrop-blur-sm"
           onClick={() => setFullscreen(false)}
         />
         {stageShell}

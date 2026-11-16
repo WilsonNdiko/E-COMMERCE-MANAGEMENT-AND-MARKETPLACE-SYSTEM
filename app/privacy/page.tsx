@@ -3,12 +3,12 @@ import { SectionTitle } from "@/components";
 
 export default function PrivacyPage() {
   return (
-    <div className="bg-slate-50 pb-20">
+    <div className="bg-canvas pb-20">
       <SectionTitle title="Privacy Policy" path="Home | Privacy Policy" />
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
-        <div className="bg-white rounded-3xl border border-slate-200/80 p-8 sm:p-10 shadow-sm space-y-6 text-sm text-slate-600 leading-relaxed">
+        <div className="bg-white rounded-3xl border border-stone-200/80 p-8 sm:p-10 shadow-sm space-y-6 text-sm text-stone-600 leading-relaxed">
           <section className="space-y-2">
-            <h2 className="text-lg font-bold text-slate-900">
+            <h2 className="text-lg font-bold text-stone-900">
               1. Information We Collect
             </h2>
             <p>
@@ -18,7 +18,7 @@ export default function PrivacyPage() {
             </p>
           </section>
           <section className="space-y-2">
-            <h2 className="text-lg font-bold text-slate-900">
+            <h2 className="text-lg font-bold text-stone-900">
               2. How We Use Your Data
             </h2>
             <p>
@@ -29,7 +29,7 @@ export default function PrivacyPage() {
             </p>
           </section>
           <section className="space-y-2">
-            <h2 className="text-lg font-bold text-slate-900">
+            <h2 className="text-lg font-bold text-stone-900">
               3. Security &amp; Your Rights
             </h2>
             <p>

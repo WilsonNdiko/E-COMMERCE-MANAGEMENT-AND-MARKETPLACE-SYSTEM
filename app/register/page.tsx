@@ -93,19 +93,19 @@ const RegisterPage = () => {
   };
 
   const inputCls =
-    "w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10";
+    "w-full rounded-xl border border-stone-200 px-3.5 py-2.5 text-sm text-stone-900 placeholder:text-stone-400 focus:border-teal-600 focus:outline-none focus:ring-4 focus:ring-teal-600/10";
 
   return (
-    <div className="bg-slate-50 min-h-[75vh] pb-20">
+    <div className="bg-canvas min-h-[75vh] pb-20">
       <SectionTitle title="Create Account" path="Home | Register" />
 
       <div className="max-w-md mx-auto px-4 pt-10">
-        <div className="bg-white rounded-3xl border border-slate-200/80 p-7 sm:p-9 shadow-sm space-y-6">
+        <div className="bg-white rounded-3xl border border-stone-200/80 p-7 sm:p-9 shadow-sm space-y-6">
           <div className="text-center space-y-1">
-            <h2 className="text-xl font-extrabold text-slate-900">
+            <h2 className="text-xl font-extrabold text-stone-900">
               Join Singitronic
             </h2>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-stone-500">
               Track orders, sync your wishlist, and get member-only deals.
             </p>
           </div>
@@ -119,7 +119,7 @@ const RegisterPage = () => {
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                <label className="block text-xs font-semibold text-stone-700 mb-1.5">
                   First Name
                 </label>
                 <input
@@ -132,7 +132,7 @@ const RegisterPage = () => {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                <label className="block text-xs font-semibold text-stone-700 mb-1.5">
                   Last Name
                 </label>
                 <input
@@ -149,7 +149,7 @@ const RegisterPage = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+              <label className="block text-xs font-semibold text-stone-700 mb-1.5">
                 Email Address
               </label>
               <input
@@ -164,7 +164,7 @@ const RegisterPage = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+              <label className="block text-xs font-semibold text-stone-700 mb-1.5">
                 Password (min. 8 characters)
               </label>
               <div className="relative">
@@ -182,7 +182,7 @@ const RegisterPage = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  className="absolute right-3 top-1/2 -transtone-y-1/2 text-stone-400 hover:text-stone-600"
                   aria-label="Toggle password visibility"
                 >
                   {showPassword ? (
@@ -195,7 +195,7 @@ const RegisterPage = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+              <label className="block text-xs font-semibold text-stone-700 mb-1.5">
                 Confirm Password
               </label>
               <input
@@ -211,7 +211,7 @@ const RegisterPage = () => {
               />
             </div>
 
-            <label className="flex items-start gap-2.5 text-xs text-slate-600 cursor-pointer pt-1">
+            <label className="flex items-start gap-2.5 text-xs text-stone-600 cursor-pointer pt-1">
               <input
                 type="checkbox"
                 checked={form.acceptedTerms}
@@ -224,14 +224,14 @@ const RegisterPage = () => {
                 I agree to the{" "}
                 <Link
                   href="/terms"
-                  className="font-semibold text-blue-600 hover:underline"
+                  className="font-semibold text-teal-700 hover:underline"
                 >
                   Terms of Use
                 </Link>{" "}
                 and{" "}
                 <Link
                   href="/privacy"
-                  className="font-semibold text-blue-600 hover:underline"
+                  className="font-semibold text-teal-700 hover:underline"
                 >
                   Privacy Policy
                 </Link>
@@ -242,17 +242,17 @@ const RegisterPage = () => {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-bold py-3 text-sm shadow-sm transition-colors"
+              className="w-full rounded-xl bg-teal-700 hover:bg-teal-800 disabled:opacity-60 text-white font-bold py-3 text-sm shadow-sm transition-colors"
             >
               {submitting ? "Creating account..." : "Create Account"}
             </button>
           </form>
 
-          <p className="text-center text-xs text-slate-500">
+          <p className="text-center text-xs text-stone-500">
             Already have an account?{" "}
             <Link
               href="/login"
-              className="font-bold text-blue-600 hover:text-blue-700"
+              className="font-bold text-teal-700 hover:text-teal-800"
             >
               Sign in
             </Link>
