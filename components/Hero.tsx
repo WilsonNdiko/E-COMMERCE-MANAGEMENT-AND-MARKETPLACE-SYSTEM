@@ -41,7 +41,7 @@ const Hero = () => {
                 <FaArrowRight className="w-4 h-4" />
               </Link>
               <Link
-                href="/product/smart-watch-demo?view=3d"
+                href="/product/apple-watch-series-9?view=3d"
                 className="inline-flex items-center gap-2 rounded-xl bg-white hover:bg-ivory border border-stone-300/90 text-stone-800 font-semibold px-6 py-3.5 text-sm sm:text-base shadow-sm hover:-translate-y-0.5 transition-all"
               >
                 <FaCube className="w-4 h-4 text-teal-700" />
@@ -74,7 +74,7 @@ const Hero = () => {
                   Bestseller Pick
                 </span>
                 <Link
-                  href="/product/smart-watch-demo?view=3d"
+                  href="/product/apple-watch-series-9?view=3d"
                   className="inline-flex items-center gap-1.5 rounded-full bg-teal-50 hover:bg-teal-700 border border-teal-200 hover:border-teal-700 px-3 py-0.5 text-xs font-semibold text-teal-800 hover:text-white transition-colors"
                 >
                   <FaCube className="w-3 h-3" />
@@ -83,7 +83,7 @@ const Hero = () => {
               </div>
 
               <Link
-                href="/product/smart-watch-demo"
+                href="/product/apple-watch-series-9"
                 className="w-full rounded-2xl bg-canvas py-6 px-4 flex items-center justify-center"
               >
                 <Image
@@ -91,7 +91,7 @@ const Hero = () => {
                   width={300}
                   height={300}
                   priority
-                  alt="Galaxy Watch Ultra Titanium"
+                  alt="Apple Watch Series 9 GPS (45mm)"
                   className="w-56 sm:w-64 h-auto object-contain animate-hero-float group-hover:scale-105 transition-transform duration-300"
                 />
               </Link>
@@ -102,14 +102,14 @@ const Hero = () => {
                     Everyday Smart Wearable
                   </p>
                   <Link
-                    href="/product/smart-watch-demo"
+                    href="/product/apple-watch-series-9"
                     className="text-base font-bold text-stone-900 hover:text-teal-700 transition-colors"
                   >
-                    Galaxy Watch Ultra Titanium
+                    Apple Watch Series 9 GPS
                   </Link>
                 </div>
                 <span className="text-2xl font-extrabold text-teal-800">
-                  $399
+                  $379
                 </span>
               </div>
             </div>

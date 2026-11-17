@@ -29,23 +29,85 @@ async function createCustomerOrder(request, response) {
       });
     }
 
-    const corder = await prisma.customer_order.create({
-      data: {
-        name: validatedData.name,
-        lastname: validatedData.lastname,
-        phone: validatedData.phone,
-        email: validatedData.email,
-        company: validatedData.company || "",
-        adress: validatedData.adress,
-        apartment: validatedData.apartment || "",
-        postalCode: validatedData.postalCode,
-        status: validatedData.status || "processing",
-        city: validatedData.city,
-        country: validatedData.country,
-        orderNotice: validatedData.orderNotice || null,
-        total: Math.round(validatedData.total),
-        dateTime: new Date(),
-      },
+    // Optional atomic line-items support: validate stock & decrement in one transaction
+    const rawItems = Array.isArray(request.body.items) ? request.body.items : [];
+    const normalizedItems = [];
+
+    if (rawItems.length > 0) {
+      // Merge duplicate productIds safely
+      const merged = new Map();
+      for (const raw of rawItems) {
+        const pid = String(raw?.productId || "").trim();
+        const qty = Math.floor(Number(raw?.quantity) || 0);
+        if (!pid || qty <= 0) {
+          return response.status(400).json({
+            error: "Each cart item must have a valid product and positive quantity.",
+          });
+        }
+        merged.set(pid, (merged.get(pid) || 0) + qty);
+      }
+
+      const dbProducts = await prisma.product.findMany({
+        where: { id: { in: Array.from(merged.keys()) } },
+      });
+      const prodMap = new Map(dbProducts.map((p) => [p.id, p]));
+
+      for (const [pid, qty] of merged.entries()) {
+        const prod = prodMap.get(pid);
+        if (!prod) {
+          return response.status(400).json({
+            error: "One of the items in your cart is no longer available. Please refresh your cart.",
+          });
+        }
+        if (prod.inStock <= 0) {
+          return response.status(400).json({
+            error: `"${prod.title}" is currently out of stock.`,
+          });
+        }
+        if (qty > prod.inStock) {
+          return response.status(400).json({
+            error: `Only ${prod.inStock} unit(s) of "${prod.title}" left in stock.`,
+          });
+        }
+        normalizedItems.push({ productId: pid, quantity: qty });
+      }
+    }
+
+    const corder = await prisma.$transaction(async (tx) => {
+      const created = await tx.customer_order.create({
+        data: {
+          name: validatedData.name,
+          lastname: validatedData.lastname,
+          phone: validatedData.phone,
+          email: validatedData.email,
+          company: validatedData.company || "",
+          adress: validatedData.adress,
+          apartment: validatedData.apartment || "",
+          postalCode: validatedData.postalCode,
+          status: validatedData.status || "processing",
+          city: validatedData.city,
+          country: validatedData.country,
+          orderNotice: validatedData.orderNotice || null,
+          total: Math.round(validatedData.total),
+          dateTime: new Date(),
+        },
+      });
+
+      for (const item of normalizedItems) {
+        await tx.customer_order_product.create({
+          data: {
+            customerOrderId: created.id,
+            productId: item.productId,
+            quantity: item.quantity,
+          },
+        });
+        await tx.product.update({
+          where: { id: item.productId },
+          data: { inStock: { decrement: item.quantity } },
+        });
+      }
+
+      return created;
     });
 
     try {

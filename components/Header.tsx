@@ -296,39 +296,49 @@ const Header = () => {
               <span>View Store</span>
             </Link>
             <NotificationBell />
-            <div className="dropdown dropdown-end">
-              <button
-                tabIndex={0}
-                type="button"
-                className="w-9 h-9 rounded-full bg-teal-700 text-white text-sm font-bold flex items-center justify-center hover:bg-teal-800 transition-colors"
+            <details className="relative group">
+              <summary
+                className="list-none cursor-pointer w-9 h-9 rounded-full bg-teal-700 text-white text-sm font-bold flex items-center justify-center hover:bg-teal-800 transition-colors"
                 aria-label="Admin menu"
               >
                 {(session?.user?.email?.[0] || "A").toUpperCase()}
-              </button>
-              <ul
-                tabIndex={0}
-                className="dropdown-content z-50 menu p-2 shadow-xl bg-white border border-stone-200 rounded-xl w-52 mt-2 text-sm"
-              >
+              </summary>
+              <ul className="absolute right-0 z-50 p-1.5 shadow-xl bg-white border border-stone-200 rounded-xl w-52 mt-2 text-xs font-medium text-stone-700 space-y-0.5">
                 <li>
-                  <Link href="/admin">Dashboard Overview</Link>
+                  <Link
+                    href="/admin"
+                    className="block rounded-lg px-3 py-2 hover:bg-canvas hover:text-teal-800"
+                  >
+                    Dashboard Overview
+                  </Link>
                 </li>
                 <li>
-                  <Link href="/admin/settings">Store Settings</Link>
+                  <Link
+                    href="/admin/settings"
+                    className="block rounded-lg px-3 py-2 hover:bg-canvas hover:text-teal-800"
+                  >
+                    Store Settings
+                  </Link>
                 </li>
                 <li>
-                  <Link href="/account">My Profile</Link>
+                  <Link
+                    href="/account"
+                    className="block rounded-lg px-3 py-2 hover:bg-canvas hover:text-teal-800"
+                  >
+                    My Profile
+                  </Link>
                 </li>
                 <li className="border-t border-stone-100 mt-1 pt-1">
                   <button
                     type="button"
                     onClick={handleLogout}
-                    className="text-rose-600 hover:text-rose-700"
+                    className="w-full text-left rounded-lg px-3 py-2 text-rose-600 hover:bg-rose-50 font-semibold"
                   >
                     Sign Out
                   </button>
                 </li>
               </ul>
-            </div>
+            </details>
           </div>
         </div>
       )}

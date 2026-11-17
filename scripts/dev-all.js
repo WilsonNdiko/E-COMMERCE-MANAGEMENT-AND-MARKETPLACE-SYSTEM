@@ -1,13 +1,10 @@
 #!/usr/bin/env node
 /**
  * Cross-platform full-stack launcher (Windows, macOS, Linux).
- * - Guarantees `.env` files, Prisma Client, SQLite schema, 16 products,
- *   and `admin@singitronic.com` / `Admin123!` login are ready automatically.
- * - Starts the Express API server (:3001) and waits until `/health` responds.
- * - Serves the fast pre-built Next.js bundle (`next start`) by default so
- *   every page opens in ~10ms with minimal RAM (~90 MB) on any laptop.
- *   (Automatically builds `.next` once on first run if missing.)
- * - Pass `--live` (`npm run dev:live`) for live hot-reload editing via Turbopack.
+ * - Ensures `.env`, Prisma Client, SQLite database, 16 products & logins are ready.
+ * - Starts Express API (:3001) and waits for `/health`.
+ * - Starts pre-built Next.js storefront (:3000) for instant (~15ms) navigation.
+ *   (Pass `--live` via `npm run dev:live` when editing code with hot-reload.)
  */
 const { spawn, spawnSync } = require("child_process");
 const fs = require("fs");
@@ -20,26 +17,27 @@ const isLiveDev = process.argv.includes("--live");
 const apiPort = Number(process.env.PORT) || 3001;
 const webPort = Number(process.env.WEB_PORT) || 3000;
 
-// 1. Ensure .env files exist & are loaded into process.env
+// 1. Ensure .env exists & load into process.env
+const envPath = path.join(rootDir, ".env");
+const envExample = path.join(rootDir, ".env.example");
+if (!fs.existsSync(envPath) && fs.existsSync(envExample)) {
+  fs.copyFileSync(envExample, envPath);
+}
 const { loadEnvFile } = require(path.join(rootDir, "utils", "dbUrl.js"));
-if (!fs.existsSync(path.join(rootDir, ".env")) && fs.existsSync(path.join(rootDir, ".env.example"))) {
-  fs.copyFileSync(path.join(rootDir, ".env.example"), path.join(rootDir, ".env"));
-}
-if (!fs.existsSync(path.join(serverDir, ".env")) && fs.existsSync(path.join(serverDir, ".env.example"))) {
-  fs.copyFileSync(path.join(serverDir, ".env.example"), path.join(serverDir, ".env"));
-}
-loadEnvFile(path.join(rootDir, ".env"));
-loadEnvFile(path.join(serverDir, ".env"));
+loadEnvFile(envPath);
 
 // 2. Ensure Prisma Client is generated
-const gen = spawnSync(process.execPath, [path.join(__dirname, "prisma-generate.js")], {
-  cwd: rootDir,
-  env: process.env,
-  stdio: "inherit",
-});
-if (gen.status !== 0) process.exit(gen.status || 1);
+const clientIndex = path.join(rootDir, "node_modules", "@prisma", "client", "index.js");
+if (!fs.existsSync(clientIndex)) {
+  const gen = spawnSync(process.execPath, [path.join(__dirname, "prisma-generate.js")], {
+    cwd: rootDir,
+    env: process.env,
+    stdio: "inherit",
+  });
+  if (gen.status !== 0) process.exit(gen.status || 1);
+}
 
-// 3. Ensure SQLite schema, 16 products & admin account exist BEFORE booting servers
+// 3. Ensure SQLite schema, catalog & logins are ready
 const dbCheck = spawnSync(process.execPath, [path.join(__dirname, "ensure-db.js")], {
   cwd: rootDir,
   env: process.env,
@@ -47,11 +45,18 @@ const dbCheck = spawnSync(process.execPath, [path.join(__dirname, "ensure-db.js"
 });
 if (dbCheck.status !== 0) process.exit(dbCheck.status || 1);
 
-// 4. In default fast mode, auto-build `.next` once if it hasn't been built yet
+// 4. Build optimized bundle automatically if running fast mode for the first time
 const nextBin = path.join(rootDir, "node_modules", "next", "dist", "bin", "next");
 const buildIdPath = path.join(rootDir, ".next", "BUILD_ID");
 if (!isLiveDev && !fs.existsSync(buildIdPath)) {
-  console.log("\n==> First run detected: building optimized frontend for instant speed (~15s)...");
+  console.log("\n==> Building optimized frontend for instant page loads (~15s)...");
+  const gen = spawnSync(process.execPath, [path.join(__dirname, "prisma-generate.js")], {
+    cwd: rootDir,
+    env: process.env,
+    stdio: "inherit",
+  });
+  if (gen.status !== 0) process.exit(gen.status || 1);
+
   const buildRes = spawnSync(process.execPath, [nextBin, "build"], {
     cwd: rootDir,
     env: { ...process.env, NODE_ENV: "production" },
@@ -67,23 +72,21 @@ function startService(name, color, cmd, args, cwd, extraEnv = {}) {
     cwd,
     env: { ...process.env, ...extraEnv },
     stdio: ["ignore", "pipe", "pipe"],
+    // Own process group on POSIX so Ctrl+C stops the whole tree (next-server
+    // grandchildren included). On Windows, `detached` is harmless.
+    detached: process.platform !== "win32",
   });
 
   const prefix = `${color}[${name}]\x1b[0m `;
-  proc.stdout.on("data", (chunk) => {
+  const forward = (stream) => (chunk) => {
     chunk
       .toString()
       .split(/\r?\n/)
       .filter(Boolean)
-      .forEach((line) => process.stdout.write(`${prefix}${line}\n`));
-  });
-  proc.stderr.on("data", (chunk) => {
-    chunk
-      .toString()
-      .split(/\r?\n/)
-      .filter(Boolean)
-      .forEach((line) => process.stderr.write(`${prefix}${line}\n`));
-  });
+      .forEach((line) => stream.write(`${prefix}${line}\n`));
+  };
+  proc.stdout.on("data", forward(process.stdout));
+  proc.stderr.on("data", forward(process.stderr));
   proc.on("exit", (code) => {
     if (code !== null && code !== 0) {
       console.error(`${prefix}exited with code ${code}`);
@@ -111,23 +114,35 @@ function waitForHealth(url, timeoutMs = 8000) {
     };
     const retry = () => {
       if (Date.now() - start >= timeoutMs) return resolve(false);
-      setTimeout(attempt, 150);
+      setTimeout(attempt, 120);
     };
     attempt();
   });
 }
 
-let shuttingDown = false;
+let stopping = false;
 const shutdown = () => {
-  if (shuttingDown) return;
-  shuttingDown = true;
-  console.log("\nStopping Singitronic services...");
+  if (stopping) return;
+  stopping = true;
+  console.log("\nStopping Singitronic...");
   for (const child of children) {
+    if (!child || !child.pid) continue;
     try {
-      child.kill("SIGTERM");
-    } catch (_) {}
+      if (process.platform === "win32") {
+        spawnSync("taskkill", ["/PID", String(child.pid), "/T", "/F"], {
+          stdio: "ignore",
+        });
+      } else {
+        // Kill the entire group so Next.js worker grandchild processes exit too
+        process.kill(-child.pid, "SIGTERM");
+      }
+    } catch {
+      try {
+        child.kill("SIGTERM");
+      } catch {}
+    }
   }
-  setTimeout(() => process.exit(0), 350);
+  setTimeout(() => process.exit(0), 300);
 };
 
 process.on("SIGINT", shutdown);
@@ -135,27 +150,19 @@ process.on("SIGTERM", shutdown);
 
 (async () => {
   console.log("\n========================================================");
-  console.log("  Singitronic Full-Stack E-Commerce System");
-  console.log(`  Storefront & Admin : http://localhost:${webPort}`);
-  console.log(`  Backend REST API   : http://localhost:${apiPort}/health`);
-  console.log("  Admin Login        : admin@singitronic.com / Admin123!");
-  console.log(
-    `  Mode               : ${
-      isLiveDev
-        ? "Live Hot-Reload (Turbopack)"
-        : "Fast Instant Mode (use `npm run dev:live` when editing code)"
-    }`
-  );
+  console.log("  Singitronic E-Commerce Running");
+  console.log(`  Website & Admin  : http://localhost:${webPort}`);
+  console.log(`  REST API Health  : http://localhost:${apiPort}/health`);
+  console.log("  Admin Login      : admin@singitronic.com / Admin123!");
+  console.log("  Customer Login   : sarah.kamau@example.com / Customer123!");
   console.log("========================================================\n");
 
-  // Start Express API & wait until it is accepting requests
   startService("API", "\x1b[36m", process.execPath, ["app.js"], serverDir, {
     PORT: String(apiPort),
-    BACKEND_INTERNAL_URL: `http://127.0.0.1:${apiPort}`,
+    SKIP_DB_BOOTSTRAP: "1",
   });
   await waitForHealth(`http://127.0.0.1:${apiPort}/health`, 8000);
 
-  // Start Next.js frontend
   const nextArgs = isLiveDev
     ? [nextBin, "dev", "--turbopack", "-p", String(webPort)]
     : [nextBin, "start", "-p", String(webPort)];
@@ -163,6 +170,7 @@ process.on("SIGTERM", shutdown);
   startService("WEB", "\x1b[32m", process.execPath, nextArgs, rootDir, {
     NODE_ENV: isLiveDev ? "development" : "production",
     BACKEND_INTERNAL_URL: `http://127.0.0.1:${apiPort}`,
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL || `http://localhost:${webPort}`,
+    NEXTAUTH_URL: `http://localhost:${webPort}`,
+    AUTH_TRUST_HOST: "true",
   });
 })();

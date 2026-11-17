@@ -42,7 +42,6 @@ function loadEnvFile(envPath) {
 function resolveLibsqlUrl(projectRoot, explicitUrl) {
   const root = projectRoot || process.cwd();
   loadEnvFile(path.join(root, ".env"));
-  loadEnvFile(path.join(root, "server", ".env"));
 
   let raw = (
     explicitUrl ||

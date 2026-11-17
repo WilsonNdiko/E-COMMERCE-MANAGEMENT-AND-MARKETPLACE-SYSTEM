@@ -16,8 +16,6 @@ const nextConfig = {
       "react-icons/hi",
       "react-icons/md",
       "react-icons/tb",
-      "@headlessui/react",
-      "date-fns",
     ],
   },
   typescript: {

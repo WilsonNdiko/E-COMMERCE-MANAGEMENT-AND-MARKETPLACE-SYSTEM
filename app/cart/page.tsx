@@ -1,6 +1,6 @@
 import SectionTitle from "@/components/SectionTitle";
+import CartView from "@/components/CartView";
 import { Loader } from "@/components/Loader";
-import { CartModule } from "@/components/modules/cart";
 import { Suspense } from "react";
 
 const CartPage = () => {
@@ -9,7 +9,7 @@ const CartPage = () => {
       <SectionTitle title="Shopping Cart" path="Home | Cart" />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-8">
         <Suspense fallback={<Loader />}>
-          <CartModule />
+          <CartView />
         </Suspense>
       </div>
     </div>

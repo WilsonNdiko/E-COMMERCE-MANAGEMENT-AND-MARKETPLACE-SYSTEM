@@ -15,6 +15,10 @@ import {
   FaShieldHalved,
   FaArrowLeft,
   FaTag,
+  FaXmark,
+  FaMinus,
+  FaPlus,
+  FaTrashCan,
 } from "react-icons/fa6";
 
 const CheckoutPage = () => {
@@ -26,13 +30,18 @@ const CheckoutPage = () => {
     promoCode,
     discountPercent,
     freeShipping,
+    updateCartAmount,
+    removeFromCart,
+    syncWithCatalog,
     applyPromoCode,
+    removePromoCode,
     clearCart,
   } = useProductStore();
 
   const [mounted, setMounted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<"card" | "cod">("cod");
+  const [formError, setFormError] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState<"cod" | "card">("cod");
   const [promoInput, setPromoInput] = useState("");
   const [cardData, setCardData] = useState({
     cardName: "",
@@ -63,6 +72,7 @@ const CheckoutPage = () => {
 
   useEffect(() => {
     setMounted(true);
+
     apiClient
       .get("/api/admin/settings")
       .then((r) => (r.ok ? r.json() : null))
@@ -75,15 +85,25 @@ const CheckoutPage = () => {
         });
       })
       .catch(() => {});
-  }, []);
+
+    // Verify cart stock & prices before submitting
+    if (useProductStore.getState().products.length > 0) {
+      apiClient
+        .get("/api/products?limit=200")
+        .then((r) => (r.ok ? r.json() : null))
+        .then((list) => {
+          if (!Array.isArray(list)) return;
+          const note = syncWithCatalog(list);
+          if (note) toast(note);
+        })
+        .catch(() => {});
+    }
+  }, [syncWithCatalog]);
 
   useEffect(() => {
     const email = session?.user?.email;
     if (email && !checkoutForm.email) {
-      setCheckoutForm((prev) => ({
-        ...prev,
-        email,
-      }));
+      setCheckoutForm((prev) => ({ ...prev, email }));
     }
   }, [session?.user?.email, checkoutForm.email]);
 
@@ -99,42 +119,59 @@ const CheckoutPage = () => {
     items.length === 0
       ? 0
       : Math.round((discountedSubtotal * storeRates.taxRate) / 100);
-  const grandTotal = Math.max(1, discountedSubtotal + shipping + tax);
+  const grandTotal = items.length === 0 ? 0 : Math.max(1, discountedSubtotal + shipping + tax);
 
   const validateForm = (): string | null => {
     if (checkoutForm.name.trim().length < 2)
-      return "First name must be at least 2 characters";
+      return "Please enter your first name (at least 2 letters).";
     if (checkoutForm.lastname.trim().length < 2)
-      return "Last name must be at least 2 characters";
+      return "Please enter your last name (at least 2 letters).";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(checkoutForm.email.trim()))
-      return "Please enter a valid email address";
-    if (checkoutForm.phone.replace(/[^0-9]/g, "").length < 8)
-      return "Please enter a valid phone number (at least 8 digits)";
+      return "Please enter a valid email address.";
+    if (checkoutForm.phone.replace(/[^0-9]/g, "").length < 7)
+      return "Please enter a valid phone number (at least 7 digits).";
     if (checkoutForm.adress.trim().length < 3)
-      return "Street address must be at least 3 characters";
+      return "Please enter your delivery street address.";
     if (checkoutForm.city.trim().length < 2)
-      return "Please enter your city";
+      return "Please enter your city or town.";
     if (checkoutForm.country.trim().length < 2)
-      return "Please enter your country";
-    if (checkoutForm.postalCode.trim().length < 3)
-      return "Please enter a valid postal code";
+      return "Please enter your country.";
+    if (
+      checkoutForm.postalCode.trim().length > 0 &&
+      checkoutForm.postalCode.trim().length < 2
+    )
+      return "Please enter a valid postal code.";
 
     if (paymentMethod === "card") {
       if (cardData.cardName.trim().length < 2)
-        return "Please enter the cardholder name";
+        return "Please enter the name on your card.";
       const digits = cardData.cardNumber.replace(/\D/g, "");
       if (digits.length < 13 || digits.length > 19)
-        return "Please enter a valid 16-digit card number";
-      if (!/^(0[1-9]|1[0-2])\/(\d{2}|\d{4})$/.test(cardData.expiry.trim()))
-        return "Please enter card expiry in MM/YY format";
+        return "Please enter a valid card number (13–19 digits).";
+      const expMatch = /^(0[1-9]|1[0-2])\/(\d{2}|\d{4})$/.exec(
+        cardData.expiry.trim()
+      );
+      if (!expMatch) return "Please enter card expiry in MM/YY format.";
+      const mm = Number(expMatch[1]);
+      const rawYy = Number(expMatch[2]);
+      const fullYear = rawYy < 100 ? 2000 + rawYy : rawYy;
+      const now = new Date();
+      if (
+        fullYear < now.getFullYear() ||
+        (fullYear === now.getFullYear() && mm < now.getMonth() + 1)
+      ) {
+        return "That card expiration date has passed.";
+      }
       if (!/^\d{3,4}$/.test(cardData.cvc.trim()))
-        return "Please enter a valid 3 or 4 digit CVC";
+        return "Please enter a valid 3 or 4 digit security code (CVC).";
     }
     return null;
   };
 
   const handlePlaceOrder = async (e: React.FormEvent) => {
     e.preventDefault();
+    setFormError("");
+
     if (items.length === 0) {
       toast.error("Your cart is empty");
       return;
@@ -142,29 +179,14 @@ const CheckoutPage = () => {
 
     const err = validateForm();
     if (err) {
+      setFormError(err);
       toast.error(err);
       return;
     }
 
     setIsSubmitting(true);
     try {
-      let userId: string | null = null;
-      if (session?.user?.email) {
-        try {
-          const uRes = await apiClient.get(
-            `/api/users/email/${encodeURIComponent(session.user.email)}`
-          );
-          if (uRes.ok) {
-            const u = await uRes.json();
-            userId = u?.id || null;
-          }
-        } catch (_) {}
-      }
-
-      const phoneFormatted =
-        checkoutForm.phone.replace(/[^0-9]/g, "").length >= 10
-          ? checkoutForm.phone.trim()
-          : checkoutForm.phone.trim().padEnd(10, "0");
+      const userId = (session?.user as any)?.id || null;
 
       const noteSegments = [
         checkoutForm.orderNotice.trim(),
@@ -172,76 +194,84 @@ const CheckoutPage = () => {
         `Payment: ${paymentMethod === "card" ? "Card" : "Pay on Delivery"}`,
       ].filter(Boolean);
 
+      // Atomic single-request checkout: creates order, attaches all items & updates stock together
       const orderRes = await apiClient.post("/api/orders", {
         name: checkoutForm.name.trim(),
         lastname: checkoutForm.lastname.trim(),
-        phone: phoneFormatted,
+        phone: checkoutForm.phone.trim(),
         email: checkoutForm.email.trim().toLowerCase(),
         company: checkoutForm.company.trim(),
         adress: checkoutForm.adress.trim(),
         apartment: checkoutForm.apartment.trim(),
-        postalCode: checkoutForm.postalCode.trim(),
+        postalCode: checkoutForm.postalCode.trim() || "00100",
         status: "processing",
         total: grandTotal,
         city: checkoutForm.city.trim(),
         country: checkoutForm.country.trim(),
         orderNotice: noteSegments.join(" | "),
         userId,
+        items: items.map((item) => ({
+          productId: item.id,
+          quantity: item.amount,
+        })),
       });
 
-      const orderData = await orderRes.json();
+      const orderData = await orderRes.json().catch(() => ({}));
       if (!orderRes.ok || !orderData?.id) {
         const msg =
-          orderData?.details?.[0]?.message ||
+          (Array.isArray(orderData?.details) && orderData.details[0]?.message) ||
           orderData?.error ||
-          "Could not place order. Please review your details.";
+          "Could not place order. Please review your details and try again.";
+        setFormError(msg);
         toast.error(msg);
         setIsSubmitting(false);
         return;
       }
-
-      // Attach ordered products
-      await Promise.all(
-        items.map((item) =>
-          apiClient.post("/api/order-product", {
-            customerOrderId: orderData.id,
-            productId: item.id,
-            quantity: item.amount,
-          })
-        )
-      );
 
       if (typeof window !== "undefined") {
         window.dispatchEvent(new CustomEvent("orderCompleted"));
       }
 
       clearCart();
-      toast.success("Order placed successfully!");
+      toast.success("Order placed! Here is your confirmation.");
       router.push(`/orders?placed=${encodeURIComponent(orderData.id)}`);
-    } catch (_) {
-      toast.error("Network error placing your order. Please try again.");
+    } catch {
+      const msg = "Could not connect to the order service. Please try again.";
+      setFormError(msg);
+      toast.error(msg);
       setIsSubmitting(false);
     }
   };
 
-  if (mounted && items.length === 0) {
+  if (!mounted) {
+    return (
+      <div className="bg-canvas min-h-[70vh] pb-16">
+        <SectionTitle title="Secure Checkout" path="Home | Cart | Checkout" />
+        <div className="py-16 text-center text-sm text-stone-500">
+          Loading checkout...
+        </div>
+      </div>
+    );
+  }
+
+  if (items.length === 0) {
     return (
       <div className="bg-canvas min-h-[70vh] pb-16">
         <SectionTitle title="Checkout" path="Home | Cart | Checkout" />
         <div className="max-w-xl mx-auto px-4 pt-12">
-          <div className="bg-white rounded-3xl border border-stone-200/80 p-12 text-center space-y-4">
+          <div className="bg-white rounded-3xl border border-stone-200/80 p-12 text-center space-y-4 shadow-sm">
             <h2 className="text-xl font-bold text-stone-900">
-              No items to check out
+              Your cart is empty
             </h2>
             <p className="text-sm text-stone-500">
-              Add products to your cart first, then return here to complete your
+              Add items from the shop first, then return here to complete your
               order.
             </p>
             <Link
               href="/shop"
-              className="inline-flex items-center rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-semibold px-6 py-3 text-sm"
+              className="inline-flex items-center rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-semibold px-6 py-3 text-sm transition-colors"
             >
-              Browse Shop
+              Browse Products
             </Link>
           </div>
         </div>
@@ -258,22 +288,29 @@ const CheckoutPage = () => {
 
       <form
         onSubmit={handlePlaceOrder}
+        noValidate
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
       >
         {/* Left: Shipping + Payment */}
         <div className="lg:col-span-7 space-y-6">
-          {/* Contact & Recipient */}
+          {formError && (
+            <div className="rounded-2xl bg-rose-50 border border-rose-200 px-4 py-3 text-xs font-medium text-rose-700">
+              {formError}
+            </div>
+          )}
+
+          {/* 1. Contact */}
           <div className="bg-white rounded-3xl border border-stone-200/80 p-6 sm:p-8 shadow-sm space-y-5">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-extrabold text-stone-900">
-                1. Contact Information
+                1. Contact Details
               </h2>
               <Link
                 href="/cart"
                 className="inline-flex items-center gap-1.5 text-xs font-semibold text-teal-700 hover:text-teal-800"
               >
                 <FaArrowLeft className="w-3 h-3" />
-                <span>Edit cart</span>
+                <span>Back to cart</span>
               </Link>
             </div>
 
@@ -289,7 +326,7 @@ const CheckoutPage = () => {
                   onChange={(e) =>
                     setCheckoutForm({ ...checkoutForm, name: e.target.value })
                   }
-                  placeholder="Alex"
+                  placeholder="Sarah"
                   className={inputCls}
                 />
               </div>
@@ -307,7 +344,7 @@ const CheckoutPage = () => {
                       lastname: e.target.value,
                     })
                   }
-                  placeholder="Morgan"
+                  placeholder="Kamau"
                   className={inputCls}
                 />
               </div>
@@ -322,7 +359,7 @@ const CheckoutPage = () => {
                   onChange={(e) =>
                     setCheckoutForm({ ...checkoutForm, email: e.target.value })
                   }
-                  placeholder="alex@example.com"
+                  placeholder="you@example.com"
                   className={inputCls}
                 />
               </div>
@@ -337,23 +374,23 @@ const CheckoutPage = () => {
                   onChange={(e) =>
                     setCheckoutForm({ ...checkoutForm, phone: e.target.value })
                   }
-                  placeholder="+1 415 555 0192"
+                  placeholder="0712 345 678"
                   className={inputCls}
                 />
               </div>
             </div>
           </div>
 
-          {/* Shipping Address */}
+          {/* 2. Delivery Address */}
           <div className="bg-white rounded-3xl border border-stone-200/80 p-6 sm:p-8 shadow-sm space-y-5">
             <h2 className="text-lg font-extrabold text-stone-900">
-              2. Shipping Address
+              2. Delivery Address
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="sm:col-span-2">
                 <label className="block text-xs font-semibold text-stone-600 mb-1.5">
-                  Street Address *
+                  Street Address / Building *
                 </label>
                 <input
                   type="text"
@@ -362,14 +399,14 @@ const CheckoutPage = () => {
                   onChange={(e) =>
                     setCheckoutForm({ ...checkoutForm, adress: e.target.value })
                   }
-                  placeholder="742 Innovation Drive"
+                  placeholder="14 Riverside Drive"
                   className={inputCls}
                 />
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-stone-600 mb-1.5">
-                  Apartment / Suite (optional)
+                  Apartment / House No. (optional)
                 </label>
                 <input
                   type="text"
@@ -380,7 +417,7 @@ const CheckoutPage = () => {
                       apartment: e.target.value,
                     })
                   }
-                  placeholder="Apt 4B"
+                  placeholder="Apt 3B"
                   className={inputCls}
                 />
               </div>
@@ -398,14 +435,14 @@ const CheckoutPage = () => {
                       company: e.target.value,
                     })
                   }
-                  placeholder="Acme Corp"
+                  placeholder="Optional"
                   className={inputCls}
                 />
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-stone-600 mb-1.5">
-                  City *
+                  City / Town *
                 </label>
                 <input
                   type="text"
@@ -414,18 +451,17 @@ const CheckoutPage = () => {
                   onChange={(e) =>
                     setCheckoutForm({ ...checkoutForm, city: e.target.value })
                   }
-                  placeholder="Austin"
+                  placeholder="Nairobi"
                   className={inputCls}
                 />
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-stone-600 mb-1.5">
-                  Postal / ZIP Code *
+                  Postal Code (optional)
                 </label>
                 <input
                   type="text"
-                  required
                   value={checkoutForm.postalCode}
                   onChange={(e) =>
                     setCheckoutForm({
@@ -433,7 +469,7 @@ const CheckoutPage = () => {
                       postalCode: e.target.value,
                     })
                   }
-                  placeholder="78701"
+                  placeholder="00100"
                   className={inputCls}
                 />
               </div>
@@ -452,14 +488,14 @@ const CheckoutPage = () => {
                       country: e.target.value,
                     })
                   }
-                  placeholder="United States"
+                  placeholder="Kenya"
                   className={inputCls}
                 />
               </div>
 
               <div className="sm:col-span-2">
                 <label className="block text-xs font-semibold text-stone-600 mb-1.5">
-                  Delivery Instructions (optional)
+                  Delivery Notes (optional)
                 </label>
                 <textarea
                   rows={2}
@@ -470,14 +506,14 @@ const CheckoutPage = () => {
                       orderNotice: e.target.value,
                     })
                   }
-                  placeholder="Gate code, drop-off preference, etc."
+                  placeholder="Call on arrival, gate landmark, preferred time, etc."
                   className={inputCls}
                 />
               </div>
             </div>
           </div>
 
-          {/* Payment Method */}
+          {/* 3. Payment Method */}
           <div className="bg-white rounded-3xl border border-stone-200/80 p-6 sm:p-8 shadow-sm space-y-5">
             <h2 className="text-lg font-extrabold text-stone-900">
               3. Payment Method
@@ -499,7 +535,7 @@ const CheckoutPage = () => {
                     Pay on Delivery
                   </p>
                   <p className="text-xs text-stone-500">
-                    Cash or card upon courier arrival
+                    Cash, mobile money, or card at delivery
                   </p>
                 </div>
               </button>
@@ -537,7 +573,7 @@ const CheckoutPage = () => {
                     onChange={(e) =>
                       setCardData({ ...cardData, cardName: e.target.value })
                     }
-                    placeholder="Alex Morgan"
+                    placeholder="Sarah Kamau"
                     className={inputCls}
                   />
                 </div>
@@ -549,7 +585,9 @@ const CheckoutPage = () => {
                     type="text"
                     value={cardData.cardNumber}
                     onChange={(e) => {
-                      const digits = e.target.value.replace(/\D/g, "").slice(0, 16);
+                      const digits = e.target.value
+                        .replace(/\D/g, "")
+                        .slice(0, 16);
                       const grouped = digits.replace(/(\d{4})(?=\d)/g, "$1 ");
                       setCardData({ ...cardData, cardNumber: grouped });
                     }}
@@ -596,50 +634,103 @@ const CheckoutPage = () => {
           </div>
         </div>
 
-        {/* Right: Order Summary */}
-        <aside className="lg:col-span-5 bg-white rounded-3xl border border-stone-200/80 p-6 sm:p-8 shadow-sm space-y-6 sticky top-32">
+        {/* Right: Order Review */}
+        <aside className="lg:col-span-5 bg-white rounded-3xl border border-stone-200/80 p-6 sm:p-8 shadow-sm space-y-6 sticky top-28">
           <h2 className="text-lg font-extrabold text-stone-900">
-            Order Review
+            Order Review ({items.reduce((s, i) => s + i.amount, 0)})
           </h2>
 
-          <ul className="divide-y divide-stone-100 max-h-72 overflow-y-auto pr-1">
-            {items.map((item) => (
-              <li key={item.id} className="py-3 flex items-center gap-3.5">
-                <div className="w-14 h-14 rounded-xl bg-canvas border border-stone-100 p-1.5 flex items-center justify-center shrink-0">
-                  <Image
-                    src={
-                      item.image
-                        ? `/${item.image}`
-                        : "/product_placeholder.jpg"
-                    }
-                    alt={item.title}
-                    width={48}
-                    height={48}
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-stone-900 truncate">
-                    {item.title}
-                  </p>
-                  <p className="text-xs text-stone-500">
-                    Qty {item.amount} × ${item.price.toLocaleString()}
-                  </p>
-                </div>
-                <span className="text-sm font-bold text-stone-900 shrink-0">
-                  ${(item.price * item.amount).toLocaleString()}
-                </span>
-              </li>
-            ))}
+          <ul className="divide-y divide-stone-100 max-h-80 overflow-y-auto pr-1">
+            {items.map((item) => {
+              const maxStock =
+                typeof item.inStock === "number" && item.inStock > 0
+                  ? item.inStock
+                  : 999;
+              return (
+                <li key={item.id} className="py-3 flex items-center gap-3">
+                  <div className="w-14 h-14 rounded-xl bg-canvas border border-stone-100 p-1.5 flex items-center justify-center shrink-0">
+                    <Image
+                      src={
+                        item.image
+                          ? `/${item.image}`
+                          : "/product_placeholder.jpg"
+                      }
+                      alt={item.title}
+                      width={48}
+                      height={48}
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0 space-y-1">
+                    <p className="text-sm font-semibold text-stone-900 truncate">
+                      {item.title}
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <div className="inline-flex items-center rounded-lg border border-stone-200 bg-canvas/70">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            updateCartAmount(
+                              item.id,
+                              Math.max(1, item.amount - 1)
+                            )
+                          }
+                          disabled={item.amount <= 1}
+                          className="w-6 h-6 flex items-center justify-center text-stone-600 disabled:opacity-35"
+                          aria-label="Decrease quantity"
+                        >
+                          <FaMinus className="w-2 h-2" />
+                        </button>
+                        <span className="w-6 text-center text-[11px] font-bold text-stone-900">
+                          {item.amount}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            updateCartAmount(item.id, item.amount + 1)
+                          }
+                          disabled={item.amount >= maxStock}
+                          className="w-6 h-6 flex items-center justify-center text-stone-600 disabled:opacity-35"
+                          aria-label="Increase quantity"
+                        >
+                          <FaPlus className="w-2 h-2" />
+                        </button>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => removeFromCart(item.id)}
+                        className="text-stone-400 hover:text-rose-600 p-1"
+                        aria-label={`Remove ${item.title}`}
+                      >
+                        <FaTrashCan className="w-3 h-3" />
+                      </button>
+                    </div>
+                  </div>
+                  <span className="text-sm font-bold text-stone-900 shrink-0">
+                    ${(item.price * item.amount).toLocaleString()}
+                  </span>
+                </li>
+              );
+            })}
           </ul>
 
-          {/* Optional Promo */}
+          {/* Promo code apply/remove */}
           {!promoCode ? (
             <div className="flex gap-2">
               <input
                 type="text"
                 value={promoInput}
                 onChange={(e) => setPromoInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    const res = applyPromoCode(promoInput);
+                    if (res.ok) {
+                      toast.success(res.message);
+                      setPromoInput("");
+                    } else toast.error(res.message);
+                  }
+                }}
                 placeholder="Promo code (SAVE10)"
                 className="flex-1 rounded-xl border border-stone-200 px-3 py-2 text-xs text-stone-900 focus:border-teal-600 focus:outline-none"
               />
@@ -652,15 +743,30 @@ const CheckoutPage = () => {
                     setPromoInput("");
                   } else toast.error(res.message);
                 }}
-                className="rounded-xl bg-stone-100 hover:bg-stone-200 px-3.5 py-2 text-xs font-bold text-stone-700"
+                className="rounded-xl bg-canvas hover:bg-sand border border-stone-200 px-3.5 py-2 text-xs font-bold text-stone-800 transition-colors"
               >
                 Apply
               </button>
             </div>
           ) : (
-            <div className="flex items-center gap-2 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-xl px-3 py-2">
-              <FaTag />
-              <span>Promo {promoCode} active</span>
+            <div className="flex items-center justify-between text-xs font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-xl px-3 py-2">
+              <span className="inline-flex items-center gap-1.5">
+                <FaTag className="text-emerald-600" />
+                <span>
+                  Promo <strong>{promoCode}</strong> applied
+                </span>
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  removePromoCode();
+                  toast.success("Promo code removed");
+                }}
+                className="text-emerald-700 hover:text-emerald-900 p-0.5"
+                aria-label="Remove promo code"
+              >
+                <FaXmark className="w-3.5 h-3.5" />
+              </button>
             </div>
           )}
 
@@ -680,7 +786,7 @@ const CheckoutPage = () => {
               </div>
             )}
             <div className="flex justify-between text-stone-600">
-              <dt>Shipping</dt>
+              <dt>Delivery</dt>
               <dd className="font-semibold text-stone-900">
                 {shipping === 0 ? (
                   <span className="text-emerald-600 font-bold">FREE</span>
@@ -690,14 +796,14 @@ const CheckoutPage = () => {
               </dd>
             </div>
             <div className="flex justify-between text-stone-600">
-              <dt>Estimated Tax (8%)</dt>
+              <dt>Estimated Tax ({storeRates.taxRate}%)</dt>
               <dd className="font-semibold text-stone-900">
                 ${tax.toLocaleString()}
               </dd>
             </div>
             <div className="flex justify-between border-t border-stone-200 pt-3 text-base">
               <dt className="font-extrabold text-stone-900">Total</dt>
-              <dd className="text-xl font-extrabold text-teal-700">
+              <dd className="text-xl font-extrabold text-teal-800">
                 ${grandTotal.toLocaleString()}
               </dd>
             </div>
@@ -706,19 +812,19 @@ const CheckoutPage = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-teal-700 hover:bg-teal-800 disabled:opacity-60 text-white font-bold px-6 py-4 text-sm shadow-lg shadow-teal-700/20 transition-all"
+            className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-teal-700 hover:bg-teal-800 disabled:opacity-60 text-white font-bold px-6 py-4 text-sm shadow-sm transition-all"
           >
             <FaLock className="w-3.5 h-3.5" />
             <span>
               {isSubmitting
-                ? "Processing Order..."
+                ? "Placing Your Order..."
                 : `Place Order · $${grandTotal.toLocaleString()}`}
             </span>
           </button>
 
           <p className="flex items-center justify-center gap-1.5 text-xs text-stone-500">
-            <FaShieldHalved className="text-emerald-600" />
-            <span>256-bit SSL encrypted · 30-day money-back guarantee</span>
+            <FaShieldHalved className="text-teal-700" />
+            <span>Protected checkout · Easy 30-day returns</span>
           </p>
         </aside>
       </form>

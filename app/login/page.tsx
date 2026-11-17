@@ -1,12 +1,13 @@
 "use client";
 import SectionTitle from "@/components/SectionTitle";
-import { isValidEmailAddressFormat } from "@/lib/utils";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState, Suspense } from "react";
 import toast from "react-hot-toast";
-import { FaEye, FaEyeSlash, FaKey } from "react-icons/fa6";
+import { FaEye, FaEyeSlash, FaKey, FaUser } from "react-icons/fa6";
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 function LoginForm() {
   const router = useRouter();
@@ -18,12 +19,14 @@ function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
-  const [showResetHelp, setShowResetHelp] = useState(false);
+  const [unregisteredEmail, setUnregisteredEmail] = useState("");
 
   useEffect(() => {
-    if (searchParams.get("expired") === "true") {
-      setError("Your session expired. Please sign in again.");
-    }
+    const prefill = searchParams.get("email");
+    if (prefill && !email) setEmail(prefill);
+  }, [searchParams, email]);
+
+  useEffect(() => {
     if (sessionStatus === "authenticated") {
       const next =
         searchParams.get("callbackUrl") ||
@@ -34,16 +37,15 @@ function LoginForm() {
 
   const signInWith = async (targetEmail: string, targetPassword: string) => {
     setError("");
+    setUnregisteredEmail("");
     const cleanEmail = targetEmail.replace(/\s+/g, "").toLowerCase();
 
-    if (!isValidEmailAddressFormat(cleanEmail)) {
-      setError("Please enter a valid email address (e.g. name@example.com).");
-      toast.error("Please enter a valid email address");
+    if (!cleanEmail || !EMAIL_RE.test(cleanEmail)) {
+      setError("Please enter a valid email address (for example: name@gmail.com).");
       return;
     }
     if (!targetPassword) {
       setError("Please enter your password.");
-      toast.error("Please enter your password");
       return;
     }
 
@@ -56,21 +58,28 @@ function LoginForm() {
       });
 
       if (res?.error) {
-        setError(
-          "Incorrect email or password. If you don't have an account yet, click 'Create one free' below — or use the Demo Admin Login button."
-        );
-        toast.error("Incorrect email or password");
+        if (res.error === "NO_ACCOUNT") {
+          setUnregisteredEmail(cleanEmail);
+          setError(`No account is registered with "${cleanEmail}" yet.`);
+          toast.error("Account not found — create one in seconds!");
+        } else if (res.error === "WRONG_PASSWORD") {
+          setError("Incorrect password. Please double-check and try again.");
+          toast.error("Incorrect password");
+        } else {
+          setError("Sign-in failed. Please check your details and try again.");
+          toast.error("Sign-in failed");
+        }
       } else {
-        toast.success("Welcome back!");
-        const next =
+        toast.success("Signed in successfully!");
+        const dest =
           searchParams.get("callbackUrl") ||
           (cleanEmail === "admin@singitronic.com" ? "/admin" : "/");
-        router.push(next);
+        router.push(dest);
         router.refresh();
       }
     } catch {
-      setError("Unable to reach the sign-in service. Please try again.");
-      toast.error("Sign-in error — please retry");
+      setError("Could not reach the sign-in server. Make sure the app is running.");
+      toast.error("Connection error");
     } finally {
       setSubmitting(false);
     }
@@ -81,27 +90,35 @@ function LoginForm() {
     await signInWith(email, password);
   };
 
-  const loginAsDemoAdmin = async () => {
-    setEmail("admin@singitronic.com");
-    setPassword("Admin123!");
-    await signInWith("admin@singitronic.com", "Admin123!");
+  const quickLogin = async (demoEmail: string, demoPassword: string) => {
+    setEmail(demoEmail);
+    setPassword(demoPassword);
+    await signInWith(demoEmail, demoPassword);
   };
 
   return (
-    <div className="max-w-md mx-auto px-4 pt-10 pb-20 space-y-5">
+    <div className="max-w-md mx-auto px-4 pt-10 pb-20">
       <div className="bg-white rounded-3xl border border-stone-200/80 p-7 sm:p-9 shadow-sm space-y-6">
         <div className="text-center space-y-1">
           <h2 className="text-xl font-extrabold text-stone-900">
             Welcome back
           </h2>
           <p className="text-xs text-stone-500">
-            Sign in to track orders, view your wishlist, or open the admin dashboard.
+            Sign in to view orders, saved items, or manage your store.
           </p>
         </div>
 
         {error && (
-          <div className="rounded-xl bg-rose-50 border border-rose-200 px-4 py-2.5 text-xs font-medium text-rose-700 leading-relaxed">
-            {error}
+          <div className="rounded-xl bg-rose-50 border border-rose-200 px-4 py-3 text-xs font-medium text-rose-700 space-y-2">
+            <p>{error}</p>
+            {unregisteredEmail && (
+              <Link
+                href={`/register?email=${encodeURIComponent(unregisteredEmail)}`}
+                className="inline-flex items-center rounded-lg bg-teal-700 hover:bg-teal-800 text-white font-semibold px-3 py-1.5 text-xs transition-colors"
+              >
+                Create account with {unregisteredEmail} →
+              </Link>
+            )}
           </div>
         )}
 
@@ -121,27 +138,18 @@ function LoginForm() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@singitronic.com"
+              placeholder="you@example.com"
               className="w-full rounded-xl border border-stone-200 px-3.5 py-2.5 text-sm text-stone-900 placeholder:text-stone-400 focus:border-teal-600 focus:outline-none focus:ring-4 focus:ring-teal-600/10"
             />
           </div>
 
           <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <label
-                htmlFor="password"
-                className="block text-xs font-semibold text-stone-700"
-              >
-                Password
-              </label>
-              <button
-                type="button"
-                onClick={() => setShowResetHelp((v) => !v)}
-                className="text-xs font-semibold text-teal-700 hover:text-teal-800"
-              >
-                Forgot password?
-              </button>
-            </div>
+            <label
+              htmlFor="password"
+              className="block text-xs font-semibold text-stone-700 mb-1.5"
+            >
+              Password
+            </label>
             <div className="relative">
               <input
                 id="password"
@@ -169,26 +177,6 @@ function LoginForm() {
             </div>
           </div>
 
-          {showResetHelp && (
-            <div className="rounded-xl bg-canvas border border-stone-200 p-3 text-xs text-stone-600 space-y-1">
-              <p>
-                <strong>Demo Admin:</strong>{" "}
-                <code className="text-teal-800">admin@singitronic.com</code> /{" "}
-                <code className="text-teal-800">Admin123!</code>
-              </p>
-              <p>
-                Need help with a customer account? Visit our{" "}
-                <Link
-                  href="/contact"
-                  className="font-semibold text-teal-700 underline"
-                >
-                  Support page
-                </Link>
-                .
-              </p>
-            </div>
-          )}
-
           <button
             type="submit"
             disabled={submitting}
@@ -198,29 +186,42 @@ function LoginForm() {
           </button>
         </form>
 
-        {/* One-Click Demo Admin Login */}
-        <div className="pt-4 border-t border-stone-100 space-y-2">
-          <button
-            type="button"
-            disabled={submitting}
-            onClick={loginAsDemoAdmin}
-            className="w-full flex items-center justify-center gap-2 rounded-xl border border-teal-200 bg-teal-50/70 hover:bg-teal-100/70 disabled:opacity-60 px-4 py-2.5 text-xs font-semibold text-teal-800 transition-colors"
-          >
-            <FaKey className="w-3.5 h-3.5" />
-            <span>One-Click Admin Sign In (admin@singitronic.com)</span>
-          </button>
-          <p className="text-center text-[11px] text-stone-400">
-            Admin credentials: admin@singitronic.com · Admin123!
+        {/* Quick Demo Accounts */}
+        <div className="pt-4 border-t border-stone-100 space-y-2.5">
+          <p className="text-[11px] font-semibold uppercase tracking-wider text-stone-400 text-center">
+            Quick Demo Access
           </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <button
+              type="button"
+              disabled={submitting}
+              onClick={() => quickLogin("admin@singitronic.com", "Admin123!")}
+              className="flex items-center justify-center gap-1.5 rounded-xl border border-teal-200 bg-teal-50/70 hover:bg-teal-100/70 disabled:opacity-60 px-3 py-2.5 text-xs font-semibold text-teal-800 transition-colors"
+            >
+              <FaKey className="w-3 h-3" />
+              <span>Admin Demo</span>
+            </button>
+            <button
+              type="button"
+              disabled={submitting}
+              onClick={() =>
+                quickLogin("sarah.kamau@example.com", "Customer123!")
+              }
+              className="flex items-center justify-center gap-1.5 rounded-xl border border-stone-200 bg-canvas hover:bg-sand disabled:opacity-60 px-3 py-2.5 text-xs font-semibold text-stone-800 transition-colors"
+            >
+              <FaUser className="w-3 h-3 text-teal-700" />
+              <span>Customer Demo</span>
+            </button>
+          </div>
         </div>
 
         <p className="text-center text-xs text-stone-500">
-          Signing in with your own email?{" "}
+          New to Singitronic?{" "}
           <Link
             href="/register"
             className="font-bold text-teal-700 hover:text-teal-800"
           >
-            Create an account free
+            Create a free account
           </Link>
         </p>
       </div>

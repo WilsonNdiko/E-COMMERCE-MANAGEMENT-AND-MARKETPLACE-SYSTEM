@@ -7,7 +7,6 @@ const { loadEnvFile, resolveLibsqlUrl } = require(path.join(
   "dbUrl.js"
 ));
 
-loadEnvFile(path.join(PROJECT_ROOT, "server", ".env"));
 loadEnvFile(path.join(PROJECT_ROOT, ".env"));
 
 const { PrismaClient } = require("../../node_modules/@prisma/client");

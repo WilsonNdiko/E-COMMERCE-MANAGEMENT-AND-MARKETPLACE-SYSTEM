@@ -5,7 +5,7 @@ import SessionProvider from "@/utils/SessionProvider";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Providers from "@/Providers";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/utils/authOptions";
 
 export const metadata: Metadata = {
   title: {

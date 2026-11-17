@@ -23,10 +23,10 @@ export const commonValidations = {
       "Email contains invalid characters"
     ),
 
-  // Shopper-friendly password validation (8+ chars, supports all characters)
+  // Shopper-friendly password validation (6+ chars, supports all characters)
   password: z
     .string()
-    .min(8, "Password must be at least 8 characters long")
+    .min(6, "Password must be at least 6 characters long")
     .max(128, "Password must be no more than 128 characters"),
 
   // Request size validation

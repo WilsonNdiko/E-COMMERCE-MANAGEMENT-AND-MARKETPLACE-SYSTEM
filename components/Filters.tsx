@@ -94,7 +94,7 @@ const Filters = () => {
             onChange={() =>
               updateParams({ inStock: (!inStock).toString() })
             }
-            className="checkbox checkbox-sm rounded"
+            className="h-4 w-4 rounded border-stone-300 text-teal-700 focus:ring-teal-600"
           />
           <span>In Stock</span>
         </label>
@@ -105,7 +105,7 @@ const Filters = () => {
             onChange={() =>
               updateParams({ outOfStock: (!outOfStock).toString() })
             }
-            className="checkbox checkbox-sm rounded"
+            className="h-4 w-4 rounded border-stone-300 text-teal-700 focus:ring-teal-600"
           />
           <span>Out of Stock</span>
         </label>
@@ -139,7 +139,7 @@ const Filters = () => {
             })
           }
           onKeyUp={() => updateParams({ price: String(priceDraft) })}
-          className="range range-xs range-primary"
+          className="w-full h-2 bg-stone-200 rounded-lg appearance-none cursor-pointer accent-teal-700"
         />
         <div className="flex flex-wrap gap-1.5 pt-1">
           {[150, 350, 750, 2000].map((preset) => (

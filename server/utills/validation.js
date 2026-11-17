@@ -204,20 +204,21 @@ const orderValidation = {
     return trimmedName;
   },
 
-  // Validate phone number
+  // Validate phone number (supports local e.g. 0712345678 and international e.g. +254 712 345 678)
   validatePhone: (phone) => {
     if (!phone || typeof phone !== 'string') {
       throw new ValidationError('Phone number is required', 'phone');
     }
 
-    const cleanedPhone = phone.replace(/[^0-9+\-\(\)\s]/g, '');
-    
-    if (cleanedPhone.length < 10) {
-      throw new ValidationError('Phone number must be at least 10 digits', 'phone');
+    const cleanedPhone = phone.replace(/[^0-9+\-\(\)\s]/g, '').trim();
+    const digitCount = cleanedPhone.replace(/[^0-9]/g, '').length;
+
+    if (digitCount < 7) {
+      throw new ValidationError('Please enter a valid phone number (at least 7 digits)', 'phone');
     }
 
-    if (cleanedPhone.length > 20) {
-      throw new ValidationError('Phone number must be less than 20 characters', 'phone');
+    if (cleanedPhone.length > 25) {
+      throw new ValidationError('Phone number is too long', 'phone');
     }
 
     return cleanedPhone;
@@ -264,16 +265,16 @@ const orderValidation = {
     return trimmedAddress;
   },
 
-  // Validate postal code
+  // Validate postal code (supports international codes or optional blank)
   validatePostalCode: (postalCode) => {
-    if (!postalCode || typeof postalCode !== 'string') {
-      throw new ValidationError('Postal code is required', 'postalCode');
+    if (postalCode === undefined || postalCode === null || String(postalCode).trim() === '') {
+      return '00100';
     }
 
-    const trimmedCode = postalCode.trim();
-    
-    if (trimmedCode.length < 3) {
-      throw new ValidationError('Postal code must be at least 3 characters', 'postalCode');
+    const trimmedCode = String(postalCode).trim();
+
+    if (trimmedCode.length < 2) {
+      throw new ValidationError('Postal code must be at least 2 characters', 'postalCode');
     }
 
     if (trimmedCode.length > 20) {

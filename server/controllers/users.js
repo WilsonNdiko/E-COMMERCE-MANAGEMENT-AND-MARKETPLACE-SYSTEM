@@ -30,9 +30,8 @@ const createUser = asyncHandler(async (request, response) => {
     throw new AppError("Invalid email format", 400);
   }
 
-  // Password validation
-  if (password.length < 8) {
-    throw new AppError("Password must be at least 8 characters long", 400);
+  if (password.length < 6) {
+    throw new AppError("Password must be at least 6 characters long", 400);
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -85,10 +84,10 @@ const updateUser = asyncHandler(async (request, response) => {
         throw new AppError("Current password is incorrect", 400);
       }
     }
-    if (password.length < 8) {
-      throw new AppError("Password must be at least 8 characters long", 400);
+    if (password.length < 6) {
+      throw new AppError("Password must be at least 6 characters long", 400);
     }
-    updateData.password = await bcrypt.hash(password, 12);
+    updateData.password = await bcrypt.hash(password, 10);
   }
   if (role) {
     updateData.role = role;

@@ -73,8 +73,8 @@ const BulkUploadPage = () => {
 
   const downloadTemplate = () => {
     const csvContent = `title,price,manufacturer,inStock,mainImage,description,slug,categoryId
-Wireless ANC Headphones,199,Sony,25,product3.webp,Premium wireless noise-cancelling headphones,wireless-anc-headphones-demo,4c2cc9ec-7504-4b7c-8ecd-2379a854a423
-UltraSlim Mechanical Keyboard,129,Logitech,15,product7.webp,Low-profile tactile mechanical keyboard,ultraslim-mechanical-keyboard-demo,a6896b67-197c-4b2a-b5e2-93954474d8b4`;
+Bose QuietComfort Wireless Headphones,249,Bose,18,headphones 1.png,Comfortable over-ear Bluetooth headphones with quiet mode and 24-hour battery,bose-quietcomfort-headphones,headphones
+Asus VivoBook 14 Everyday Laptop,599,Asus,12,laptop 1.webp,Lightweight 14-inch Full HD laptop with 16GB RAM and 512GB SSD,asus-vivobook-14-laptop,laptops`;
     const blob = new Blob([csvContent], { type: "text/csv" });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");

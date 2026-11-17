@@ -162,7 +162,7 @@ const DashboardProductTable = () => {
                       selectedIds.length === filtered.length
                     }
                     onChange={toggleSelectAll}
-                    className="checkbox checkbox-xs rounded"
+                    className="h-4 w-4 rounded border-stone-300 text-teal-700 focus:ring-teal-600"
                   />
                 </th>
                 <th className="px-4 py-3.5">Product</th>
@@ -193,7 +193,7 @@ const DashboardProductTable = () => {
                         type="checkbox"
                         checked={selectedIds.includes(product.id)}
                         onChange={() => toggleOne(product.id)}
-                        className="checkbox checkbox-xs rounded"
+                        className="h-4 w-4 rounded border-stone-300 text-teal-700 focus:ring-teal-600"
                       />
                     </td>
                     <td className="px-4 py-3">

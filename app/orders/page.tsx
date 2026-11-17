@@ -195,7 +195,7 @@ function OrdersContent() {
         </h2>
         <p className="text-xs text-stone-500 mb-4">
           Enter your Order ID (e.g.{" "}
-          <code className="font-mono">ord-demo-1001</code>) or the email address
+          <code className="font-mono">ord-1001</code>) or the email address
           used at checkout.
         </p>
         <form onSubmit={handleLookup} className="flex flex-col sm:flex-row gap-3">

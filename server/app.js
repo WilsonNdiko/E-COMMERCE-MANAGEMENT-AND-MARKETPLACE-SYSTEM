@@ -2,9 +2,8 @@ const express = require("express");
 const path = require("path");
 const PROJECT_ROOT = path.resolve(__dirname, "..");
 
-// Load env from server/.env and root .env with zero external dependencies
+// Load root .env with zero external dependencies (works on Windows/macOS/Linux)
 const { loadEnvFile } = require(path.join(PROJECT_ROOT, "utils", "dbUrl.js"));
-loadEnvFile(path.join(__dirname, ".env"));
 loadEnvFile(path.join(PROJECT_ROOT, ".env"));
 
 const cors = require("cors");
@@ -35,11 +34,13 @@ const { ensureDatabaseReady } = require(path.join(
 ));
 
 async function startServer() {
-  // Guarantee SQLite schema, 16 demo products, and admin account exist before handling requests
-  try {
-    await ensureDatabaseReady({ silent: false });
-  } catch (err) {
-    console.error("Warning during database bootstrap:", err.message || err);
+  // Guarantee SQLite schema, catalog & demo accounts exist when started standalone
+  if (process.env.SKIP_DB_BOOTSTRAP !== "1") {
+    try {
+      await ensureDatabaseReady({ silent: false });
+    } catch (err) {
+      console.error("Warning during database bootstrap:", err.message || err);
+    }
   }
 
   const productsRouter = require("./routes/products");

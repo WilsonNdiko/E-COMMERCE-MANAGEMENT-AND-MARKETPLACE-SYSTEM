@@ -280,7 +280,7 @@ const DashboardProductDetails = () => {
                         const f = e.target.files?.[0];
                         if (f) handleUpload(f);
                       }}
-                      className="file-input file-input-bordered file-input-sm rounded-xl w-full max-w-sm"
+                      className="block w-full max-w-sm text-xs text-stone-600 file:mr-3 file:rounded-lg file:border-0 file:bg-teal-50 file:px-3 file:py-2 file:text-xs file:font-semibold file:text-teal-800 hover:file:bg-teal-100"
                     />
                   </div>
                 </div>
