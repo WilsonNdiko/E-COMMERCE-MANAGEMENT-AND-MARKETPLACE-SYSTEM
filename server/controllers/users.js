@@ -1,0 +1,188 @@
+const prisma = require("../utills/db");
+const bcrypt = require("bcryptjs");
+const { asyncHandler, AppError } = require("../utills/errorHandler");
+
+// Helper function to exclude password from user object
+function excludePassword(user) {
+  if (!user) return user;
+  const { password, ...userWithoutPassword } = user;
+  return userWithoutPassword;
+}
+
+const getAllUsers = asyncHandler(async (request, response) => {
+  const users = await prisma.user.findMany({});
+  // Exclude password from all users
+  const usersWithoutPasswords = users.map(user => excludePassword(user));
+  return response.json(usersWithoutPasswords);
+});
+
+const createUser = asyncHandler(async (request, response) => {
+  const { email, password, role } = request.body;
+
+  // Basic validation
+  if (!email || !password) {
+    throw new AppError("Email and password are required", 400);
+  }
+
+  const cleanEmail = String(email).trim().toLowerCase();
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(cleanEmail)) {
+    throw new AppError("Invalid email format", 400);
+  }
+
+  // Password validation
+  if (password.length < 8) {
+    throw new AppError("Password must be at least 8 characters long", 400);
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const user = await prisma.user.create({
+    data: {
+      email: cleanEmail,
+      password: hashedPassword,
+      role: role || "user",
+    },
+  });
+  // Exclude password from response
+  return response.status(201).json(excludePassword(user));
+});
+
+const updateUser = asyncHandler(async (request, response) => {
+  const { id } = request.params;
+  const { email, password, currentPassword, role } = request.body;
+
+  if (!id) {
+    throw new AppError("User ID is required", 400);
+  }
+
+  const existingUser = await prisma.user.findUnique({
+    where: {
+      id: id,
+    },
+  });
+
+  if (!existingUser) {
+    throw new AppError("User not found", 404);
+  }
+
+  // Prepare update data
+  const updateData = {};
+  if (email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      throw new AppError("Invalid email format", 400);
+    }
+    updateData.email = email;
+  }
+  if (password) {
+    if (currentPassword !== undefined) {
+      if (!existingUser.password) {
+        throw new AppError("Cannot verify current password for this account", 400);
+      }
+      const isMatch = await bcrypt.compare(currentPassword, existingUser.password);
+      if (!isMatch) {
+        throw new AppError("Current password is incorrect", 400);
+      }
+    }
+    if (password.length < 8) {
+      throw new AppError("Password must be at least 8 characters long", 400);
+    }
+    updateData.password = await bcrypt.hash(password, 12);
+  }
+  if (role) {
+    updateData.role = role;
+  }
+
+  const updatedUser = await prisma.user.update({
+    where: {
+      id: existingUser.id,
+    },
+    data: updateData,
+  });
+
+  // Exclude password from response
+  return response.status(200).json(excludePassword(updatedUser));
+});
+
+const deleteUser = asyncHandler(async (request, response) => {
+  const { id } = request.params;
+
+  if (!id) {
+    throw new AppError("User ID is required", 400);
+  }
+
+  const existingUser = await prisma.user.findUnique({
+    where: {
+      id: id,
+    },
+  });
+
+  if (!existingUser) {
+    throw new AppError("User not found", 404);
+  }
+
+  await prisma.user.delete({
+    where: {
+      id: id,
+    },
+  });
+  return response.status(204).send();
+});
+
+const getUser = asyncHandler(async (request, response) => {
+  const { id } = request.params;
+
+  if (!id) {
+    throw new AppError("User ID is required", 400);
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: id,
+    },
+  });
+  
+  if (!user) {
+    throw new AppError("User not found", 404);
+  }
+  
+  // Exclude password from response
+  return response.status(200).json(excludePassword(user));
+});
+
+const getUserByEmail = asyncHandler(async (request, response) => {
+  const { email } = request.params;
+
+  if (!email) {
+    throw new AppError("Email is required", 400);
+  }
+
+  const cleanEmail = String(email).trim().toLowerCase();
+  let user = await prisma.user.findUnique({
+    where: { email: cleanEmail },
+  });
+
+  if (!user) {
+    const rows = await prisma.$queryRawUnsafe(
+      `SELECT "id", "email", "password", "role" FROM "User" WHERE lower("email") = ? LIMIT 1`,
+      cleanEmail
+    );
+    user = rows?.[0] || null;
+  }
+
+  if (!user) {
+    throw new AppError("User not found", 404);
+  }
+
+  return response.status(200).json(excludePassword(user));
+});
+
+module.exports = {
+  createUser,
+  updateUser,
+  deleteUser,
+  getUser,
+  getAllUsers,
+  getUserByEmail,
+};
