@@ -2,7 +2,9 @@ import React from "react";
 import Link from "next/link";
 import ProductItem from "./ProductItem";
 import Pagination from "./Pagination";
-import apiClient from "@/lib/api";
+import prisma from "@/utils/db";
+
+const PAGE_SIZE = 12;
 
 const Products = async ({
   params,
@@ -19,33 +21,73 @@ const Products = async ({
     typeof searchParams?.sort === "string" ? searchParams.sort : "defaultSort";
   const page = Math.max(1, Number(searchParams?.page) || 1);
   const category =
-    params?.slug && params.slug.length > 0 ? params.slug[0] : "";
-
-  const qs = new URLSearchParams();
-  qs.set("inStock", String(inStock));
-  qs.set("outOfStock", String(outOfStock));
-  if (maxPrice && !Number.isNaN(maxPrice)) qs.set("maxPrice", String(maxPrice));
-  if (minRating > 0) qs.set("minRating", String(minRating));
-  if (category) qs.set("category", category);
-  qs.set("sort", sort);
-  qs.set("page", String(page));
-  qs.set("limit", "12");
+    params?.slug && params.slug.length > 0
+      ? decodeURIComponent(params.slug[0]).trim().toLowerCase()
+      : "";
 
   let products: Product[] = [];
   let totalCount = 0;
   let totalPages = 1;
 
   try {
-    const res = await apiClient.get(`/api/products?${qs.toString()}`, {
-      cache: "no-store",
-    });
-    if (res.ok) {
-      totalCount = Number(res.headers.get("x-total-count")) || 0;
-      totalPages = Number(res.headers.get("x-total-pages")) || 1;
-      const result = await res.json();
-      products = Array.isArray(result) ? result : [];
-      if (!totalCount) totalCount = products.length;
+    const where: any = {};
+
+    if (inStock && !outOfStock) {
+      where.inStock = { gt: 0 };
+    } else if (!inStock && outOfStock) {
+      where.inStock = { equals: 0 };
+    } else if (!inStock && !outOfStock) {
+      where.inStock = { lt: 0 };
     }
+
+    if (maxPrice !== null && !Number.isNaN(maxPrice)) {
+      where.price = { lte: maxPrice };
+    }
+
+    if (minRating > 0 && !Number.isNaN(minRating)) {
+      where.rating = { gte: minRating };
+    }
+
+    if (category) {
+      where.category = { name: { equals: category } };
+    }
+
+    let orderBy: any = [{ id: "asc" }];
+    switch (sort) {
+      case "titleAsc":
+        orderBy = { title: "asc" };
+        break;
+      case "titleDesc":
+        orderBy = { title: "desc" };
+        break;
+      case "lowPrice":
+        orderBy = { price: "asc" };
+        break;
+      case "highPrice":
+        orderBy = { price: "desc" };
+        break;
+      case "topRated":
+        orderBy = [{ rating: "desc" }, { price: "asc" }];
+        break;
+      default:
+        orderBy = [{ id: "asc" }];
+        break;
+    }
+
+    const [count, rows] = await Promise.all([
+      prisma.product.count({ where }),
+      prisma.product.findMany({
+        where,
+        include: { category: true },
+        orderBy,
+        skip: (page - 1) * PAGE_SIZE,
+        take: PAGE_SIZE,
+      }),
+    ]);
+
+    totalCount = count;
+    totalPages = Math.max(1, Math.ceil(count / PAGE_SIZE));
+    products = rows as unknown as Product[];
   } catch (error) {
     console.error("Error fetching products:", error);
     products = [];

@@ -1,5 +1,5 @@
 "use client";
-import { DashboardSidebar } from "@/components";
+import DashboardSidebar from "@/components/DashboardSidebar";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { formatCategoryName } from "../../../../utils/categoryFormating";
@@ -71,7 +71,7 @@ const DashboardCategory = () => {
           </div>
 
           <div className="relative max-w-xs">
-            <FaMagnifyingGlass className="w-3.5 h-3.5 text-stone-400 absolute left-3.5 top-1/2 -transtone-y-1/2" />
+            <FaMagnifyingGlass className="w-3.5 h-3.5 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={search}

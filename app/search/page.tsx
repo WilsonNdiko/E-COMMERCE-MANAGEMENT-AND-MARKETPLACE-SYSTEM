@@ -1,5 +1,6 @@
-import { ProductItem, SectionTitle } from "@/components";
-import apiClient from "@/lib/api";
+import ProductItem from "@/components/ProductItem";
+import SectionTitle from "@/components/SectionTitle";
+import prisma from "@/utils/db";
 import Link from "next/link";
 import React from "react";
 import { sanitize } from "@/lib/sanitize";
@@ -17,14 +18,22 @@ const SearchPage = async ({ searchParams }: Props) => {
   let products: Product[] = [];
 
   try {
-    const data = await apiClient.get(
-      `/api/search?query=${encodeURIComponent(query)}`,
-      { cache: "no-store" }
-    );
-    if (data.ok) {
-      const result = await data.json();
-      products = Array.isArray(result) ? result : [];
-    }
+    const rows = await prisma.product.findMany({
+      where: query
+        ? {
+            OR: [
+              { title: { contains: query } },
+              { description: { contains: query } },
+              { manufacturer: { contains: query } },
+              { category: { name: { contains: query.toLowerCase() } } },
+            ],
+          }
+        : undefined,
+      include: { category: true },
+      orderBy: [{ rating: "desc" }, { id: "asc" }],
+      take: 40,
+    });
+    products = rows as unknown as Product[];
   } catch (error) {
     console.error("Error fetching search results:", error);
     products = [];

@@ -1,5 +1,5 @@
 "use client";
-import { SectionTitle } from "@/components";
+import SectionTitle from "@/components/SectionTitle";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -182,7 +182,7 @@ const RegisterPage = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-3 top-1/2 -transtone-y-1/2 text-stone-400 hover:text-stone-600"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600"
                   aria-label="Toggle password visibility"
                 >
                   {showPassword ? (

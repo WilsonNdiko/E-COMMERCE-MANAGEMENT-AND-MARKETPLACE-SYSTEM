@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { DashboardSidebar } from "@/components";
+import DashboardSidebar from "@/components/DashboardSidebar";
 import apiClient from "@/lib/api";
 import toast from "react-hot-toast";
 import { FaTrashCan, FaDownload, FaStar } from "react-icons/fa6";

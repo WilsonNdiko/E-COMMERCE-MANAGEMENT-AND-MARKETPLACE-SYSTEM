@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { SectionTitle } from "@/components";
+import SectionTitle from "@/components/SectionTitle";
 import {
   FaShieldHalved,
   FaTruckFast,

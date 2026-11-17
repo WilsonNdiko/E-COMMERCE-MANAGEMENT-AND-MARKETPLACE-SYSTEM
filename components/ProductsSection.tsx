@@ -1,20 +1,19 @@
 import React from "react";
 import Link from "next/link";
 import ProductItem from "./ProductItem";
-import apiClient from "@/lib/api";
+import prisma from "@/utils/db";
 import { FaArrowRight } from "react-icons/fa6";
 
 const ProductsSection = async () => {
   let products: Product[] = [];
 
   try {
-    const data = await apiClient.get("/api/products?limit=8", {
-      cache: "no-store",
+    const rows = await prisma.product.findMany({
+      take: 8,
+      include: { category: true },
+      orderBy: [{ rating: "desc" }, { id: "asc" }],
     });
-    if (data.ok) {
-      const result = await data.json();
-      products = Array.isArray(result) ? result : [];
-    }
+    products = rows as unknown as Product[];
   } catch (error) {
     console.error("Error fetching featured products:", error);
     products = [];
@@ -48,9 +47,14 @@ const ProductsSection = async () => {
             ))}
           </div>
         ) : (
-          <div className="rounded-2xl bg-white border border-dashed border-stone-300 p-12 text-center">
-            <p className="text-stone-600 font-medium">
-              No products available right now. Check back soon!
+          <div className="rounded-2xl bg-white border border-dashed border-stone-300 p-12 text-center space-y-2">
+            <p className="text-stone-700 font-semibold">
+              Catalog is initializing...
+            </p>
+            <p className="text-xs text-stone-500">
+              Refresh this page in a moment or run{" "}
+              <code className="text-teal-800 font-semibold">npm run db:seed</code>{" "}
+              in your terminal.
             </p>
           </div>
         )}

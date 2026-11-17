@@ -1,5 +1,5 @@
 "use client";
-import { DashboardSidebar } from "@/components";
+import DashboardSidebar from "@/components/DashboardSidebar";
 import BulkUploadHistory from "@/components/BulkUploadHistory";
 import React, { useState, useRef } from "react";
 import toast from "react-hot-toast";

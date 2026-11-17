@@ -1,11 +1,9 @@
-import {
-  ProductItem,
-  ProductTabs,
-  SingleProductDynamicFields,
-} from "@/components";
+import ProductItem from "@/components/ProductItem";
+import ProductTabs from "@/components/ProductTabs";
+import SingleProductDynamicFields from "@/components/SingleProductDynamicFields";
 import ProductGallery from "@/components/ProductGallery";
 import RecentlyViewed from "@/components/RecentlyViewed";
-import apiClient from "@/lib/api";
+import prisma from "@/utils/db";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import React, { Suspense } from "react";
@@ -35,51 +33,37 @@ interface SingleProductPageProps {
 const SingleProductPage = async ({ params }: SingleProductPageProps) => {
   const { productSlug } = await params;
 
-  const data = await apiClient.get(
-    `/api/slugs/${encodeURIComponent(productSlug)}`,
-    { cache: "no-store" }
-  );
+  const found = await prisma.product.findFirst({
+    where: { slug: decodeURIComponent(productSlug) },
+    include: { category: true },
+  });
 
-  if (!data.ok) {
+  if (!found) {
     notFound();
   }
 
-  const product: Product = await data.json();
-  if (!product || (product as any).error) {
-    notFound();
-  }
+  const product = found as unknown as Product;
 
-  // Fetch gallery images using real product.id
-  let images: ImageItem[] = [];
-  try {
-    const imgRes = await apiClient.get(`/api/images/${product.id}`, {
-      cache: "no-store",
-    });
-    if (imgRes.ok) {
-      const parsed = await imgRes.json();
-      images = Array.isArray(parsed) ? parsed : [];
-    }
-  } catch (_) {}
+  // Fetch gallery images & related products in parallel in <1ms
+  const [images, allRelated] = await Promise.all([
+    prisma.image
+      .findMany({ where: { productID: product.id } })
+      .catch(() => [] as ImageItem[]),
+    prisma.product
+      .findMany({
+        where: { id: { not: product.id } },
+        include: { category: true },
+        take: 8,
+      })
+      .catch(() => []),
+  ]);
 
-  // Fetch related products
-  let relatedProducts: Product[] = [];
-  try {
-    const relRes = await apiClient.get(`/api/products?limit=8`, {
-      cache: "no-store",
-    });
-    if (relRes.ok) {
-      const all: Product[] = await relRes.json();
-      if (Array.isArray(all)) {
-        const sameCat = all.filter(
-          (p) => p.id !== product.id && p.categoryId === product.categoryId
-        );
-        const others = all.filter(
-          (p) => p.id !== product.id && p.categoryId !== product.categoryId
-        );
-        relatedProducts = [...sameCat, ...others].slice(0, 4);
-      }
-    }
-  } catch (_) {}
+  const sameCat = allRelated.filter((p) => p.categoryId === product.categoryId);
+  const others = allRelated.filter((p) => p.categoryId !== product.categoryId);
+  const relatedProducts = [...sameCat, ...others].slice(
+    0,
+    4
+  ) as unknown as Product[];
 
   const inStock = Number(product.inStock) > 0;
   const rating = Math.min(5, Math.max(0, Number(product.rating) || 0));

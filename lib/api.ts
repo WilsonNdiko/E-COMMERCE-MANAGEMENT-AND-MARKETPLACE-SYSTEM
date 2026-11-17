@@ -1,8 +1,8 @@
 const getBaseUrl = () => {
-  if (typeof window === 'undefined') {
-    return process.env.BACKEND_INTERNAL_URL || 'http://127.0.0.1:3001';
+  if (typeof window === "undefined") {
+    return process.env.BACKEND_INTERNAL_URL || "http://127.0.0.1:3001";
   }
-  return process.env.NEXT_PUBLIC_API_BASE_URL || '';
+  return process.env.NEXT_PUBLIC_API_BASE_URL || "";
 };
 
 export const apiClient = {
@@ -13,45 +13,52 @@ export const apiClient = {
   async request(endpoint: string, options: RequestInit = {}) {
     const url = `${getBaseUrl()}${endpoint}`;
     const isFormData =
-      typeof FormData !== 'undefined' && options.body instanceof FormData;
+      typeof FormData !== "undefined" && options.body instanceof FormData;
 
     const headers: HeadersInit = isFormData
       ? { ...(options.headers || {}) }
       : {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           ...(options.headers || {}),
         };
 
-    return fetch(url, { ...options, headers });
+    // Never let a slow or restarting backend hang page rendering
+    const timeoutMs = typeof window === "undefined" ? 4000 : 12000;
+    const signal =
+      options.signal ||
+      (typeof AbortSignal !== "undefined" && "timeout" in AbortSignal
+        ? AbortSignal.timeout(timeoutMs)
+        : undefined);
+
+    return fetch(url, { ...options, headers, signal });
   },
 
-  // Convenience methods
   get: (endpoint: string, options?: RequestInit) =>
-    apiClient.request(endpoint, { ...options, method: 'GET' }),
+    apiClient.request(endpoint, { ...options, method: "GET" }),
 
   post: (endpoint: string, data?: any, options?: RequestInit) => {
-    if (typeof FormData !== 'undefined' && data instanceof FormData) {
+    if (typeof FormData !== "undefined" && data instanceof FormData) {
       return apiClient.request(endpoint, {
         ...options,
-        method: 'POST',
+        method: "POST",
         body: data,
       });
     }
     if (
       data &&
-      typeof data === 'object' &&
-      typeof FormData !== 'undefined' &&
+      typeof data === "object" &&
+      typeof FormData !== "undefined" &&
       data.body instanceof FormData
     ) {
       return apiClient.request(endpoint, {
         ...options,
         ...data,
-        method: 'POST',
+        method: "POST",
       });
     }
     return apiClient.request(endpoint, {
       ...options,
-      method: 'POST',
+      method: "POST",
       body: data ? JSON.stringify(data) : undefined,
     });
   },
@@ -59,12 +66,12 @@ export const apiClient = {
   put: (endpoint: string, data?: any, options?: RequestInit) =>
     apiClient.request(endpoint, {
       ...options,
-      method: 'PUT',
+      method: "PUT",
       body: data ? JSON.stringify(data) : undefined,
     }),
 
   delete: (endpoint: string, options?: RequestInit) =>
-    apiClient.request(endpoint, { ...options, method: 'DELETE' }),
+    apiClient.request(endpoint, { ...options, method: "DELETE" }),
 };
 
 export default apiClient;

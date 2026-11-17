@@ -24,9 +24,9 @@ const createUser = asyncHandler(async (request, response) => {
     throw new AppError("Email and password are required", 400);
   }
 
-  // Email validation
+  const cleanEmail = String(email).trim().toLowerCase();
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
+  if (!emailRegex.test(cleanEmail)) {
     throw new AppError("Invalid email format", 400);
   }
 
@@ -35,11 +35,11 @@ const createUser = asyncHandler(async (request, response) => {
     throw new AppError("Password must be at least 8 characters long", 400);
   }
 
-  const hashedPassword = await bcrypt.hash(password, 14);
+  const hashedPassword = await bcrypt.hash(password, 10);
 
   const user = await prisma.user.create({
     data: {
-      email,
+      email: cleanEmail,
       password: hashedPassword,
       role: role || "user",
     },
@@ -158,17 +158,23 @@ const getUserByEmail = asyncHandler(async (request, response) => {
     throw new AppError("Email is required", 400);
   }
 
-  const user = await prisma.user.findUnique({
-    where: {
-      email: email,
-    },
+  const cleanEmail = String(email).trim().toLowerCase();
+  let user = await prisma.user.findUnique({
+    where: { email: cleanEmail },
   });
-  
+
+  if (!user) {
+    const rows = await prisma.$queryRawUnsafe(
+      `SELECT "id", "email", "password", "role" FROM "User" WHERE lower("email") = ? LIMIT 1`,
+      cleanEmail
+    );
+    user = rows?.[0] || null;
+  }
+
   if (!user) {
     throw new AppError("User not found", 404);
   }
-  
-  // Exclude password from response
+
   return response.status(200).json(excludePassword(user));
 });
 

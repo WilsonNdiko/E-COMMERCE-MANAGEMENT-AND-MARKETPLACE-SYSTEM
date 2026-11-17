@@ -35,14 +35,14 @@ const Hero = () => {
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3.5 pt-1">
               <Link
                 href="/shop"
-                className="inline-flex items-center gap-2 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-semibold px-7 py-3.5 text-sm sm:text-base shadow-sm hover:-transtone-y-0.5 transition-all"
+                className="inline-flex items-center gap-2 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-semibold px-7 py-3.5 text-sm sm:text-base shadow-sm hover:-translate-y-0.5 transition-all"
               >
                 <span>Start Shopping</span>
                 <FaArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 href="/product/smart-watch-demo?view=3d"
-                className="inline-flex items-center gap-2 rounded-xl bg-white hover:bg-ivory border border-stone-300/90 text-stone-800 font-semibold px-6 py-3.5 text-sm sm:text-base shadow-sm hover:-transtone-y-0.5 transition-all"
+                className="inline-flex items-center gap-2 rounded-xl bg-white hover:bg-ivory border border-stone-300/90 text-stone-800 font-semibold px-6 py-3.5 text-sm sm:text-base shadow-sm hover:-translate-y-0.5 transition-all"
               >
                 <FaCube className="w-4 h-4 text-teal-700" />
                 <span>Try 3D Product View</span>

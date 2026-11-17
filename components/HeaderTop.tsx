@@ -24,18 +24,37 @@ const HeaderTop = () => {
 
   useEffect(() => {
     let active = true;
+    const CACHE_KEY = "singitronic_header_settings_v1";
+    try {
+      const cached = sessionStorage.getItem(CACHE_KEY);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (parsed && Date.now() - (parsed.ts || 0) < 5 * 60 * 1000) {
+          setMeta(parsed.meta);
+          return;
+        }
+      }
+    } catch {}
+
     apiClient
       .get("/api/admin/settings")
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => {
         if (!active || !d) return;
-        setMeta({
+        const nextMeta = {
           phone: d.supportPhone || "+1 (800) 555-0194",
           email: d.supportEmail || "support@singitronic.com",
           banner:
             d.announcementText ||
             `Free delivery on orders over $${d.freeShippingThreshold || 150}`,
-        });
+        };
+        setMeta(nextMeta);
+        try {
+          sessionStorage.setItem(
+            CACHE_KEY,
+            JSON.stringify({ ts: Date.now(), meta: nextMeta })
+          );
+        } catch {}
       })
       .catch(() => {});
     return () => {

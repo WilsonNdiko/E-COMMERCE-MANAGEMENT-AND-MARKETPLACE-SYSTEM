@@ -27,7 +27,7 @@ function SimpleSlider() {
     <div className="slider-container max-w-screen-2xl mx-auto px-16 max-md:px-7">
       <Slider {...settings}>
         <div className="h-[500px] max-lg:h-[400px] max-md:h-[250px] max-[500px]:h-[200px] max-[400px]:h-[150px] relative">
-          <div className="absolute left-[50%] transtone-x-[-50%] transtone-y-[30%] h-full text-center max-lg:transtone-y-[25%] max-md:transtone-y-[20%] max-sm:hidden">
+          <div className="absolute left-[50%] translate-x-[-50%] translate-y-[30%] h-full text-center max-lg:translate-y-[25%] max-md:translate-y-[20%] max-sm:hidden">
             <p className="text-xl font-light underline underline-offset-4 mb-5 max-[1162px]:text-lg max-lg:mb-2 max-md:text-base max-md:mb-1">
               Headphones
             </p>
@@ -45,7 +45,7 @@ function SimpleSlider() {
           <img src="/slider image 1.webp" alt="slider 1" className="h-full" />
         </div>
         <div className="h-[500px] max-lg:h-[400px] max-md:h-[250px] max-[500px]:h-[200px] max-[400px]:h-[150px] relative">
-          <div className="absolute left-[50%] transtone-x-[-50%] transtone-y-[30%] h-full text-center max-lg:transtone-y-[25%] max-md:transtone-y-[20%] max-sm:hidden">
+          <div className="absolute left-[50%] translate-x-[-50%] translate-y-[30%] h-full text-center max-lg:translate-y-[25%] max-md:translate-y-[20%] max-sm:hidden">
             <p className="text-xl font-light underline underline-offset-4 mb-5 max-[1162px]:text-lg max-lg:mb-2 max-md:text-base max-md:mb-1">
               Earbud
             </p>

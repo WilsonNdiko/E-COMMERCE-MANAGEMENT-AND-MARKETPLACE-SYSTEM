@@ -1324,7 +1324,7 @@ export default function Product3DViewer({
 
       {/* Right Zoom & Reset Floating Pill */}
       <div
-        className={`absolute right-3.5 top-1/2 -transtone-y-1/2 z-10 flex flex-col rounded-full border backdrop-blur-md overflow-hidden ${
+        className={`absolute right-3.5 top-1/2 -translate-y-1/2 z-10 flex flex-col rounded-full border backdrop-blur-md overflow-hidden ${
           darkStage
             ? "bg-stone-800/80 border-stone-700 text-stone-200"
             : "bg-white/90 border-stone-200 text-stone-700 shadow-sm"

@@ -57,4 +57,5 @@ logs/
 # OS & Archives
 Thumbs.db
 .DS_Store
-*.zip
+*.zip*.db-wal
+*.db-shm

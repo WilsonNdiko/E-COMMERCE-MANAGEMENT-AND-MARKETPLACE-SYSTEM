@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { SectionTitle } from "@/components";
+import SectionTitle from "@/components/SectionTitle";
 import apiClient from "@/lib/api";
 import toast from "react-hot-toast";
 import {

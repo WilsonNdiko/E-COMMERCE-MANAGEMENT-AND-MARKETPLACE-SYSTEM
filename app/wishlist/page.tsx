@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { SectionTitle } from "@/components";
+import SectionTitle from "@/components/SectionTitle";
 import { useWishlistStore } from "@/app/_zustand/wishlistStore";
 import { useProductStore } from "@/app/_zustand/store";
 import { useSession } from "next-auth/react";

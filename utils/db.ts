@@ -1,34 +1,63 @@
+import fs from "fs";
 import path from "path";
-import { pathToFileURL } from "url";
+import { fileURLToPath } from "url";
 import { PrismaClient } from "@prisma/client";
 import { PrismaLibSQL } from "@prisma/adapter-libsql";
 
-function resolveDatabaseUrl(): string {
-  const raw = (process.env.DATABASE_URL || "file:./prisma/dev.db").trim();
+/**
+ * Cross-platform SQLite/LibSQL URL resolver supporting Windows (`file:C:/...`),
+ * macOS, and Linux (`file:/...`), including folders with spaces or symbols.
+ */
+export function resolveDatabaseUrl(): string {
+  let raw = (process.env.DATABASE_URL || "file:./prisma/dev.db").trim();
 
-  // Pass through remote LibSQL / Turso / HTTP URLs untouched
+  if (
+    (raw.startsWith('"') && raw.endsWith('"')) ||
+    (raw.startsWith("'") && raw.endsWith("'"))
+  ) {
+    raw = raw.slice(1, -1).trim();
+  }
+
   if (
     raw.startsWith("libsql://") ||
     raw.startsWith("https://") ||
     raw.startsWith("http://") ||
-    raw === "file::memory:"
+    raw === "file::memory:" ||
+    raw.startsWith("file::memory:?")
   ) {
     return raw;
   }
 
+  let absPath: string;
   if (raw.startsWith("file://")) {
-    return raw;
+    try {
+      absPath = fileURLToPath(raw);
+    } catch {
+      const stripped = raw.replace(/^file:\/\/\/?/, "");
+      absPath = /^[A-Za-z]:[\\/]/.test(stripped) ? stripped : "/" + stripped;
+    }
+  } else {
+    const filePart = raw.startsWith("file:") ? raw.slice("file:".length) : raw;
+    const cleanPart = filePart.split("?")[0];
+    const isWinDrive = /^[A-Za-z]:[\\/]/.test(cleanPart);
+    absPath =
+      path.isAbsolute(cleanPart) || isWinDrive
+        ? cleanPart
+        : path.resolve(process.cwd(), cleanPart);
   }
 
-  if (raw.startsWith("file:")) {
-    const filePart = raw.slice("file:".length);
-    const absPath = path.isAbsolute(filePart)
-      ? filePart
-      : path.resolve(process.cwd(), filePart);
-    return pathToFileURL(absPath).href;
-  }
+  try {
+    fs.mkdirSync(path.dirname(absPath), { recursive: true });
+  } catch {}
 
-  return pathToFileURL(path.resolve(process.cwd(), raw)).href;
+  const normalized = absPath
+    .replace(/\\/g, "/")
+    .replace(/^\/([A-Za-z]:\/)/, "$1")
+    .replace(/%/g, "%25")
+    .replace(/\?/g, "%3F")
+    .replace(/#/g, "%23");
+
+  return `file:${normalized}`;
 }
 
 const prismaClientSingleton = () => {
@@ -38,10 +67,7 @@ const prismaClientSingleton = () => {
 
   return new PrismaClient({
     adapter,
-    log:
-      process.env.NODE_ENV === "development"
-        ? ["warn", "error"]
-        : ["error", "warn"],
+    log: ["error"],
   });
 };
 

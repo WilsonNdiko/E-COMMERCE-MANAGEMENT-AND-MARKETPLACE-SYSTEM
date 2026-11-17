@@ -11,7 +11,7 @@ const CategoryItem = ({ title, children, href }: CategoryItemProps) => {
   return (
     <Link
       href={href}
-      className="group flex flex-col items-center justify-center gap-3 rounded-2xl bg-white p-5 border border-stone-200/80 hover:border-teal-500 hover:shadow-md hover:-transtone-y-0.5 transition-all duration-200 text-center"
+      className="group flex flex-col items-center justify-center gap-3 rounded-2xl bg-white p-5 border border-stone-200/80 hover:border-teal-500 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 text-center"
     >
       <div className="w-14 h-14 rounded-xl bg-canvas group-hover:bg-teal-50 flex items-center justify-center transition-colors">
         {children}

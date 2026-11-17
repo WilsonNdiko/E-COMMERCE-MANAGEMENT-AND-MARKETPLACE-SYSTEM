@@ -1,5 +1,5 @@
 "use client";
-import { SectionTitle } from "@/components";
+import SectionTitle from "@/components/SectionTitle";
 import { isValidEmailAddressFormat } from "@/lib/utils";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
@@ -32,43 +32,59 @@ function LoginForm() {
     }
   }, [sessionStatus, session?.user?.role, router, searchParams]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const signInWith = async (targetEmail: string, targetPassword: string) => {
     setError("");
+    const cleanEmail = targetEmail.replace(/\s+/g, "").toLowerCase();
 
-    if (!isValidEmailAddressFormat(email.trim())) {
-      setError("Please enter a valid email address");
+    if (!isValidEmailAddressFormat(cleanEmail)) {
+      setError("Please enter a valid email address (e.g. name@example.com).");
       toast.error("Please enter a valid email address");
       return;
     }
-    if (!password || password.length < 8) {
-      setError("Password must be at least 8 characters");
-      toast.error("Password must be at least 8 characters");
+    if (!targetPassword) {
+      setError("Please enter your password.");
+      toast.error("Please enter your password");
       return;
     }
 
     setSubmitting(true);
-    const res = await signIn("credentials", {
-      redirect: false,
-      email: email.trim(),
-      password,
-    });
-    setSubmitting(false);
+    try {
+      const res = await signIn("credentials", {
+        redirect: false,
+        email: cleanEmail,
+        password: targetPassword,
+      });
 
-    if (res?.error) {
-      setError("Invalid email or password. Please try again.");
-      toast.error("Invalid email or password");
-    } else {
-      toast.success("Welcome back!");
-      router.refresh();
+      if (res?.error) {
+        setError(
+          "Incorrect email or password. If you don't have an account yet, click 'Create one free' below — or use the Demo Admin Login button."
+        );
+        toast.error("Incorrect email or password");
+      } else {
+        toast.success("Welcome back!");
+        const next =
+          searchParams.get("callbackUrl") ||
+          (cleanEmail === "admin@singitronic.com" ? "/admin" : "/");
+        router.push(next);
+        router.refresh();
+      }
+    } catch {
+      setError("Unable to reach the sign-in service. Please try again.");
+      toast.error("Sign-in error — please retry");
+    } finally {
+      setSubmitting(false);
     }
   };
 
-  const fillDemoAdmin = () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await signInWith(email, password);
+  };
+
+  const loginAsDemoAdmin = async () => {
     setEmail("admin@singitronic.com");
     setPassword("Admin123!");
-    setError("");
-    toast.success("Demo admin credentials filled — click Sign In");
+    await signInWith("admin@singitronic.com", "Admin123!");
   };
 
   return (
@@ -79,17 +95,17 @@ function LoginForm() {
             Welcome back
           </h2>
           <p className="text-xs text-stone-500">
-            Sign in to manage orders, wishlist, or the admin dashboard.
+            Sign in to track orders, view your wishlist, or open the admin dashboard.
           </p>
         </div>
 
         {error && (
-          <div className="rounded-xl bg-rose-50 border border-rose-200 px-4 py-2.5 text-xs font-medium text-rose-700">
+          <div className="rounded-xl bg-rose-50 border border-rose-200 px-4 py-2.5 text-xs font-medium text-rose-700 leading-relaxed">
             {error}
           </div>
         )}
 
-        <form className="space-y-4" onSubmit={handleSubmit}>
+        <form className="space-y-4" onSubmit={handleSubmit} noValidate>
           <div>
             <label
               htmlFor="email"
@@ -105,7 +121,7 @@ function LoginForm() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
+              placeholder="admin@singitronic.com"
               className="w-full rounded-xl border border-stone-200 px-3.5 py-2.5 text-sm text-stone-900 placeholder:text-stone-400 focus:border-teal-600 focus:outline-none focus:ring-4 focus:ring-teal-600/10"
             />
           </div>
@@ -135,13 +151,13 @@ function LoginForm() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
+                placeholder="Enter your password"
                 className="w-full rounded-xl border border-stone-200 pl-3.5 pr-10 py-2.5 text-sm text-stone-900 placeholder:text-stone-400 focus:border-teal-600 focus:outline-none focus:ring-4 focus:ring-teal-600/10"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword((v) => !v)}
-                className="absolute right-3 top-1/2 -transtone-y-1/2 text-stone-400 hover:text-stone-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600"
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? (
@@ -154,15 +170,22 @@ function LoginForm() {
           </div>
 
           {showResetHelp && (
-            <div className="rounded-xl bg-canvas border border-stone-200 p-3 text-xs text-stone-600">
-              Need a password reset? Reach out via our{" "}
-              <Link
-                href="/contact"
-                className="font-semibold text-teal-700 underline"
-              >
-                Support form
-              </Link>{" "}
-              and our team will reset your account right away.
+            <div className="rounded-xl bg-canvas border border-stone-200 p-3 text-xs text-stone-600 space-y-1">
+              <p>
+                <strong>Demo Admin:</strong>{" "}
+                <code className="text-teal-800">admin@singitronic.com</code> /{" "}
+                <code className="text-teal-800">Admin123!</code>
+              </p>
+              <p>
+                Need help with a customer account? Visit our{" "}
+                <Link
+                  href="/contact"
+                  className="font-semibold text-teal-700 underline"
+                >
+                  Support page
+                </Link>
+                .
+              </p>
             </div>
           )}
 
@@ -175,25 +198,29 @@ function LoginForm() {
           </button>
         </form>
 
-        {/* Demo Admin Helper */}
-        <div className="pt-4 border-t border-stone-100">
+        {/* One-Click Demo Admin Login */}
+        <div className="pt-4 border-t border-stone-100 space-y-2">
           <button
             type="button"
-            onClick={fillDemoAdmin}
-            className="w-full flex items-center justify-center gap-2 rounded-xl border border-teal-200 bg-teal-50/70 hover:bg-teal-100/70 px-4 py-2.5 text-xs font-semibold text-teal-800 transition-colors"
+            disabled={submitting}
+            onClick={loginAsDemoAdmin}
+            className="w-full flex items-center justify-center gap-2 rounded-xl border border-teal-200 bg-teal-50/70 hover:bg-teal-100/70 disabled:opacity-60 px-4 py-2.5 text-xs font-semibold text-teal-800 transition-colors"
           >
             <FaKey className="w-3.5 h-3.5" />
-            <span>Fill Demo Admin Login (admin@singitronic.com)</span>
+            <span>One-Click Admin Sign In (admin@singitronic.com)</span>
           </button>
+          <p className="text-center text-[11px] text-stone-400">
+            Admin credentials: admin@singitronic.com · Admin123!
+          </p>
         </div>
 
         <p className="text-center text-xs text-stone-500">
-          Don&apos;t have an account?{" "}
+          Signing in with your own email?{" "}
           <Link
             href="/register"
             className="font-bold text-teal-700 hover:text-teal-800"
           >
-            Create one free
+            Create an account free
           </Link>
         </p>
       </div>

@@ -1,7 +1,10 @@
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-import { Breadcrumb, Filters, Products, SortBy } from "@/components";
+import Breadcrumb from "@/components/Breadcrumb";
+import Filters from "@/components/Filters";
+import Products from "@/components/Products";
+import SortBy from "@/components/SortBy";
 import React from "react";
 import { sanitize } from "@/lib/sanitize";
 

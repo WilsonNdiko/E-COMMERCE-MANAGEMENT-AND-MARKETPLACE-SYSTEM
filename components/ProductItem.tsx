@@ -19,7 +19,7 @@ const ProductItem = ({
   const reviewCount = product._count?.reviews;
 
   return (
-    <div className="group w-full bg-white rounded-2xl border border-stone-200/90 hover:border-teal-600/45 hover:-transtone-y-1 hover:shadow-xl hover:shadow-stone-900/5 transition-all duration-200 flex flex-col overflow-hidden">
+    <div className="group w-full bg-white rounded-2xl border border-stone-200/90 hover:border-teal-600/45 hover:-translate-y-1 hover:shadow-xl hover:shadow-stone-900/5 transition-all duration-200 flex flex-col overflow-hidden">
       {/* Solid Soft Cream Product Stage */}
       <div className="relative aspect-square bg-ivory border-b border-stone-100 p-6 flex items-center justify-center overflow-hidden">
         {/* Stock Badge */}

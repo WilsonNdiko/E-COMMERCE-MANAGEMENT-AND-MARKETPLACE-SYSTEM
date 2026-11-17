@@ -1,29 +1,12 @@
 const path = require("path");
-const { pathToFileURL } = require("url");
 const PROJECT_ROOT = path.resolve(__dirname, "..");
-require("dotenv").config({ path: path.join(PROJECT_ROOT, ".env") });
+const { resolveLibsqlUrl } = require(path.join(PROJECT_ROOT, "utils", "dbUrl.js"));
 const { createClient } = require("@libsql/client");
 
-function resolveDatabaseUrl() {
-  const raw = (process.env.DATABASE_URL || "file:./prisma/dev.db").trim();
-  if (
-    raw.startsWith("libsql://") ||
-    raw.startsWith("https://") ||
-    raw.startsWith("http://") ||
-    raw.startsWith("file://")
-  ) {
-    return raw;
-  }
-  const filePart = raw.startsWith("file:") ? raw.slice("file:".length) : raw;
-  const absPath = path.isAbsolute(filePart)
-    ? filePart
-    : path.resolve(PROJECT_ROOT, filePart);
-  return pathToFileURL(absPath).href;
-}
-
-const dbUrl = resolveDatabaseUrl();
-
 const statements = [
+  `PRAGMA journal_mode = WAL;`,
+  `PRAGMA synchronous = NORMAL;`,
+  `PRAGMA busy_timeout = 5000;`,
   `PRAGMA foreign_keys = ON;`,
 
   `CREATE TABLE IF NOT EXISTS "Category" (
@@ -41,7 +24,7 @@ const statements = [
     "address" TEXT,
     "status" TEXT NOT NULL DEFAULT 'ACTIVE',
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL
+    "updatedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
   );`,
 
   `CREATE TABLE IF NOT EXISTS "Product" (
@@ -60,12 +43,17 @@ const statements = [
     CONSTRAINT "Product_merchantId_fkey" FOREIGN KEY ("merchantId") REFERENCES "Merchant" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
   );`,
   `CREATE UNIQUE INDEX IF NOT EXISTS "Product_slug_key" ON "Product"("slug");`,
+  `CREATE INDEX IF NOT EXISTS "Product_categoryId_idx" ON "Product"("categoryId");`,
+  `CREATE INDEX IF NOT EXISTS "Product_price_idx" ON "Product"("price");`,
+  `CREATE INDEX IF NOT EXISTS "Product_rating_idx" ON "Product"("rating");`,
+  `CREATE INDEX IF NOT EXISTS "Product_inStock_idx" ON "Product"("inStock");`,
 
   `CREATE TABLE IF NOT EXISTS "Image" (
     "imageID" TEXT NOT NULL PRIMARY KEY,
     "productID" TEXT NOT NULL,
     "image" TEXT NOT NULL
   );`,
+  `CREATE INDEX IF NOT EXISTS "Image_productID_idx" ON "Image"("productID");`,
 
   `CREATE TABLE IF NOT EXISTS "User" (
     "id" TEXT NOT NULL PRIMARY KEY,
@@ -92,6 +80,8 @@ const statements = [
     "orderNotice" TEXT,
     "total" INTEGER NOT NULL
   );`,
+  `CREATE INDEX IF NOT EXISTS "Customer_order_email_idx" ON "Customer_order"("email");`,
+  `CREATE INDEX IF NOT EXISTS "Customer_order_dateTime_idx" ON "Customer_order"("dateTime");`,
 
   `CREATE TABLE IF NOT EXISTS "customer_order_product" (
     "id" TEXT NOT NULL PRIMARY KEY,
@@ -101,6 +91,7 @@ const statements = [
     CONSTRAINT "customer_order_product_customerOrderId_fkey" FOREIGN KEY ("customerOrderId") REFERENCES "Customer_order" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "customer_order_product_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
   );`,
+  `CREATE INDEX IF NOT EXISTS "customer_order_product_order_idx" ON "customer_order_product"("customerOrderId");`,
 
   `CREATE TABLE IF NOT EXISTS "Wishlist" (
     "id" TEXT NOT NULL PRIMARY KEY,
@@ -109,6 +100,7 @@ const statements = [
     CONSTRAINT "Wishlist_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT "Wishlist_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
   );`,
+  `CREATE INDEX IF NOT EXISTS "Wishlist_userId_idx" ON "Wishlist"("userId");`,
 
   `CREATE TABLE IF NOT EXISTS "Notification" (
     "id" TEXT NOT NULL PRIMARY KEY,
@@ -120,7 +112,7 @@ const statements = [
     "priority" TEXT NOT NULL DEFAULT 'NORMAL',
     "metadata" TEXT,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
+    "updatedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT "Notification_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
   );`,
   `CREATE INDEX IF NOT EXISTS "Notification_userId_idx" ON "Notification"("userId");`,
@@ -195,19 +187,27 @@ const statements = [
   );`,
 ];
 
-async function main() {
+async function initSqliteSchema(options = {}) {
+  const dbUrl = resolveLibsqlUrl(PROJECT_ROOT, options.url);
   const client = createClient({ url: dbUrl });
   try {
     for (const sql of statements) {
       await client.execute(sql);
     }
-    console.log(`SQLite schema initialized successfully at ${dbUrl}`);
+    if (!options.silent) {
+      console.log(`SQLite schema ready at ${dbUrl}`);
+    }
+    return dbUrl;
   } finally {
     client.close();
   }
 }
 
-main().catch((err) => {
-  console.error("Failed to initialize SQLite database:", err);
-  process.exit(1);
-});
+module.exports = { initSqliteSchema };
+
+if (require.main === module) {
+  initSqliteSchema().catch((err) => {
+    console.error("Failed to initialize SQLite database:", err);
+    process.exit(1);
+  });
+}

@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { SectionTitle } from "@/components";
+import SectionTitle from "@/components/SectionTitle";
 import NotificationCard from "@/components/NotificationCard";
 import { useNotifications } from "@/hooks/useNotifications";
 import { useNotificationStore } from "@/app/_zustand/notificationStore";
@@ -68,7 +68,7 @@ const NotificationsPage = () => {
         {/* Toolbar */}
         <div className="bg-white rounded-2xl border border-stone-200/80 p-4 shadow-sm flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
           <div className="relative flex-1">
-            <FaMagnifyingGlass className="w-3.5 h-3.5 text-stone-400 absolute left-3.5 top-1/2 -transtone-y-1/2" />
+            <FaMagnifyingGlass className="w-3.5 h-3.5 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={filters.search || ""}

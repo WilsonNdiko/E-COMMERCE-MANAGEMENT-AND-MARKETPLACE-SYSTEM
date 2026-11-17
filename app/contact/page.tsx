@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { SectionTitle } from "@/components";
+import SectionTitle from "@/components/SectionTitle";
 import apiClient from "@/lib/api";
 import toast from "react-hot-toast";
 import {

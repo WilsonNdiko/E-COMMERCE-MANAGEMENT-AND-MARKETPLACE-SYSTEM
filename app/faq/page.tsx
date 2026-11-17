@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import { SectionTitle } from "@/components";
+import SectionTitle from "@/components/SectionTitle";
 import { FaChevronDown, FaMagnifyingGlass } from "react-icons/fa6";
 
 const FAQS = [
@@ -47,7 +47,7 @@ export default function FaqPage() {
 
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 space-y-6">
         <div className="relative">
-          <FaMagnifyingGlass className="w-4 h-4 text-stone-400 absolute left-4 top-1/2 -transtone-y-1/2" />
+          <FaMagnifyingGlass className="w-4 h-4 text-stone-400 absolute left-4 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={search}

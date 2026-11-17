@@ -209,40 +209,56 @@ export const useUnreadCount = () => {
   const { data: session } = useSession();
 
   const fetchUnreadCount = useCallback(async () => {
-    if (!session?.user?.email) return;
+    const email = session?.user?.email;
+    if (!email) return;
+    if (typeof document !== 'undefined' && document.visibilityState === 'hidden') {
+      return;
+    }
 
     try {
-      // Get user ID first
-      const userResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || ''}/api/users/email/${session.user.email}`);
-      const userData = await userResponse.json();
-      
-      if (userData?.id) {
-        const { unreadCount } = await notificationApi.getUnreadCount(userData.id);
+      const cacheKey = `singitronic_uid_${email.toLowerCase()}`;
+      let userId =
+        (session.user as any)?.id ||
+        (typeof sessionStorage !== 'undefined' ? sessionStorage.getItem(cacheKey) : null);
+
+      if (!userId) {
+        const userResponse = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL || ''}/api/users/email/${encodeURIComponent(email)}`
+        );
+        if (!userResponse.ok) return;
+        const userData = await userResponse.json();
+        userId = userData?.id || null;
+        if (userId && typeof sessionStorage !== 'undefined') {
+          try { sessionStorage.setItem(cacheKey, userId); } catch {}
+        }
+      }
+
+      if (userId) {
+        const { unreadCount } = await notificationApi.getUnreadCount(userId);
         setUnreadCount(unreadCount);
       }
-    } catch (error) {
-      console.error('Error fetching unread count:', error);
+    } catch {
+      // Silently ignore transient network hiccups
     }
-  }, [session?.user?.email, setUnreadCount]);
+  }, [session?.user, setUnreadCount]);
 
-  // Auto-refresh unread count every 30 seconds
+  // Refresh unread count every 2 minutes when tab is active
   useEffect(() => {
+    if (!session?.user?.email) return;
     fetchUnreadCount();
-    const interval = setInterval(fetchUnreadCount, 30000); // 30 seconds
-    
-    // Listen for order completed events to refresh immediately
+    const interval = setInterval(fetchUnreadCount, 120000);
+
     const handleOrderCompleted = () => {
-      console.log('Order completed - refreshing notifications');
-      setTimeout(fetchUnreadCount, 1000); // Slight delay to ensure notification is created
+      setTimeout(fetchUnreadCount, 800);
     };
-    
+
     window.addEventListener('orderCompleted', handleOrderCompleted);
-    
+
     return () => {
       clearInterval(interval);
       window.removeEventListener('orderCompleted', handleOrderCompleted);
     };
-  }, [fetchUnreadCount]);
+  }, [session?.user?.email, fetchUnreadCount]);
 
   return {
     unreadCount,

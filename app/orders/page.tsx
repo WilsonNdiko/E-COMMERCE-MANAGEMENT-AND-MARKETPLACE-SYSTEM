@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { SectionTitle } from "@/components";
+import SectionTitle from "@/components/SectionTitle";
 import apiClient from "@/lib/api";
 import toast from "react-hot-toast";
 import {
@@ -200,7 +200,7 @@ function OrdersContent() {
         </p>
         <form onSubmit={handleLookup} className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
-            <FaMagnifyingGlass className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -transtone-y-1/2" />
+            <FaMagnifyingGlass className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={lookupInput}
